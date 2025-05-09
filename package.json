@@ -13,6 +13,9 @@
   "dependencies": {
     
   },
+  "peerDependencies": {
+    "typescript": ">=5.0.0"
+  },
   "keywords": [
     "framework",
     "nodejs-framework"
