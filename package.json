@@ -1,0 +1,29 @@
+{
+  "name": "deepline",
+  "version": "1.0.0",
+  "description": "It is a NodeJs Framework",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node ./framework/shall.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shamimhaque-mpi/deepline.git"
+  },
+  "dependencies": {
+    
+  },
+  "keywords": [
+    "framework",
+    "nodejs-framework"
+  ],
+  "author": {
+    "name": "Shamim Haque",
+    "email": "shamim.haque.dev@gmail.com"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shamimhaque-mpi/deepline/issues"
+  },
+  "homepage": "https://github.com/shamimhaque-mpi/deepline#readme"
+}

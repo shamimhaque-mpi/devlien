@@ -1,1 +1,3 @@
-# deepline
+# DeepLine
+...................................
+DeepLine is a Framework built on Nodejs engine. It allows developers to run JavaScript on the server-side, creating server-side applications with Deepline and it is an open-source, cross-platform framework that offers an event-driven, non-blocking I/O model, making it efficient and scalable for building fast, high-performance web applications

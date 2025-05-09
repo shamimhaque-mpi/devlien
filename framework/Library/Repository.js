@@ -1,0 +1,42 @@
+module.exports = {
+    base:"./framework/App/Structure/",
+    root:"../../",
+    map : {
+        app:{
+            type:"dir",
+            path:"app",
+        },
+        config:{
+            type:"dir",
+            path:'config',
+            children:{
+                type:'fs',
+                path:"config/app.js"
+            }
+        },
+        public:{
+            type:"dir",
+            path:'public'
+        },
+        routes:{
+            type:"dir",
+            path:"routes",
+            children:{
+                type:'fs',
+                path:"routes/web.js"
+            }
+        },
+        views:{
+            type:'dir',
+            path:"views",
+            children:{
+                type:'fs',
+                path:"views/welcome.html"
+            }
+        },
+        server:{
+            type:'fs',
+            path:'server.js'
+        }
+    }
+}
