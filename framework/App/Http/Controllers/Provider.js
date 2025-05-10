@@ -14,7 +14,7 @@ module.exports = class
      * *********
      *
      * *************** */
-    async getResponse()
+    async getResponse($request)
     {
         try {
             let {route, system} = this.services;
@@ -23,26 +23,16 @@ module.exports = class
             {
                 const cltr_path = system.path("App/Http/Controllers/"+route['CONTROLLER']);
 
-                const base = new (require(cltr_path))(this.services);
+                const base = new (require(cltr_path).default)($request);
 
-                const resp = base[route['METHOD']](this.services);
+                const resp = await base[route['METHOD']]($request);
 
-                //
-                if(typeof resp == 'string' || typeof resp == 'number'){
-                    return await new Promise((resolve, reject)=>{
-                        resolve(resp.toString());
-                    });
-                }
-                else {
-                    return (resp ? resp : false);
-                }
+                return resp;
             }
             return false;
         }
         catch(error){
-            return await new Promise((resolve, reject)=>{
-                resolve(error.message);
-            });
+            return error.message
         }
     }
 }

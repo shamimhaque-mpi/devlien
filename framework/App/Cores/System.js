@@ -1,4 +1,4 @@
-const config = require(path("config/app"));
+// const config = require(path("config/app"));
 
 module.exports = class 
 {

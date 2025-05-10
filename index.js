@@ -1,4 +1,4 @@
-const server = require("deepline/framework/Server");
+const server = require("./framework/Server.js");
 
 
 module.exports = class extends server {

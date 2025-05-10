@@ -1,16 +1,23 @@
-const route      = require("./Routes/RouteServe");
-const controller = require("./Http/Controllers/Provider");
-const glbmdth    = require("./Cores/Global");
+// const route      = require("./Routes/RouteServe");
+// const controller = require("./Http/Controllers/Provider");
+// const glbmdth    = require("./Cores/Global");
+import controller from "./Http/Controllers/Provider.js"
+import route from "./Routes/RouteServe.js"
+import glbmdth from "./Cores/Global.js"
+import System from "./Cores/System.js"
+import formidable from 'formidable';
+import Request from "./Http/Request.js";
 
-module.exports = class 
+export default class Kernel 
 {
+    
     SERVICES   = {};
     //
     constructor(request, response)
     {
         this.initConfig(request, response);
         //
-        this.executeController(response);
+        this.executeController(request, response);
     }
 
     setGlobal(){
@@ -24,7 +31,7 @@ module.exports = class
      * ****************
      *
      * ************* */
-    executeController(response)
+    async executeController(request, response)
     {
         try {
             /*
@@ -32,22 +39,22 @@ module.exports = class
              *
              * *******************/
             if(!this.SERVICES.route.PATH) throw {stack:"Page Not Found"};
-
-
-
             /*
              * ***********************
              *
              * *******************/
-            const fedback = (new controller(this.SERVICES)).getResponse();
-            if(fedback.then){
-                fedback.then(res=>{
-                    response.end(res);
-                });
-            }
+            
+            const form = formidable({ multiples: true });
+            var fields;
+            var files;
+            [fields, files] = await form.parse(request);
 
-
-            /*********************************************/
+            const feedback = await (new controller(this.SERVICES)).getResponse(Request.instance({
+                fields:fields,
+                files:files,
+                user:false
+            }));
+            response.end(Buffer.isBuffer(feedback) ? feedback : JSON.stringify(feedback))
         }
         catch(err){
             // console.log(err.message, "Message");
@@ -80,7 +87,7 @@ module.exports = class
         this.SERVICES = {
             request  : request,
             response : response,
-            system   : new (require("./Cores/System"))()
+            system   : new System()
         }
         //
         this.SERVICES.route = (new route(this.SERVICES)).route();

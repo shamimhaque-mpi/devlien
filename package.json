@@ -2,6 +2,13 @@
   "name": "deepline",
   "version": "1.0.0",
   "description": "It is a NodeJs Framework",
+  "exports": {
+    ".":"./index.js",
+    "./run":"./framework/Run.js",
+    "./model":"./framework/App/Eloquent/Model.js",
+    "./controller": "./framework/App/Http/Controllers/Controller.js",
+    "./file": "./framework/App/File/FileHandler.js"
+  },
   "main": "index.js",
   "scripts": {
     "postinstall": "node ./framework/shall.js"
@@ -11,10 +18,13 @@
     "url": "git+https://github.com/shamimhaque-mpi/deepline.git"
   },
   "dependencies": {
-    
+    "mysql2": "^3.14.0",
+    "formidable": "^3.5.4",
+    "dotenv": "^16.5.0",
+    "nodemon": "^3.1.10"
   },
   "peerDependencies": {
-    "typescript": ">=5.0.0"
+    
   },
   "keywords": [
     "framework",

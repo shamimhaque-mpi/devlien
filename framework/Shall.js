@@ -7,13 +7,13 @@ const { exec } = require('child_process');
     jfiojfildgjildfj
 */
 
-exec(`cp -R ./framework/App/Structure/* ../../`, (error, stdout, stderr) => {
-    if (error) {
-        console.error(`exec error: ${error}`);
-        return;
-    }
-    console.log(stderr);
-});
+// exec(`cp -R ./framework/App/Structure/* ../../`, (error, stdout, stderr) => {
+//     if (error) {
+//         console.error(`exec error: ${error}`);
+//         return;
+//     }
+//     console.log(stderr);
+// });
 
 
 
