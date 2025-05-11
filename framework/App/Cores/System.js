@@ -5,7 +5,7 @@ export default class System {
     base_path = '';
     constructor(config = {path:''}) 
     {
-        this.base_path = config.path
+        this.base_path = config.path ? config.path : '';
     }
     
 

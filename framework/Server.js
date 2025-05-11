@@ -5,7 +5,7 @@ export default class Server {
     port = 3080;
     constructor(){
         const app = http.createServer((req, res)=>{
-            // new kernel.default(req, res);
+            new kernel(req, res);
         });
         
         

@@ -1,7 +1,4 @@
-// const route      = require("./Routes/RouteServe");
-// const controller = require("./Http/Controllers/Provider");
-// const methods    = require("./Cores/Global");
-import controller from "./Http/Controllers/Provider.js"
+import Provider from "./Http/Controller/Provider.js"
 import RouteServe from "./Routes/RouteServe.js"
 import {methods} from "./Cores/Global.js"
 import System from "./Cores/System.js"
@@ -41,7 +38,7 @@ export default class Kernel
              * ***********************
              *
              * *******************/
-            if(this.SERVICES.route.MIDDLEWARE.length){
+            if(this.SERVICES.route.MIDDLEWARE && this.SERVICES.route.MIDDLEWARE.length){
                 for(const index in this.SERVICES.route.MIDDLEWARE){
                     let middleware = this.SERVICES.route.MIDDLEWARE[index];
 
@@ -65,7 +62,7 @@ export default class Kernel
             var files;
             [fields, files] = await form.parse(request);
 
-            const feedback = await (new controller(this.SERVICES)).getResponse(Request.instance({
+            const feedback = await (new Provider(this.SERVICES)).getResponse(Request.instance({
                 fields:fields,
                 files:files,
                 user:false
