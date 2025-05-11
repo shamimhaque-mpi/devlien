@@ -5,6 +5,7 @@
   "exports": {
     ".":"./index.js",
     "./run":"./framework/Run.js",
+    "./server":"./framework/Server.js",
     "./route":"./framework/App/Routes/Route.js",
     "./model":"./framework/App/Eloquent/Model.js",
     "./controller": "./framework/App/Http/Controller/Controller.js",
@@ -12,8 +13,12 @@
     "./file": "./framework/App/File/FileHandler.js"
   },
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "postinstall": "node ./framework/shall.js"
+  },  
+  "bin": {
+    "deepline": "./bin/cli.js"
   },
   "repository": {
     "type": "git",

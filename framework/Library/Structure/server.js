@@ -1,4 +1,4 @@
-const deepline = require("deepline");
+import deepline from "deepline";
 
 const app = new deepline();
 

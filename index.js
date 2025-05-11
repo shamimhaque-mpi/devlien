@@ -1,7 +1,7 @@
-const server = require("./framework/Server.js");
+import Server from "deepline/server";
 
 
-module.exports = class extends server {
+export default class deepline extends Server {
     serve(){
         return ["Server Started on port "+this.port];
     }

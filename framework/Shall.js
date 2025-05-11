@@ -1,7 +1,46 @@
-const args = process.argv;
-const lib  = require("./Library/Repository");
-const fs   = require("fs");
-const { exec } = require('child_process');
+#!/usr/bin/env node
+// const args = process.argv;
+// const lib  = require("./Library/Repository");
+// const fs   = require("fs");
+// const { exec } = require('child_process');
+
+// const readline = require('readline');
+
+// console.log(readline);
+
+// function askQuestion(query) {
+//     const rl = readline.createInterface({
+//       input: process.stdin,
+//       output: process.stdout,
+//     });
+  
+//     return new Promise(resolve => {
+//       rl.question(query, answer => {
+//         rl.close();
+//         resolve(answer.trim());
+//       });
+//     });
+// }
+
+// (async () => {
+//     console.log('📦 Deepline setup:');
+  
+//     const answer = await askQuestion('Which framework are you using? (nuxt/next/none): ');
+  
+//     switch (answer.toLowerCase()) {
+//       case 'nuxt':
+//         console.log('✅ Nuxt support selected.');
+//         // run logic here
+//         break;
+//       case 'next':
+//         console.log('✅ Next support selected.');
+//         // run logic here
+//         break;
+//       default:
+//         console.log('⚠ No framework selected.');
+//     }
+// })();
+
 
 /*
     jfiojfildgjildfj

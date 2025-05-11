@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     base:"./framework/App/Structure/",
     root:"../../",
     map : {

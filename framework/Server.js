@@ -1,11 +1,11 @@
-const http   = require('http');
-const kernel = require('./App/Kernel');
+import http from "http";
+import kernel from "./App/Kernel";
 
-module.exports = class {
+export default class Server {
     port = 3080;
     constructor(){
         const app = http.createServer((req, res)=>{
-            new kernel.default(req, res);
+            // new kernel.default(req, res);
         });
         
         
