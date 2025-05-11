@@ -1,4 +1,4 @@
-module.exports = gbl = {
+export const methods = {
     url(){
         
     },

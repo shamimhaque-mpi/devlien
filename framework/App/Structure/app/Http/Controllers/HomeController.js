@@ -1,25 +1,13 @@
-const controller = use("App/Http/Controllers/Controller");
+import Controller from "deepline/controller" 
 
-module.exports = class extends controller
+export default class HomeController extends Controller
 {
-    models = {
-        User:'User'
-    }
-
     constructor(){
         super();
     }
 
 
     index(){
-        return view("welcome");
-    }
-
-    about(){
-        return "dfsdfsdf";
-    }
-
-    tutorials(){    
         return view("welcome");
     }
 
@@ -32,16 +20,9 @@ module.exports = class extends controller
 
     }
 
-
-    edit(){
-
-    }
-
-
     update(){
         return view("contact");
     }
-
 
     view(){
 

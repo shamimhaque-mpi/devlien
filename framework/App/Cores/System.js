@@ -1,15 +1,15 @@
 // const config = require(path("config/app"));
+import path from "path";
 
-module.exports = class 
-{
+export default class System {
     base_path = '';
-    constructor() 
+    constructor(config = {path:''}) 
     {
-        
+        this.base_path = config.path
     }
     
 
     path($string=""){
-        return process.cwd()+($string!='' ? ('/'+$string) : '');
+        return path.join(process.cwd(), ($string!='' ? (this.base_path+'/'+$string) : this.base_path));
     }
 }

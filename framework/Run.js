@@ -1,5 +1,15 @@
+import kernel from "./App/Kernel"
+
 export default class Run {
-    constructor(config = {root_path:'', request:{}}){
-        
+    #request;
+    #config;
+    constructor(request, config={path:''}){
+        this.#config = config;
+        this.#request = request; 
+    }
+
+
+    async getResponse(){
+        return new kernel(this.#request, null, this.#config);
     }
 }

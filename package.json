@@ -5,8 +5,10 @@
   "exports": {
     ".":"./index.js",
     "./run":"./framework/Run.js",
+    "./route":"./framework/App/Routes/Route.js",
     "./model":"./framework/App/Eloquent/Model.js",
-    "./controller": "./framework/App/Http/Controllers/Controller.js",
+    "./controller": "./framework/App/Http/Controller/Controller.js",
+    "./resouceCollection": "./framework/App/Http/Resouces/ResouceCollection.js",
     "./file": "./framework/App/File/FileHandler.js"
   },
   "main": "index.js",

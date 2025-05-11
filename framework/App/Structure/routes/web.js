@@ -1,4 +1,4 @@
-const route = use("App/Routes/Route");
+import route from "deepline/route"
 
 
 route.get('/', 'HomeController@index');
@@ -7,7 +7,4 @@ route.get('/tutorials', 'HomeController@tutorials');
 route.get('/issue', 'HomeController@issue');
 
 
-module.exports = route;
-
-
-
+export default route;

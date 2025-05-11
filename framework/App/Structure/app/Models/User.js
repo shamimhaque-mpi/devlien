@@ -1,5 +1,5 @@
-module.exports  = class {
-    constructor(){
-        console.log("I am from Model");
-    }
+import Model from "deepline/model"
+
+export default class User extends Model {
+    
 }
