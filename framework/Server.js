@@ -1,5 +1,5 @@
 import http from "http";
-import kernel from "./App/Kernel";
+import kernel from "./App/Kernel.js";
 
 export default class Server {
     port = 3080;
