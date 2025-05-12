@@ -51,7 +51,7 @@ export default class Kernel
 
 
 
-            if(!this.SERVICES.route.PATH) throw {stack:"Page Not Found"};
+            if(!this.SERVICES.route.METHOD) throw {stack:"Page Not Found"};
             /*
              * ***********************
              *

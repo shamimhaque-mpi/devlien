@@ -16,17 +16,15 @@ export default class RouteServe {
 
     async setConfig(request, response, system){
 
-        let route = await import(system.path("Routes/api.js"));
-        
-        let routes = route.default.fetch();
-        let _ROUTE = {};
-        for(const url in routes){
-            routes[url].PATH = "/api"+routes[url].PATH;
-            _ROUTE['/api'+url] = routes[url];
+        let route_api = await import(system.path("Routes/api.js"));
+        let route_web = await import(system.path("Routes/web.js"));
+
+        let _API_ROUTES = {};
+        for(const path in route_api.default._ROUTES){
+            _API_ROUTES['/api'+path] = route_api.default._ROUTES[path];
         }
-
-
-        this._ROUTES = _ROUTE
+        
+        this._ROUTES = {..._API_ROUTES, ...route_web.default._ROUTES}
         this._REQUEST  = request;
         this._RESPONSE = response;
         
@@ -35,18 +33,15 @@ export default class RouteServe {
 
 
 
-    async getOrigin()
-    {
-        if(Object.keys(this._ROUTES).length>0) {
-            for(const path in this._ROUTES){
-                let isRequestAccept = this._REQUEST.method.toLocaleLowerCase() == this._ROUTES[path].REQUEST_METHOD.toLocaleLowerCase() || this._ROUTES[path].REQUEST_METHOD.toLocaleLowerCase()=='any';
-                if(path==this._REQUEST.url && isRequestAccept) {
-                    return this._ROUTES[path];
-                }
-            }
-            return {};
+    async getOrigin(){
+
+        let _TARGET_PATH =  this._ROUTES[this._REQUEST.url];
+        let _IS_ACCEPT   = _TARGET_PATH && (_TARGET_PATH.REQUEST_METHOD.includes(this._REQUEST.method.toLocaleUpperCase()) || _TARGET_PATH.REQUEST_METHOD.includes('ANY'))
+
+        if(_IS_ACCEPT){
+            return _TARGET_PATH;
         }
-        else return {};
+        return {};
     }
 
 
