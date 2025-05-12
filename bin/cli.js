@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 import readline from 'readline';
-import fs from "fs";
 import { exec } from 'child_process';
+
+
+import Package from './package.js';
+
 
 
 const base_path = process.cwd();
@@ -9,13 +12,17 @@ const base_path = process.cwd();
 
 
 (async () => {
+
+
+
+
     var answer = await askChoice(
         'Are you using Deepline with another framework ?',
-        ['Yes', 'No']
+        ['No', 'Yes']
     );
 
     if(answer.toLowerCase() =='yes'){
-        console.clear();
+        // console.clear();
         var answer = await askChoice(
             'Which framework are you using ?',
             ['Nuxt', 'Next', 'Nest']
@@ -25,7 +32,17 @@ const base_path = process.cwd();
     }
     else {
 
-        exec(`cp -R ${base_path}/node_modules/deepline/framework/Library/Structure/* ${base_path}`, (error, stdout, stderr) => {
+
+        Package.add((json)=>{
+            delete json.scripts.test;
+            json.type="module";
+            json.scripts.dev = "nodemon ./server.js";
+        })
+        .save();
+
+
+
+        exec(`cp -R ${base_path}/node_modules/deepline/libraries/demo/. ${base_path}`, (error, stdout, stderr) => {
             if (error) {
                 console.error(`exec error: ${error}`);
                 return;
@@ -34,6 +51,11 @@ const base_path = process.cwd();
         });
     }
 })();
+
+
+
+
+
 
 
 
@@ -51,7 +73,6 @@ function askChoice(question, choices) {
         let currentIndex = 0;
 
         function render() {
-            console.clear();
             console.log(question+'\n');
             choices.forEach((choice, i) => {
                 const selected = i === currentIndex ? '◉' : '◯';
