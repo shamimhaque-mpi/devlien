@@ -1,5 +1,7 @@
-module.exports = class
-{
+import fs from "fs";
+
+export default class View {
+
 	getSource(path="")
 	{
 		if(path!="")
@@ -26,7 +28,6 @@ module.exports = class
 
 	async contents($path)
 	{
-		const fs = require("fs");
 		//
 		if(fs.existsSync($path))
 		{
@@ -38,7 +39,7 @@ module.exports = class
 			});
 		}
 		else {
-			return "Not Found";
+			return "view page Not Found";
 		}
 	}
 

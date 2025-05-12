@@ -2,7 +2,9 @@ import route from "deepline/route"
 
 
 export default route.serve(route=>{
-    route.get('about', 'HomeController@about');
-    route.get('gallery', 'HomeController@gallery');
-    route.get('contact', 'HomeController@contact');
+    route.get('/', 'DeeplineController@index');
+    route.get('docs', 'DeeplineController@docs');
+    route.get('resouces', 'DeeplineController@resouces');
+    route.get('products', 'DeeplineController@products');
+    route.get('blog', 'DeeplineController@blog');
 });

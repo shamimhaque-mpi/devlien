@@ -19,9 +19,6 @@ export default class Mysql {
 
 
     constructor(){
-
-        console.log(this.#config, 'from-mysql');
-
         this.#conn = createPool({
             host: this.#config?.db_host,
             user: this.#config?.db_username,

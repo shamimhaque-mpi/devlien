@@ -1,12 +1,16 @@
+import path from "path";
+
 export const methods = {
     url(){
         
     },
     path(uri=""){
-        return process.cwd()+"/"+gbl.uriSanitize(uri);
+        return path.join(process.cwd(), uri);
     },
-    use(namespace){
-        return require(process.cwd()+"/node_modules/deepline/framework/"+gbl.uriSanitize(namespace));
+    
+    async use(namespace){
+        let file = namespace.split('/').filter(e=>e).join('/')+'.js';
+        return (await import(process.cwd()+'/'+file)).default;
     },
     asset(){
 
@@ -17,12 +21,12 @@ export const methods = {
     config(){
         
     },
-    view(path="", $param=false)
+    async view(path="", $param=false)
     {
-        const view = new (require("../View/View"));
+        const view = new (await import("../View/View.js")).default;
         return view.getSource(path);
     },
     uriSanitize(uri=""){
-        return uri.split('/').filter(row=>(row?row:false)).join('/');
+        return uri.split('/').filter(row=>row).join('/');
     }
 }
