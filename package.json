@@ -15,7 +15,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "postinstall": "node ./framework/shall.js"
+    
   },  
   "bin": {
     "deepline": "./bin/cli.js"
