@@ -16,8 +16,8 @@ export default class RouteServe {
 
     async setConfig(request, response, system){
 
-        let route_api = await import(system.path("Routes/api.js"));
-        let route_web = await import(system.path("Routes/web.js"));
+        let route_api = await import(system.path("routes/api.js"));
+        let route_web = await import(system.path("routes/web.js"));
 
         let _API_ROUTES = {};
         for(const path in route_api.default._ROUTES){
