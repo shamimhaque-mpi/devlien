@@ -8,6 +8,8 @@
     "./server":"./framework/Server.js",
     "./route":"./framework/App/Routes/Route.js",
     "./model":"./framework/App/Eloquent/Model.js",
+    "./database":"./framework/App/Database/Mysql.js",
+    "./migration":"./framework/App/Database/Migration.js",
     "./controller": "./framework/App/Http/Controller/Controller.js",
     "./resouceCollection": "./framework/App/Http/Resouces/ResouceCollection.js",
     "./file": "./framework/App/File/FileHandler.js"
