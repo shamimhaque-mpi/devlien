@@ -22,6 +22,15 @@ Execution.start((system, param)=>{
                 system.updatePackageJson();
                 system.copyDemo();
             }
+            else {
+                system.ask('Which framework are you using ?', ['NuxtJs', 'NextJs', 'NestJs'])
+                .then(ans=>{
+                    if(ans.toLowerCase()=='nuxtjs'){
+                        system.updatePackageJson();
+                        system.copyNuxtDemo();
+                    }
+                })
+            }
         })
     }
 });

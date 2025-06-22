@@ -3,6 +3,7 @@ import process from 'process';
 import { exec } from 'child_process';
 import Package from './package.js';
 import Migration from './migration.js';
+import path from 'path';
 
 export default class Execution {
 
@@ -38,6 +39,19 @@ export default class Execution {
     }
 
 
+
+
+    copyNuxtDemo(){
+        exec(`cp -R ${this.base_path}/node_modules/deepline/libraries/nuxt/* ${path.join(this.base_path), 'server/'}`, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`exec error: ${error}`);
+                return;
+            }
+            else {
+                exec(`mv ${path.join(this.base_path), 'server/.env'} ${this.base_path}`, ()=>{});
+            }
+        });
+    }
 
 
     updatePackageJson(){

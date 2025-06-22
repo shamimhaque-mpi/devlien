@@ -1,4 +1,4 @@
-import kernel from "./App/Kernel"
+import kernel from "./App/Kernel.js"
 
 export default class Run {
     #request;

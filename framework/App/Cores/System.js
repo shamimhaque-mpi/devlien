@@ -1,5 +1,5 @@
-// const config = require(path("config/app"));
 import path from "path";
+import env from "deepline/env";
 
 export default class System {
     base_path = '';
@@ -10,6 +10,6 @@ export default class System {
     
 
     path($string=""){
-        return path.join(process.cwd(), ($string!='' ? (this.base_path+'/'+$string) : this.base_path));
+        return path.join(env.BASE_PATH, ($string!='' ? (this.base_path+'/'+$string) : this.base_path));
     }
 }

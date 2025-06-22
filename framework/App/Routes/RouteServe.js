@@ -27,6 +27,7 @@ export default class RouteServe {
         this._ROUTES = {..._API_ROUTES, ...route_web.default._ROUTES}
         this._REQUEST  = request;
         this._RESPONSE = response;
+
         
         return this._ROUTE = await this.getOrigin();
     }

@@ -49,8 +49,6 @@ export default class Kernel
                 }
             }
 
-
-
             if(!this.SERVICES.route.METHOD) throw {stack:"Page Not Found"};
             /*
              * ***********************

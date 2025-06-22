@@ -1,8 +1,10 @@
+import env from "deepline/env";
+import path from "path";
+
 export default class Provider 
 {
     services;
-    constructor($classter)
-    {
+    constructor($classter){
         this.services = $classter;
     }
 
@@ -21,7 +23,7 @@ export default class Provider
             //
             if(route['CONTROLLER'] && route['METHOD'])
             {
-                const cltr_path = system.path("app/Http/Controllers/"+route['CONTROLLER']+'.js');
+                const cltr_path = path.join(env.BASE_PATH, "app/Http/Controllers/"+route['CONTROLLER']+'.js');
 
                 const base = new ((await import(cltr_path)).default)($request);
 
