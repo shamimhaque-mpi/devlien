@@ -3,6 +3,7 @@ import process from 'process';
 import { exec } from 'child_process';
 import Package from './package.js';
 import Migration from './migration.js';
+import Model from './model.js';
 import path from 'path';
 
 export default class Execution {
@@ -23,9 +24,13 @@ export default class Execution {
 
 
 
-
     async createMigration(name){
         Migration.create(name);
+    }
+
+
+    async createModel(modelName){
+        Model.create(modelName);
     }
 
 

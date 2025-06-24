@@ -10,6 +10,11 @@ Execution.start((system, param)=>{
     }
 
 
+    if(param.includes('make:model')){
+        system.createModel(param[1]);
+    }
+
+
     else if(param.includes('migrate')){
         system.runMigrate(param[1]);
     }
