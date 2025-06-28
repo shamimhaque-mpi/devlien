@@ -107,7 +107,7 @@ export default class Schema {
             if(!entity._drop){
                 column  = `${this._OPERATION=='update'?'CHANGE COLUMN ':''}`;
                 column += `${
-                    this._OPERATION=='update' ? `${key} ${entity._rename ? entity._rename:key }` : key
+                    this._OPERATION=='update' ? `\`${key}\` \`${entity._rename ? entity._rename:key }\`` : `\`${key}\``
                 }`
                 column += ` ${entity._type}`;
                 column += `${!entity._primary_key ? (entity._nullable ? ' NULL' : ' NOT NULL') : ''}`;

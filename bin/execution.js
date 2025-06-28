@@ -4,6 +4,8 @@ import { exec } from 'child_process';
 import Package from './package.js';
 import Migration from './migration.js';
 import Model from './model.js';
+import Controller from './controller.js';
+import Resource from './resource.js';
 import path from 'path';
 
 export default class Execution {
@@ -18,12 +20,6 @@ export default class Execution {
     }
 
 
-    runMigrate(){
-        Migration.execute();
-    }
-
-
-
     async createMigration(name){
         Migration.create(name);
     }
@@ -31,6 +27,25 @@ export default class Execution {
 
     async createModel(modelName){
         Model.create(modelName);
+    }
+
+
+    async createController(modelName){
+        Controller.create(modelName);
+    }
+
+
+    async createResource(modelName){
+        Resource.create(modelName);
+    }
+
+
+    runMigrate(){
+        Migration.execute();
+    }
+
+    runMigrateRollback(param=null){
+        Migration.rollback(param);
     }
 
 

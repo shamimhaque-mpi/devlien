@@ -15,8 +15,23 @@ Execution.start((system, param)=>{
     }
 
 
+    if(param.includes('make:controller')){
+        system.createController(param[1]);
+    }
+
+
+    if(param.includes('make:resource')){
+        system.createResource(param[1]);
+    }
+
+
     else if(param.includes('migrate')){
         system.runMigrate(param[1]);
+    }
+
+
+    else if(param.includes('migrate:rollback')){
+        system.runMigrateRollback(param[1]);
     }
 
 

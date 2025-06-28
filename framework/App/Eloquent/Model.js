@@ -12,9 +12,9 @@ export default class Model extends Relation {
     #successFn         = false;
 
 
-    constructor(){
+    constructor(config={}){
         super();
-        this.#table = this.getTableName();
+            this.#table = config.table ? config.table : this.getTableName();
     }
 
 
@@ -78,6 +78,15 @@ export default class Model extends Relation {
 
 
     async first() {
+        const [records] = await Database.instance().query(this.makeQuery('get'));
+        return records[0] ? this.makeResponse(records[0]) : false;
+    }
+
+
+
+
+    async last() {
+        this.orderBy('id', 'DESC');
         const [records] = await Database.instance().query(this.makeQuery('get'));
         return records[0] ? this.makeResponse(records[0]) : false;
     }

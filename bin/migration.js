@@ -2,6 +2,9 @@ import fs from "fs";
 import path from "path";
 import Mysql from "../framework/App/Database/Mysql.js";
 import env from "deepline/env";
+import System from "../framework/App/Cores/System.js";
+import Model from "deepline/model";
+import { group } from "console";
 
 export default class Migration {
 
@@ -33,23 +36,96 @@ export default class Migration {
 
 
 
-    static async execute(){
+    static async execute()
+    {
         let migration = new Migration;
-        //
-        fs.readdir(path.join(migration.app_path, 'database/migrations/'), (error, files)=>{
-            if(!error){
-                for(const index in files)
-                    migration.runMigration(path.join(migration.app_path, 'database/migrations', files[index]));
+        const migrations = await System.readDirAsync(System.path('database/migrations/'));
+
+
+        try{
+            const Dmigrations = await System.readDirAsync(System.vendorPath('App/Database/Default/'));
+            for(const index in Dmigrations){
+                let migration = new (await import(System.vendorPath('App/Database/Default/'+Dmigrations[index]))).default;
+                await Mysql.instance().query(migration.getQuery().replaceAll('\n', ''));
             }
-        });
+        }
+        catch(e){}
+
+        class Migrations extends Model { constructor(){super({table:'migrations'})}}
+
+        let migrated_list = await Migrations.instance().get();
+            migrated_list = Object.values(migrated_list).map(row=>row.path)
         
+
+        let group_no = await Migrations.instance().last();
+        group_no = group_no ? group_no.group + 1 : 1;
+
+        for(const index in migrations){
+            if(migrated_list.indexOf(migrations[index])<0){
+                await migration.runMigration(System.path('database/migrations/'+migrations[index])); 
+                await Migrations.instance().create({
+                    path  : migrations[index],
+                    group : group_no
+                });
+            }
+        }
+        
+        process.exit();
     }
+
+
+
+
+
 
     async runMigration(path){
         let migration = new (await import(path)).default;
-        let dd = await Mysql.instance().query(migration.getQuery().replaceAll('\n', ''));
-        console.log(dd);
+        //
+        console.log(path+'  processing');
+        await Mysql.instance().query(migration.getQuery().replaceAll('\n', ''));
+        console.log('\x1b[32m%s\x1b[0m', path+'  done');
     }
+
+
+
+
+
+    static async rollback(param=null)
+    {
+
+        const migrations = await System.readDirAsync(System.path('database/migrations/'));
+        class Migrations extends Model { constructor(){super({table:'migrations'})}}
+
+
+        if(param=='--all'){
+            var migrated_list = await Migrations.instance().get();
+        }
+        else {
+            let group_no      = (await Migrations.instance().last()).group;
+            var migrated_list = await Migrations.instance().where({group:group_no}).get();
+        }
+        migrated_list = Object.values(migrated_list).map(row=>row.path);
+
+
+
+        for(const index in migrated_list){
+            
+            let migration = new (await import(System.path('database/migrations/'+migrated_list[index]))).default;
+            console.log(migrated_list[index]+'  processing');
+            await Mysql.instance().query(migration.getQuery('down').replaceAll('\n', ''));
+            await Migrations.instance().where({path:migrated_list[index]}).delete();
+            console.log('\x1b[32m%s\x1b[0m', migrated_list[index]+'  done');
+        }
+        
+
+        process.exit();
+    }
+
+
+
+
+
+
 
     getTableName(migrationName) {
         // Remove trailing '_table' if present
