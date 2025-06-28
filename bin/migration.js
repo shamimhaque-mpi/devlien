@@ -4,7 +4,6 @@ import Mysql from "../framework/App/Database/Mysql.js";
 import env from "deepline/env";
 import System from "../framework/App/Cores/System.js";
 import Model from "deepline/model";
-import { group } from "console";
 
 export default class Migration {
 
@@ -19,17 +18,14 @@ export default class Migration {
 
     static async create(name){
 
-        let mgn = new Migration;
-
+        let mgn   = new Migration;
         let table = (new Migration).getTableName(name);
 
         const today = (new Date().toISOString().split('T')[0]).split('-').join('_');
         const unixSeconds = Math.floor(Date.now() / 1000);
 
         var content = fs.readFileSync(mgn.package_path+'/libraries/standard/migration.js', 'utf-8');
-
-        content = content.replaceAll('@table', table)
-
+            content = content.replaceAll('@table', table)
 
         fs.writeFileSync(path.join(env.BASE_PATH, `database/migrations/${today+'_'+unixSeconds}_${name}.js`)  , content);
     }
