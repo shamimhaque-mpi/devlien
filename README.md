@@ -138,6 +138,10 @@ import User from "../Models/User";
 
 // Fetch all users
 let users = await User.instance().get();
+
+// or
+let user = new User();
+let users = await user.get();
 ```
 
 More query methods coming soon...
@@ -146,11 +150,10 @@ More query methods coming soon...
 
 ## 🧾 Roadmap (Coming Soon)
 
-- Middleware support  
 - Authentication scaffolding  
 - RESTful API boilerplate  
-- CLI-based project bootstrap  
-- Model relationships (hasOne, belongsTo, etc.)
+- Collection map
+- Queue process
 
 ---
 
