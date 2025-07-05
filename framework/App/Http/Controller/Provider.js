@@ -11,7 +11,6 @@ export default class Provider
 
 
 
-
     /*
      * *********
      *
@@ -20,14 +19,14 @@ export default class Provider
     {
         try {
             let {route, system} = this.services;
-            //
+
             if(route['CONTROLLER'] && route['METHOD'])
             {
                 const cltr_path = path.join(env.BASE_PATH, "app/Http/Controllers/"+route['CONTROLLER']+'.js');
 
                 const base = new ((await import(cltr_path)).default)($request);
 
-                const resp = await base[route['METHOD']]($request);
+                const resp = await base[route['METHOD']]($request, route.PARAMS);
 
                 return resp;
             }
