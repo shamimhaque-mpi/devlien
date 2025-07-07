@@ -39,14 +39,24 @@ export default class Kernel
              *
              * *******************/
             if(this.SERVICES.route.MIDDLEWARE && this.SERVICES.route.MIDDLEWARE.length){
+                var isReturn = false;
                 for(const index in this.SERVICES.route.MIDDLEWARE){
-                    let middleware = this.SERVICES.route.MIDDLEWARE[index];
 
+                    let middleware = this.SERVICES.route.MIDDLEWARE[index];
                     middleware = new middleware();
-                    if(middleware.next){
-                        await middleware.next(request, response);
+
+                    if(middleware){
+                        let isNuxt = await middleware.next(request, response);
+                        if(isNuxt!==true){
+                            isReturn = JSON.stringify(isNuxt);
+                            break;
+                        }
                     }
                 }
+                if(response & isReturn)
+                    response.end(Buffer.isBuffer(isReturn) ? isReturn : JSON.stringify(isReturn));
+                else if(isReturn)
+                    return isReturn;
             }
 
             if(!this.SERVICES.route.METHOD) throw {stack:"Page Not Found"};

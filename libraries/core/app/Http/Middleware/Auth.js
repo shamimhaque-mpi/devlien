@@ -1,6 +1,5 @@
 export default class Auth {
-
-    async nuxt(request){
-        
+    async next(request){
+        return true;
     }
 }
