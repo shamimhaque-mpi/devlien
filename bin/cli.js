@@ -4,7 +4,6 @@ import Execution from './execution.js';
 
 Execution.start((system, param)=>{
 
-
     if(param.includes('make:migration')){
         system.createMigration(param[1]);
     }
@@ -48,11 +47,16 @@ Execution.start((system, param)=>{
                 system.copyDemo();
             }
             else {
-                system.ask('Which framework are you using ?', ['NuxtJs', 'NextJs', 'NestJs'])
+                // 'NestJs'
+                system.ask('Which framework are you using ?', ['NuxtJs', 'NextJs'])
                 .then(ans=>{
                     if(ans.toLowerCase()=='nuxtjs'){
                         system.updatePackageJson();
                         system.copyNuxtDemo();
+                    }
+                    else if(ans.toLowerCase()=='nextjs'){
+                        system.updatePackageJson();
+                        system.copyNextDemo();
                     }
                 })
             }

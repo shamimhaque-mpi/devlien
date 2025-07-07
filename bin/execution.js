@@ -66,15 +66,20 @@ export default class Execution {
 
 
     copyNuxtDemo(){
-        exec(`cp -R ${this.base_path}/node_modules/deepline/libraries/nuxt/* ${path.join(this.base_path), 'server/'}`, (error, stdout, stderr) => {
+        exec(`cp -R ${this.base_path}/node_modules/deepline/libraries/core/* ${path.join(this.base_path, 'server/')}`, (error, stdout, stderr) => {
             if (error) {
                 console.error(`exec error: ${error}`);
                 return;
             }
             else {
-                exec(`mv ${path.join(this.base_path), 'server/.env'} ${this.base_path}`, ()=>{});
+                exec(`cp -R ${path.join(this.base_path, '/node_modules/deepline/libraries/nuxt/*')} ${path.join(this.base_path, 'server/')}`, ()=>{});
+                exec(`cp ${path.join(this.base_path, '/node_modules/deepline/libraries/nuxt/.env')} ${this.base_path}`, ()=>{});
             }
         });
+    }
+
+    copyNextDemo(){
+        
     }
 
 
