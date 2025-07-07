@@ -32,7 +32,7 @@ npm install https://github.com/shamimhaque-mpi/deepline
 Initialize the server environment using:
 
 ```bash
-npx deepline config
+npx deepline setup
 ```
 
 This will automatically create the following structure inside your project:

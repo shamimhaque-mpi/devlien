@@ -8,11 +8,13 @@ import Controller from './controller.js';
 import Resource from './resource.js';
 import path from 'path';
 import Cache from './cache.js';
+import os from "os";
 
 export default class Execution {
 
     constructor(){
         this.base_path = process.cwd();
+        this.os = os.platform();
     }
 
 
@@ -66,14 +68,37 @@ export default class Execution {
 
 
     copyNuxtDemo(){
-        exec(`cp -R ${this.base_path}/node_modules/deepline/libraries/core/* ${path.join(this.base_path, 'server/')}`, (error, stdout, stderr) => {
+
+        var cmd_core_files = `cp -R ${this.base_path}/node_modules/deepline/libraries/core/* ${path.join(this.base_path, 'server/')}`;
+        var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/deepline/libraries/nuxt/*')} ${path.join(this.base_path, 'server/')}`;
+        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/deepline/libraries/nuxt/.env')} ${this.base_path}`;
+        var cmd_env_remov  = `rm -rf ${path.join(this.base_path, 'server/.env')}`;
+
+
+        if(this.os=='win32'){
+            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/core')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
+            cmd_nuxt_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/nuxt')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
+            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/nuxt/.env')}" "${this.base_path}" /Y`;
+            cmd_env_remov = `del /F /Q "${path.join(this.base_path, 'server/.env')}"`;
+        }
+
+
+        exec(cmd_core_files, (error, stdout, stderr) => {
             if (error) {
                 console.error(`exec error: ${error}`);
                 return;
             }
             else {
-                exec(`cp -R ${path.join(this.base_path, '/node_modules/deepline/libraries/nuxt/*')} ${path.join(this.base_path, 'server/')}`, ()=>{});
-                exec(`cp ${path.join(this.base_path, '/node_modules/deepline/libraries/nuxt/.env')} ${this.base_path}`, ()=>{});
+                exec(cmd_nuxt_files, (error)=>{
+                    if(!error)
+                    exec(cmd_env_clone, (error)=>{
+                        if(!error)
+                        exec(cmd_env_remov, (error)=>{
+                            // if(!error)
+                            // setTimeout(()=>{Cache.clear();}, 5000)
+                        });
+                    });
+                });
             }
         });
     }

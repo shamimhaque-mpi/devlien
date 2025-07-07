@@ -39,7 +39,7 @@ Execution.start((system, param)=>{
     }
 
 
-    else if(param.includes('config')){
+    else if(param.includes('setup')){
         system.ask('Are you using Deepline with another framework ?', ['No', 'Yes'])
         .then(ans=>{
             if(ans.toLowerCase()=='no'){
