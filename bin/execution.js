@@ -7,6 +7,7 @@ import Model from './model.js';
 import Controller from './controller.js';
 import Resource from './resource.js';
 import path from 'path';
+import Cache from './cache.js';
 
 export default class Execution {
 
@@ -48,6 +49,9 @@ export default class Execution {
         Migration.rollback(param);
     }
 
+    cacheClear(){
+        Cache.clear();
+    }
 
     copyDemo(){
         exec(`cp -R ${this.base_path}/node_modules/deepline/libraries/demo/. ${this.base_path}`, (error, stdout, stderr) => {

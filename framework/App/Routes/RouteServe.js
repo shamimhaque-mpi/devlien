@@ -7,28 +7,28 @@ export default class RouteServe {
     #request;
     #response;
     #system;
+    #routes;
 
-    constructor({request, response, system}){
+    constructor({request, response, system, routes}){
         this.#request = request;
         this.#response = response;
         this.#system = system;
+        this.#routes = routes;
     }
 
-    async setConfig(request, response, system){
+    async setConfig(request, response){
 
-        let route_api = await import(system.path("routes/api.js"));
-        let route_web = await import(system.path("routes/web.js"));
-
-        let _API_ROUTES = {};
-        for(const path in route_api.default._ROUTES){
-            _API_ROUTES['/api'+path] = route_api.default._ROUTES[path];
-        }
+        var _ROUTES = {};
+        this.#routes.forEach(router=>{
+            for(const path in router._ROUTES){
+                _ROUTES[path] = router._ROUTES[path];
+            }
+        });
         
-        this._ROUTES = {..._API_ROUTES, ...route_web.default._ROUTES}
+        this._ROUTES   = _ROUTES;
         this._REQUEST  = request;
         this._RESPONSE = response;
 
-        
         return this._ROUTE = await this.getOrigin();
     }
 
@@ -38,8 +38,6 @@ export default class RouteServe {
 
         for (const pattern in this._ROUTES){
             const match_route = this.matchRoute(pattern, this._REQUEST.url);
-
-            console.log(match_route, pattern, this._REQUEST.url);
             
             if(match_route) {
                 this._ROUTES[this._REQUEST.url] = this._ROUTES[pattern];

@@ -12,6 +12,7 @@ import route from "deepline/route";
  * GET request to '/' will be handled by DeeplineController's index() method.
  */
 export default route.serve(route => {
-    // Handles GET / → index() method of DeeplineController
-    route.get('index', 'DeeplineController@index'); 
+    route.group({'prefix':'api'}, (route)=>{
+        route.get('index', 'DeeplineController@index'); 
+    })
 });

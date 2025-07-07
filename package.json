@@ -12,8 +12,10 @@
     "./migration":"./framework/App/Database/Migration.js",
     "./controller": "./framework/App/Http/Controller/Controller.js",
     "./resouceCollection": "./framework/App/Http/Resouces/ResouceCollection.js",
+    "./serviceProvider": "./framework/App/Http/Provider/ServiceProvider.js",
     "./file": "./framework/App/File/FileHandler.js",
-    "./env": "./framework/Env.js"
+    "./env": "./framework/Env.js",
+    "./config": "./framework/App/Cores/Config.js"
   },
   "main": "index.js",
   "type": "module",

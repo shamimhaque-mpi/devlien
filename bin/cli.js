@@ -35,7 +35,12 @@ Execution.start((system, param)=>{
     }
 
 
-    else if(param.includes('install')){
+    else if(param.includes('cache:clear')){
+        system.cacheClear(param[1]);
+    }
+
+
+    else if(param.includes('config')){
         system.ask('Are you using Deepline with another framework ?', ['No', 'Yes'])
         .then(ans=>{
             if(ans.toLowerCase()=='no'){

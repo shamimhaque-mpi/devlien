@@ -4,18 +4,18 @@ import {methods} from "./Cores/Global.js"
 import System from "./Cores/System.js"
 import formidable from 'formidable';
 import Request from "./Http/Request.js";
+import config from "deepline/config";
 
 export default class Kernel 
 {
-    
-    SERVICES   = {};
-    #PATH
+    SERVICES = {};
+    ROUTES   = [];
     //
-    constructor(request, response=null, config={})
-    {
-        this.#PATH = config.path;
+    constructor(request, response=null, config={}){
         return this.executeController(request, response);
     }
+
+
 
     setGlobal(){
         Object.keys(methods).forEach(method_name => {
@@ -30,7 +30,7 @@ export default class Kernel
      * ************* */
     async executeController(request, response)
     {
-
+        await this.initProvider(request, response);
         await this.initConfig(request, response);
 
         try {
@@ -77,6 +77,20 @@ export default class Kernel
         }
     }
 
+
+
+
+    async initProvider(request, response){
+        let providers = config('app.providers', null);
+        if(providers) providers.forEach(provider=>{
+            provider = new provider();
+            provider.boot();
+            if(provider.ROUTE_SERVICE){
+                this.ROUTES = [...this.ROUTES, ...provider.ROUTE_SERVICE];
+            }
+        });
+    }
+
     /*
      * ***************
      * 
@@ -95,9 +109,10 @@ export default class Kernel
          * SET ALL SERVICES
          * *************** */
         this.SERVICES = {
+            routes   : this.ROUTES,
             request  : request,
             response : response,
-            system   : new System({path:this.#PATH})
+            system   : new System()
         }
         //
         this.SERVICES.route = await (new RouteServe(this.SERVICES)).route();
