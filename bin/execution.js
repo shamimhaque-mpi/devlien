@@ -103,7 +103,7 @@ export default class Execution {
 
 
             console.log('System is preparing...');
-            Cache.clear();
+            await this.execPromise('npx deepline cache:clear');
             console.log('\x1b[32m%s\x1b[0m', 'System is ready to go.\n')
 
         } catch (error) {
@@ -111,7 +111,42 @@ export default class Execution {
         }
     }
 
-    copyNextDemo(){
+    async copyNextDemo(){
+
+
+        var cmd_core_files = `cp -R ${this.base_path}/node_modules/deepline/libraries/core/* ${path.join(this.base_path, 'pages/server/')}`;
+        var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/deepline/libraries/next/*')} ${path.join(this.base_path, '/')}`;
+        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/deepline/libraries/next/.env')} ${this.base_path}`;
+
+
+        if(this.os=='win32'){
+            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/core')}" "${path.join(this.base_path, 'pages/server')}" /E /I /Y`;
+            cmd_nuxt_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/next')}" "${path.join(this.base_path, '/')}" /E /I /Y`;
+            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/next/.env')}" "${this.base_path}" /Y`;
+        }
+
+        try {
+
+            console.log('Nuxtjs config is being updated...');
+            await this.execPromise(cmd_nuxt_files);
+            console.log('\x1b[32m%s\x1b[0m', 'Nuxtjs config has been updated.\n');
+
+            console.log('Core files are being generated...');
+            await this.execPromise(cmd_core_files);
+            console.log('\x1b[32m%s\x1b[0m', 'Core files have been generated.\n');
+
+            console.log('Environment variables are being updated...');
+            await this.execPromise(cmd_env_clone);
+            console.log('\x1b[32m%s\x1b[0m', 'Environment variables have been updated.\n');
+
+
+            console.log('System is preparing...');
+            await this.execPromise('npx deepline cache:clear');
+            console.log('\x1b[32m%s\x1b[0m', 'System is ready to go.\n')
+
+        } catch (error) {
+            console.error("Error occurred:", error);
+        }
         
     }
 
