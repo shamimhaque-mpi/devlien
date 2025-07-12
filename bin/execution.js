@@ -114,13 +114,13 @@ export default class Execution {
     async copyNextDemo(){
 
 
-        var cmd_core_files = `cp -R ${this.base_path}/node_modules/deepline/libraries/core/* ${path.join(this.base_path, 'pages/server/')}`;
+        var cmd_core_files = `cp -R ${this.base_path}/node_modules/deepline/libraries/core/* ${path.join(this.base_path, 'server/')}`;
         var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/deepline/libraries/next/*')} ${path.join(this.base_path, '/')}`;
         var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/deepline/libraries/next/.env')} ${this.base_path}`;
 
 
         if(this.os=='win32'){
-            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/core')}" "${path.join(this.base_path, 'pages/server')}" /E /I /Y`;
+            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/core')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
             cmd_nuxt_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/next')}" "${path.join(this.base_path, '/')}" /E /I /Y`;
             cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/next/.env')}" "${this.base_path}" /Y`;
         }
