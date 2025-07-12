@@ -15,7 +15,8 @@
     "./serviceProvider": "./framework/App/Http/Provider/ServiceProvider.js",
     "./file": "./framework/App/File/FileHandler.js",
     "./env": "./framework/Env.js",
-    "./config": "./framework/App/Cores/Config.js"
+    "./config": "./framework/App/Cores/Config.js",
+    "./system": "./framework/App/Cores/System.js"
   },
   "main": "index.js",
   "type": "module",

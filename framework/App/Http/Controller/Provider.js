@@ -1,4 +1,5 @@
-import env from "deepline/env";
+import { baseEnv } from "deepline/env";
+import System from "deepline/system";
 import path from "path";
 
 export default class Provider 
@@ -22,10 +23,8 @@ export default class Provider
 
             if(route['CONTROLLER'] && route['METHOD']){
                 
-                const cltr_path = path.join(env.BASE_PATH, "app/Http/Controllers/"+route['CONTROLLER']+'.js');
-
-                const base = new ((await import(cltr_path)).default)($request);
-
+                const cltr_path = path.join(baseEnv.BASE_PATH, "app/Http/Controllers/"+route['CONTROLLER']+'.js');
+                const base = new (await System.import(cltr_path))($request);
                 const resp = await base[route['METHOD']]($request, route.PARAMS);
 
                 return resp;

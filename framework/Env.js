@@ -2,21 +2,22 @@ import path  from "path";
 import dotenv from "dotenv";
 
 dotenv.config({ path: path.resolve()+'/.env' });
-// process.env
 
-export default {
+export default function(segment=null, _default=null) {
+    if(segment)
+        return process.env[segment] ? process.env[segment] : _default; 
+    return _default; 
+}
+
+
+
+export const baseEnv = {
     DB_HOST : process.env.DB_HOST,
     DB_USERNAME : process.env.DB_USERNAME,
     DB_PASSWORD : process.env.DB_PASSWORD,
     DB_NAME : process.env.DB_NAME,
-    BASE_PATH : path.join(process.cwd(), process.env.SERVER_PATH ? process.env.SERVER_PATH : '')
+    BASE_PATH : path.join(process.cwd(), process.env.SERVER_PATH ? process.env.SERVER_PATH : ''),
 }
 
 
-
-export const base = {
-    path : {
-        root:path.join(process.cwd(), process.env.SERVER_PATH ? process.env.SERVER_PATH : ''),
-        join:(_path)=>path.join(base.path.root, _path),
-    }
-}
+export const nodeEnv = process.env;

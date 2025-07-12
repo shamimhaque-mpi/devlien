@@ -1,32 +1,35 @@
 import fs from "fs";
 import path from "path";
-import { base } from "deepline/env";
-import System from "../framework/App/Cores/System.js";
+import { baseEnv } from "deepline/env";
+import System from "deepline/system";
 
 export default class Cache {
 
     constructor(){}
 
     static async clear(modelName){
-
         let dir = path.join(process.cwd(), 'node_modules/deepline/framework/App/bootstrap');
+        fs.writeFileSync(path.join(dir, 'config.js'), `export const configs = {}`);
 
-        const files = await System.readDirAsync(base.path.join('config'));
+        try{
+            const files = await System.readDirAsync(path.join(baseEnv.BASE_PATH, 'config'));
 
-        var content   = ``;
-        var fileNames = ``;
+            var content   = `import System from "deepline/system";\n\n`;
+            var fileNames = ``;
 
-        Object.values(files).forEach((file)=>{
+            Object.values(files).forEach((file)=>{
 
-            let fileName  = file.replace('.js', '');
-                // fileName  = fileName.charAt(0).toUpperCase() + fileName.slice(1);
-                // fileNames += `  ${file.replace('.js', '')} : (new ${fileName}()),\n`;
-                fileNames += `  ${file.replace('.js', '')} : ${fileName},\n`;
-            //
-            content += `import {${fileName}} from '${base.path.join('config/'+file)}' \n`;
-        });
+                let fileName  = file.replace('.js', '');
+                    fileNames += `  ${file.replace('.js', '')} : ${fileName},\n`;
+                //
+                content += `const ${fileName} = await System.import('${path.join(baseEnv.BASE_PATH, 'config/'+file)}');\n`;
+            });
 
-        content += `\n\nexport const configs = {\n${fileNames}}`;
-        fs.writeFileSync(path.join(dir, 'config.js'), content);
+            content += `\n\nexport const configs = {\n${fileNames}}`;
+            fs.writeFileSync(path.join(dir, 'config.js'), content);
+        }
+        catch(e){
+            // console.log(e);
+        }
     }
 }

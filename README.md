@@ -137,7 +137,7 @@ In your controller:
 import User from "../Models/User";
 
 // Fetch all users
-let users = await User.instance().get();
+let users = await User.get();
 
 // or
 let user = new User();

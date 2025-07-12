@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import env from "deepline/env";
+import { baseEnv } from "deepline/env";
 
 export default class Controller {
 
@@ -17,6 +17,6 @@ export default class Controller {
         let mgn = new Controller;
         var content = fs.readFileSync(mgn.package_path+'/libraries/standard/controller.js', 'utf-8');
         content = content.replaceAll('@controller', controllerName)
-        fs.writeFileSync(path.join(env.BASE_PATH, `app/Http/Controllers/${controllerName}.js`)  , content);
+        fs.writeFileSync(path.join(baseEnv.BASE_PATH, `app/Http/Controllers/${controllerName}.js`)  , content);
     }
 }

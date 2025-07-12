@@ -1,6 +1,7 @@
+import { pathToFileURL } from 'url';
+import { baseEnv } from "deepline/env";
 import fs from "fs";
 import path from "path";
-import env from "deepline/env";
 
 export default class System {
     base_path = '';
@@ -11,13 +12,13 @@ export default class System {
     
 
     path($string=""){
-        return path.join(env.BASE_PATH, ($string!='' ? (this.base_path+'/'+$string) : this.base_path));
+        return path.join(baseEnv.BASE_PATH, ($string!='' ? (this.base_path+'/'+$string) : this.base_path));
     }
 
 
     static path($string=""){
         let obj = new System;
-        return path.join(env.BASE_PATH, ($string!='' ? (obj.base_path+'/'+$string) : obj.base_path));
+        return path.join(baseEnv.BASE_PATH, ($string!='' ? (obj.base_path+'/'+$string) : obj.base_path));
     }
 
 
@@ -32,5 +33,13 @@ export default class System {
                 else resolve(files);
             });
         });
+    }
+
+    static toFilePath(path=''){
+        return pathToFileURL(path).href;
+    }
+
+    static async import(path=''){
+        return (await import(pathToFileURL(path).href)).default;
     }
 }

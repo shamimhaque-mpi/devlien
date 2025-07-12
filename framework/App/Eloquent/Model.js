@@ -18,16 +18,6 @@ export default class Model extends Relation {
     }
 
 
-    getTableName(){
-        const constructor = Object.getPrototypeOf(this).constructor;
-        return this.pluralize(this.toSnakeCase(constructor.name));
-    }
-
-
-    static instance() {
-        return new this();
-    }
-
 
     where(condition) {
 
@@ -52,10 +42,20 @@ export default class Model extends Relation {
     }
 
 
+    static where(condition){
+        return (new this()).where(condition);
+    }
+
+
     orderBy(entity, type){
         this.#_orderBy = `ORDER BY ${entity} ${type}`;
         return this;
     }
+
+    static orderBy(entity, type){
+        return (new this()).orderBy(entity, type);
+    }
+
 
     //join('t1', 't2', 't1.id', 't2.id')
     join(...fields){
@@ -70,16 +70,31 @@ export default class Model extends Relation {
     }
 
 
+    static join(...fields){
+        return (new this()).join(fields);
+    }
+
+
+
     select(columns) {
         this.#_columns = columns;
         return this;
     }
 
 
+    static select(columns){
+        return (new this()).select(columns);
+    }
+
 
     async first() {
         const [records] = await Database.instance().query(this.makeQuery('get'));
         return records[0] ? this.makeResponse(records[0]) : false;
+    }
+
+
+    static async first(){
+        return await (new this()).first();
     }
 
 
@@ -89,6 +104,11 @@ export default class Model extends Relation {
         this.orderBy('id', 'DESC');
         const [records] = await Database.instance().query(this.makeQuery('get'));
         return records[0] ? this.makeResponse(records[0]) : false;
+    }
+
+
+    static async last(){
+        return await (new this()).last();
     }
 
 
@@ -103,16 +123,8 @@ export default class Model extends Relation {
     }
 
 
-
-    makeResponse(record){
-
-        let model = this.constructor.name;
-        const d   = {[model]:class extends this.constructor { constructor(){super()}}}
-
-        const _dClass = new d[model];
-        delete _dClass.softdelete;
-
-        return Object.assign(_dClass, record);
+    static async get(){
+        return await (new this()).get();
     }
     
 
@@ -122,7 +134,11 @@ export default class Model extends Relation {
     }
 
 
-    
+    static async count(){
+        return await (new this()).count();
+    }
+
+
     async create(data) {
         const columns = Object.keys(data);
         const values  = Object.values(data);
@@ -137,6 +153,10 @@ export default class Model extends Relation {
     }
 
 
+    static async create(data){
+        return await (new this()).create(data);
+    }
+
 
     async update(data={}){
 
@@ -150,6 +170,11 @@ export default class Model extends Relation {
     }
 
 
+    static async update(data={}){
+        return await (new this()).update(data);
+    }
+
+
     async delete(){
         if(this.softdelete){
             await this.update({deleted_at:(new Date()).toISOString().split('T')[0]});
@@ -159,13 +184,29 @@ export default class Model extends Relation {
     }
 
 
+    static async delete(){
+        return await (new this()).delete();
+    }
+
+
     async truncate(){
         return await Database.instance().query(`TRUNCATE TABLE ${this.#table};`);
     }
 
+
+    static async truncate(){
+        return await (new this()).truncate();
+    }
+
+
     withSoftDelete(slug=true) {
         this.#_withSoftDete = slug;
         return this;
+    }
+
+
+    static withSoftDelete(slug=true){
+        return (new this()).withSoftDelete(slug);
     }
 
 
@@ -175,6 +216,11 @@ export default class Model extends Relation {
             this.#_where += `${this.#_where?' AND ' : ''} \`${this.#table}\`.deleted_at IS NOT NULL`;
         }
         return this;
+    }
+
+
+    static onlySoftDelete(is=true){
+        return (new this()).onlySoftDelete(is);
     }
 
 
@@ -251,6 +297,29 @@ export default class Model extends Relation {
 
     toObject(){
         return Object.assign({}, this);
+    }
+
+
+    getTableName(){
+        const constructor = Object.getPrototypeOf(this).constructor;
+        return this.pluralize(this.toSnakeCase(constructor.name));
+    }
+
+
+    static instance() {
+        return new this();
+    }
+
+
+    makeResponse(record){
+
+        let model = this.constructor.name;
+        const d   = {[model]:class extends this.constructor { constructor(){super()}}}
+
+        const _dClass = new d[model];
+        delete _dClass.softdelete;
+
+        return Object.assign(_dClass, record);
     }
 
 }

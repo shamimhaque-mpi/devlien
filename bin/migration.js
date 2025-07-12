@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
 import Mysql from "../framework/App/Database/Mysql.js";
-import env from "deepline/env";
-import System from "../framework/App/Cores/System.js";
+import { baseEnv } from "deepline/env";
+import System from "deepline/system";
 import Model from "deepline/model";
 
 export default class Migration {
@@ -27,7 +27,7 @@ export default class Migration {
         var content = fs.readFileSync(mgn.package_path+'/libraries/standard/migration.js', 'utf-8');
             content = content.replaceAll('@table', table)
 
-        fs.writeFileSync(path.join(env.BASE_PATH, `database/migrations/${today+'_'+unixSeconds}_${name}.js`)  , content);
+        fs.writeFileSync(path.join(baseEnv.BASE_PATH, `database/migrations/${today+'_'+unixSeconds}_${name}.js`)  , content);
     }
 
 
@@ -40,8 +40,10 @@ export default class Migration {
 
         try{
             const Dmigrations = await System.readDirAsync(System.vendorPath('App/Database/Default/'));
-            for(const index in Dmigrations){
-                let migration = new (await import(System.vendorPath('App/Database/Default/'+Dmigrations[index]))).default;
+
+            for(const index in Dmigrations)
+                {
+                let migration = new (await System.import(System.vendorPath('App/Database/Default/'+Dmigrations[index])));
                 await Mysql.instance().query(migration.getQuery().replaceAll('\n', ''));
             }
         }
@@ -75,7 +77,7 @@ export default class Migration {
 
 
     async runMigration(path){
-        let migration = new (await import(path)).default;
+        let migration = new (await System.import(path));
         //
         console.log(path+'  processing');
         await Mysql.instance().query(migration.getQuery().replaceAll('\n', ''));
@@ -106,7 +108,7 @@ export default class Migration {
 
         for(const index in migrated_list){
             
-            let migration = new (await import(System.path('database/migrations/'+migrated_list[index]))).default;
+            let migration = new (await System.import(System.path('database/migrations/'+migrated_list[index])));
             console.log(migrated_list[index]+'  processing');
             await Mysql.instance().query(migration.getQuery('down').replaceAll('\n', ''));
             await Migrations.instance().where({path:migrated_list[index]}).delete();

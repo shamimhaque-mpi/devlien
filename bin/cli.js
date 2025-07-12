@@ -1,6 +1,8 @@
 #!/usr/bin/env node
-import Execution from './execution.js';
+import Cache from './cache.js';
+Cache.clear();
 
+const { default: Execution } = await import('./execution.js');
 
 Execution.start((system, param)=>{
 
@@ -47,7 +49,6 @@ Execution.start((system, param)=>{
                 system.copyDemo();
             }
             else {
-                // 'NestJs'
                 system.ask('Which framework are you using ?', ['NuxtJs', 'NextJs'])
                 .then(ans=>{
                     if(ans.toLowerCase()=='nuxtjs'){
@@ -60,6 +61,6 @@ Execution.start((system, param)=>{
                     }
                 })
             }
-        })
+        });
     }
 });

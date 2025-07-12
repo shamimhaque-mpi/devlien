@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import env from "deepline/env";
+import { baseEnv } from "deepline/env";
 
 export default class Migration {
 
@@ -21,6 +21,6 @@ export default class Migration {
 
         content = content.replaceAll('@model', modelName)
 
-        fs.writeFileSync(path.join(env.BASE_PATH, `app/Models/${modelName}.js`)  , content);
+        fs.writeFileSync(path.join(baseEnv.BASE_PATH, `app/Models/${modelName}.js`)  , content);
     }
 }

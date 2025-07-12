@@ -9,10 +9,14 @@ import Resource from './resource.js';
 import path from 'path';
 import Cache from './cache.js';
 import os from "os";
+import { promisify } from 'util';
 
 export default class Execution {
 
+    execPromise = promisify(exec);
+
     constructor(){
+        Cache.clear();
         this.base_path = process.cwd();
         this.os = os.platform();
     }
@@ -67,7 +71,7 @@ export default class Execution {
 
 
 
-    copyNuxtDemo(){
+    async copyNuxtDemo(){
 
         var cmd_core_files = `cp -R ${this.base_path}/node_modules/deepline/libraries/core/* ${path.join(this.base_path, 'server/')}`;
         var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/deepline/libraries/nuxt/*')} ${path.join(this.base_path, 'server/')}`;
@@ -82,25 +86,29 @@ export default class Execution {
             cmd_env_remov = `del /F /Q "${path.join(this.base_path, 'server/.env')}"`;
         }
 
+        try {
 
-        exec(cmd_core_files, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`exec error: ${error}`);
-                return;
-            }
-            else {
-                exec(cmd_nuxt_files, (error)=>{
-                    if(!error)
-                    exec(cmd_env_clone, (error)=>{
-                        if(!error)
-                        exec(cmd_env_remov, (error)=>{
-                            // if(!error)
-                            // setTimeout(()=>{Cache.clear();}, 5000)
-                        });
-                    });
-                });
-            }
-        });
+            console.log('Core files are being generated...');
+            await this.execPromise(cmd_core_files);
+            console.log('\x1b[32m%s\x1b[0m', 'Core files have been generated.\n');
+
+            console.log('Nuxtjs config is being updated...');
+            await this.execPromise(cmd_nuxt_files);
+            console.log('\x1b[32m%s\x1b[0m', 'Nuxtjs config has been updated.\n');
+
+            console.log('Environment variables are being updated...');
+            await this.execPromise(cmd_env_clone);
+            await this.execPromise(cmd_env_remov);
+            console.log('\x1b[32m%s\x1b[0m', 'Environment variables have been updated.\n');
+
+
+            console.log('System is preparing...');
+            Cache.clear();
+            console.log('\x1b[32m%s\x1b[0m', 'System is ready to go.\n')
+
+        } catch (error) {
+            console.error("Error occurred:", error);
+        }
     }
 
     copyNextDemo(){
