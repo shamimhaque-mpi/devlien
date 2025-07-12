@@ -1,7 +1,7 @@
 import RouteServiceProvider from "../app/Providers/RouteServiceProvider.js"
 
 
-export const app = {
+export default {
 
     name : '',
     version : '1.0.0',

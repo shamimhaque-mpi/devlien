@@ -22,7 +22,7 @@ export default class Cache {
                 let fileName  = file.replace('.js', '');
                     fileNames += `  ${file.replace('.js', '')} : ${fileName},\n`;
                 //
-                content += `const ${fileName} = await System.import('${path.join(baseEnv.BASE_PATH, 'config/'+file)}');\n`;
+                content += `const ${fileName} = (await import('${System.toFilePath(path.join(baseEnv.BASE_PATH, 'config/'+file))}')).default;\n`;
             });
 
             content += `\n\nexport const configs = {\n${fileNames}}`;
