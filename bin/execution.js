@@ -131,14 +131,19 @@ export default class Execution {
             await this.execPromise(cmd_nuxt_files);
             console.log('\x1b[32m%s\x1b[0m', 'Nuxtjs config has been updated.\n');
 
+            await this.delay(1000);
+
             console.log('Core files are being generated...');
             await this.execPromise(cmd_core_files);
             console.log('\x1b[32m%s\x1b[0m', 'Core files have been generated.\n');
+
+            await this.delay(1000);
 
             console.log('Environment variables are being updated...');
             await this.execPromise(cmd_env_clone);
             console.log('\x1b[32m%s\x1b[0m', 'Environment variables have been updated.\n');
 
+            await this.delay(1000);
 
             console.log('System is preparing...');
             await this.execPromise('npx deepline cache:clear');
@@ -207,5 +212,8 @@ export default class Execution {
                 }
             });
         });
+    }
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
