@@ -1,13 +1,16 @@
 import { createPool } from 'mysql2/promise';
 import config from 'deepline/config';
 
-
+class DatabaseError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'Mysql';
+    }
+}
 
 export default class Mysql {
     
-    #conn   = new Object();
     #config = {};
-
 
     constructor(){
 
@@ -15,36 +18,32 @@ export default class Mysql {
 
         if(database.default && database.connections)
             this.#config = database.connections[database.default]
-
-
-        this.#conn = createPool({
-            host: this.#config?.host,
-            user: this.#config?.username,
-            password: this.#config?.password,
-            database: this.#config?.database,    
-        })
-
     }
-
 
     static instance (){
         return new Mysql();
     }
 
-
-
-    query(query, values=[]){
-        return this.#conn.query(query, values);
+    async query(query, values=[]){
+        try{
+            return await this.connect().query(query, values);
+        }
+        catch(e){
+            throw new DatabaseError(e);
+        }
     }
 
-
+    static query(query, values=[]){
+        return (new Mysql()).query(query, values);
+    }
 
     connect(database=this.#config.database){
-        return this.#conn = createPool({
+        return createPool({
             host: this.#config.host,
             user: this.#config.username,
             password: this.#config.password,
-            database: database,    
+            database: database,
+            connectTimeout: 3000
         })
     }
 }

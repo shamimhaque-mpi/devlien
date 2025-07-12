@@ -17,8 +17,6 @@ export default class Model extends Relation {
             this.#table = config.table ? config.table : this.getTableName();
     }
 
-
-
     where(condition) {
 
         if(Array.isArray(condition) && condition.length==3)
@@ -88,8 +86,14 @@ export default class Model extends Relation {
 
 
     async first() {
-        const [records] = await Database.instance().query(this.makeQuery('get'));
-        return records[0] ? this.makeResponse(records[0]) : false;
+
+        try{
+            const [records] = await Database.instance().query(this.makeQuery('get'));
+            return records[0] ? this.makeResponse(records[0]) : false;
+        }
+        catch(e){
+            throw new Error(e);
+        }
     }
 
 
@@ -98,12 +102,15 @@ export default class Model extends Relation {
     }
 
 
-
-
     async last() {
-        this.orderBy('id', 'DESC');
-        const [records] = await Database.instance().query(this.makeQuery('get'));
-        return records[0] ? this.makeResponse(records[0]) : false;
+        try{
+            this.orderBy('id', 'DESC');
+            const [records] = await Database.instance().query(this.makeQuery('get'));
+            return records[0] ? this.makeResponse(records[0]) : false;
+        }
+        catch(e){
+            throw new Error(e);
+        }
     }
 
 
@@ -112,14 +119,17 @@ export default class Model extends Relation {
     }
 
 
-
     async get() {
-        var [records] = await Database.instance().query(this.makeQuery('get'));
-        records = records.map((record)=>{
-            return this.makeResponse(record); ;
-        });
-        return records;
-        
+        try{
+            var [records] = await Database.instance().query(this.makeQuery('get'));
+            records = records.map((record)=>{
+                return this.makeResponse(record); ;
+            });
+            return records;
+        }
+        catch(e){
+            throw new Error(e);
+        }
     }
 
 
@@ -129,8 +139,13 @@ export default class Model extends Relation {
     
 
     async count(){
-        let [count] = await Database.instance().query(this.makeQuery('count'));
-        return count[0].count;
+        try{
+            let [count] = await Database.instance().query(this.makeQuery('count'));
+            return count[0].count;
+        }
+        catch(e){
+            throw new Error(e);
+        }
     }
 
 
@@ -140,16 +155,21 @@ export default class Model extends Relation {
 
 
     async create(data) {
-        const columns = Object.keys(data);
-        const values  = Object.values(data);
-        const [record] = await Database.instance().query(this.makeQuery('insert', columns), values);
+        try{
+            const columns = Object.keys(data);
+            const values  = Object.values(data);
+            const [record] = await Database.instance().query(this.makeQuery('insert', columns), values);
 
-        let _data = this.where({'id':record.insertId}).first();
+            let _data = this.where({'id':record.insertId}).first();
 
-        if(this.#successFn)
-            this.#successFn(this.where({'id':record.insertId}), _data);
+            if(this.#successFn)
+                this.#successFn(this.where({'id':record.insertId}), _data);
 
-        return _data;
+            return _data;
+        }
+        catch(e){
+            throw new Error(e);
+        }
     }
 
 
@@ -159,14 +179,18 @@ export default class Model extends Relation {
 
 
     async update(data={}){
+        try{
+            await Database.instance().query(this.makeQuery('update', data));
+            let _data = this.first()
 
-        await Database.instance().query(this.makeQuery('update', data));
-        let _data = this.first()
-
-        if(this.#successFn)
-            this.#successFn(this, _data);
-        
-        return _data;
+            if(this.#successFn)
+                this.#successFn(this, _data);
+            
+            return _data;
+        }
+        catch(e){
+            throw new Error(e);
+        }
     }
 
 
@@ -176,11 +200,16 @@ export default class Model extends Relation {
 
 
     async delete(){
-        if(this.softdelete){
-            await this.update({deleted_at:(new Date()).toISOString().split('T')[0]});
+        try{
+            if(this.softdelete){
+                await this.update({deleted_at:(new Date()).toISOString().split('T')[0]});
+            }
+            else
+                return await Database.instance().query(this.makeQuery('delete'));
         }
-        else
-            return await Database.instance().query(this.makeQuery('delete'));
+        catch(e){
+            throw new Error(e);
+        }
     }
 
 
@@ -190,7 +219,12 @@ export default class Model extends Relation {
 
 
     async truncate(){
-        return await Database.instance().query(`TRUNCATE TABLE ${this.#table};`);
+        try{
+            return await Database.instance().query(`TRUNCATE TABLE ${this.#table};`);
+        }
+        catch(e){
+            throw new Error(e);
+        }
     }
 
 
