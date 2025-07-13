@@ -59,13 +59,38 @@ export default class Execution {
         Cache.clear();
     }
 
-    copyDemo(){
-        exec(`cp -R ${this.base_path}/node_modules/deepline/libraries/demo/. ${this.base_path}`, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`exec error: ${error}`);
-                return;
-            }
-        });
+    async copyDemo(){
+
+        var cmd_core_files = `cp -R ${this.base_path}/node_modules/deepline/libraries/core/* ${path.join(this.base_path, '')}`;
+        var cmd_views_files = `cp -R ${path.join(this.base_path, '/node_modules/deepline/libraries/demo/*')} ${path.join(this.base_path, '')}`;
+        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/deepline/libraries/demo/.env')} ${this.base_path}`;
+
+
+        if(this.os=='win32'){
+            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/core')}" "${path.join(this.base_path, '')}" /E /I /Y`;
+            cmd_views_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/demo')}" "${path.join(this.base_path, '')}" /E /I /Y`;
+            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/demo/.env')}" "${this.base_path}" /Y`;
+        }
+
+        try {
+
+            console.log('Core files are being generated...');
+            await this.execPromise(cmd_core_files);
+            await this.delay(500);
+            await this.execPromise(cmd_views_files);
+            await this.delay(500);
+            await this.execPromise(cmd_env_clone);
+            await this.delay(500);
+            console.log('\x1b[32m%s\x1b[0m', 'Core files have been generated.\n');
+
+
+            console.log('System is preparing...');
+            await this.execPromise('npx deepline cache:clear');
+            console.log('\x1b[32m%s\x1b[0m', 'System is ready to go.\n')
+
+        } catch (error) {
+            console.error("Error occurred:", error);
+        }
     }
 
 
@@ -92,15 +117,23 @@ export default class Execution {
             await this.execPromise(cmd_core_files);
             console.log('\x1b[32m%s\x1b[0m', 'Core files have been generated.\n');
 
+            await this.delay(500);
+
             console.log('Nuxtjs config is being updated...');
             await this.execPromise(cmd_nuxt_files);
             console.log('\x1b[32m%s\x1b[0m', 'Nuxtjs config has been updated.\n');
 
+            await this.delay(500);
+
             console.log('Environment variables are being updated...');
             await this.execPromise(cmd_env_clone);
+
+            await this.delay(500);
+
             await this.execPromise(cmd_env_remov);
             console.log('\x1b[32m%s\x1b[0m', 'Environment variables have been updated.\n');
 
+            await this.delay(500);
 
             console.log('System is preparing...');
             await this.execPromise('npx deepline cache:clear');
@@ -131,19 +164,19 @@ export default class Execution {
             await this.execPromise(cmd_nuxt_files);
             console.log('\x1b[32m%s\x1b[0m', 'Nuxtjs config has been updated.\n');
 
-            await this.delay(1000);
+            await this.delay(500);
 
             console.log('Core files are being generated...');
             await this.execPromise(cmd_core_files);
             console.log('\x1b[32m%s\x1b[0m', 'Core files have been generated.\n');
 
-            await this.delay(1000);
+            await this.delay(500);
 
             console.log('Environment variables are being updated...');
             await this.execPromise(cmd_env_clone);
             console.log('\x1b[32m%s\x1b[0m', 'Environment variables have been updated.\n');
 
-            await this.delay(1000);
+            await this.delay(500);
 
             console.log('System is preparing...');
             await this.execPromise('npx deepline cache:clear');

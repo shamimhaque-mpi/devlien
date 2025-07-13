@@ -41,7 +41,11 @@ This will automatically create the following structure inside your project:
 server/
 ├── app/
 │   ├── Controllers/
-│   └── Models/
+│   ├── Models/
+│   └── Providers/
+├── config/
+│   ├── app
+│   └── database
 ├── database/
 │   ├── migrations/
 │   └── seeds/
@@ -138,7 +142,6 @@ import User from "../Models/User";
 
 // Fetch all users
 let users = await User.get();
-
 // or
 let user = new User();
 let users = await user.get();
