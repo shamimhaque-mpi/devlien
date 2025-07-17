@@ -8,6 +8,8 @@ export default class Model extends Relation {
     #_columns   = ['*'];
     #_orderBy   = '';
     #_join      = '';
+    #_skip      = '';
+    #_limit     = '';
     #_withSoftDete     = false;
     #successFn         = false;
 
@@ -55,6 +57,26 @@ export default class Model extends Relation {
     }
 
 
+    skip(_num=null){
+        this.#_skip = _num;
+        return this;
+    }
+
+    static skip(_num=null){
+        return (new this()).skip(_num);
+    }
+
+
+    limit(_num){
+        this.#_limit = _num;
+        return this;
+    }
+
+
+    static limit(_num){
+        return (new this()).limit(_num);
+    }
+
     //join('t1', 't2', 't1.id', 't2.id')
     join(...fields){
 
@@ -71,7 +93,6 @@ export default class Model extends Relation {
     static join(...fields){
         return (new this()).join(fields);
     }
-
 
 
     select(columns) {
@@ -278,9 +299,13 @@ export default class Model extends Relation {
                 
                 ${this.#_join ? 'JOIN '+ this.#_join : ''} 
 
-                ${this.#_where?' where '+this.#_where:''} 
+                ${this.#_where?' WHERE '+this.#_where:''} 
                 
                 ${this.#_orderBy} 
+
+                ${this.#_limit ? ' LIMIT '+this.#_limit : ''}
+
+                ${this.#_skip ? ' OFFSET '+this.#_skip : ''} 
             `;
         }
 
