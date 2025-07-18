@@ -42,7 +42,8 @@ server
 ├── app
 │   ├── Http
 |   |   ├──Controllers
-|   |   └──Middleware
+|   |   ├──Middleware
+|   |   └──Resources
 │   ├── Models
 │   └── Providers
 ├── config
