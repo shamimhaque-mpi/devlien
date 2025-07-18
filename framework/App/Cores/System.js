@@ -1,5 +1,5 @@
 import { pathToFileURL } from 'url';
-import { baseEnv } from "deepline/env";
+import { baseEnv } from "devlien/env";
 import fs from "fs";
 import path from "path";
 
@@ -23,7 +23,7 @@ export default class System {
 
 
     static vendorPath($string=""){
-        return path.join(process.cwd(), 'node_modules/deepline/framework', $string);
+        return path.join(process.cwd(), 'node_modules/devlien/framework', $string);
     }
 
     static readDirAsync(dirPath) {

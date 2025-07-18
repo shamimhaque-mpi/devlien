@@ -1,5 +1,5 @@
 import { createPool } from 'mysql2/promise';
-import config from 'deepline/config';
+import config from 'devlien/config';
 
 class DatabaseError extends Error {
     constructor(message) {

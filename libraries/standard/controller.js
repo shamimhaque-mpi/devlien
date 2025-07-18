@@ -1,4 +1,4 @@
-import Controller from "deepline/controller";
+import Controller from "devlien/controller";
 
 /**
  * @controller

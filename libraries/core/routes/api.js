@@ -1,4 +1,4 @@
-import route from "deepline/route";
+import route from "devlien/route";
 import Auth from "../app/Http/Middleware/Auth.js";
 
 /**
@@ -10,11 +10,11 @@ import Auth from "../app/Http/Middleware/Auth.js";
  * Route format: route.get('route-name', 'Controller@method')
  *
  * Example:
- * GET request to '/' will be handled by DeeplineController's index() method.
+ * GET request to '/' will be handled by DevlienController's index() method.
  */
 
 export default route.serve(route => {
     route.group({'prefix':'api', 'middleware':[Auth]}, (route)=>{
-        route.get('index', 'DeeplineController@index'); 
+        route.get('index', 'DevlienController@index'); 
     })
 });

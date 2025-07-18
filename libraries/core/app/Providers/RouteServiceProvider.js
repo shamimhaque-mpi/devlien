@@ -1,4 +1,4 @@
-import ServiceProvider from "deepline/serviceProvider";
+import ServiceProvider from "devlien/serviceProvider";
 import API from "../../routes/api.js";
 
 

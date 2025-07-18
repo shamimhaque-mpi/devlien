@@ -1,4 +1,4 @@
-import ResouceCollection from "deepline/resouceCollection";
+import ResouceCollection from "devlien/resouceCollection";
 
 export default class @resource extends ResouceCollection {
     

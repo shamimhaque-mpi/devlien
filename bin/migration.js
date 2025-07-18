@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
 import Mysql from "../framework/App/Database/Mysql.js";
-import { baseEnv } from "deepline/env";
-import System from "deepline/system";
-import Model from "deepline/model";
+import { baseEnv } from "devlien/env";
+import System from "devlien/system";
+import Model from "devlien/model";
 
 export default class Migration {
 
@@ -12,7 +12,7 @@ export default class Migration {
 
 
     constructor(){
-        this.package_path = path.join(process.cwd(), 'node_modules/deepline');
+        this.package_path = path.join(process.cwd(), 'node_modules/devlien');
         this.app_path = process.cwd();
     }
 

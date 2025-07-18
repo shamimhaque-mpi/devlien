@@ -1,5 +1,5 @@
-import deepline from "deepline";
+import devlien from "devlien";
 
-const app = new deepline();
+const app = new devlien();
 
 app.serve();

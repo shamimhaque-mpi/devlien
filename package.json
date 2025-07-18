@@ -1,6 +1,6 @@
 {
-  "name": "deepline",
-  "version": "1.0.1",
+  "name": "devlien",
+  "version": "1.0.0",
   "description": "It is a NodeJs Framework",
   "exports": {
     ".":"./index.js",
@@ -24,11 +24,11 @@
     
   },  
   "bin": {
-    "deepline": "./bin/cli.js"
+    "devlien": "./bin/cli.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shamimhaque-mpi/deepline.git"
+    "url": "git+https://github.com/shamimhaque-mpi/devlien.git"
   },
   "dependencies": {
     "mysql2": "^3.14.0",
@@ -49,7 +49,7 @@
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shamimhaque-mpi/deepline/issues"
+    "url": "https://github.com/shamimhaque-mpi/devlien/issues"
   },
-  "homepage": "https://github.com/shamimhaque-mpi/deepline#readme"
+  "homepage": "https://github.com/shamimhaque-mpi/devlien#readme"
 }

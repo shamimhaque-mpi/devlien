@@ -4,7 +4,7 @@ import {methods} from "./Cores/Global.js"
 import System from "./Cores/System.js"
 import formidable from 'formidable';
 import Request from "./Http/Request.js";
-import config from "deepline/config";
+import config from "devlien/config";
 
 export default class Kernel 
 {

@@ -1,10 +1,10 @@
-import Controller from "deepline/controller";
+import Controller from "devlien/controller";
 
 /**
- * DeeplineController
+ * DevlienController
  * This controller handles requests for the home or root page.
  */
-export default class DeeplineController extends Controller {
+export default class DevlienController extends Controller {
     constructor() {
         super();
         // Any setup or initialization can go here.

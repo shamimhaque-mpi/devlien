@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { baseEnv } from "deepline/env";
+import { baseEnv } from "devlien/env";
 
 export default class Resource {
 
@@ -9,7 +9,7 @@ export default class Resource {
 
     
     constructor(){
-        this.package_path = path.join(process.cwd(), 'node_modules/deepline');
+        this.package_path = path.join(process.cwd(), 'node_modules/devlien');
         this.app_path = process.cwd();
     }
 

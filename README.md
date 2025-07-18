@@ -1,6 +1,6 @@
-# Deepline Framework
+# Devlien Framework
 
-**Deepline** is a minimal and flexible Node.js backend framework designed to work seamlessly with:
+**Devlien** is a minimal and flexible Node.js backend framework designed to work seamlessly with:
 
 - ✅ Nuxt.js
 - ✅ Next.js
@@ -13,16 +13,16 @@ It gives you a Laravel-like development experience while staying simple and unop
 
 ## 🚀 Quick Start with Nuxt.js
 
-This guide will walk you through installing and using Deepline in a **Nuxt.js**, **Nextjs** project.
+This guide will walk you through installing and using Devlien in a **Nuxt.js**, **Nextjs** project.
 
 ---
 
 ### 1️⃣ Install the Framework
 
-In your Nuxt project root, install Deepline:
+In your Nuxt project root, install Devlien:
 
 ```bash
-npm install deepline
+npm install devlien
 ```
 
 ---
@@ -32,7 +32,7 @@ npm install deepline
 Initialize the server environment using:
 
 ```bash
-npx deepline setup
+npx devlien setup
 ```
 
 This will automatically create the following structure inside your project:
@@ -77,14 +77,14 @@ DB_PASSWORD=secret
 
 ## ✨ Generate Core Components
 
-Deepline includes several command-line tools to help you build faster:
+Devlien includes several command-line tools to help you build faster:
 
 ---
 
 ### 📂 Create a Controller
 
 ```bash
-npx deepline make:controller HomeController
+npx devlien make:controller HomeController
 ```
 
 This will generate:  
@@ -95,7 +95,7 @@ This will generate:
 ### 📦 Create a Model
 
 ```bash
-npx deepline make:model User
+npx devlien make:model User
 ```
 
 This will generate:  
@@ -106,7 +106,7 @@ This will generate:
 ### 🧱 Create a Migration
 
 ```bash
-npx deepline make:migration users
+npx devlien make:migration users
 ```
 
 This will generate:  
@@ -119,8 +119,8 @@ Edit the file to define your table structure.
 ### 🔄 Run Migrations
 
 ```bash
-npx deepline migrate
-npx deepline migrate:rollback --all
+npx devlien migrate
+npx devlien migrate:rollback --all
 ```
 
 This will execute all pending migrations and create tables in your database.
@@ -130,10 +130,10 @@ This will execute all pending migrations and create tables in your database.
 ### 🚀 Create a HTTP Resource
 
 ```bash
-npx deepline make:resource
+npx devlien make:resource
 ```
 
-You’ll be prompted to enter the resource name (e.g., `Product`) and Deepline will generate resource for you.
+You’ll be prompted to enter the resource name (e.g., `Product`) and Devlien will generate resource for you.
 
 
 
@@ -143,7 +143,7 @@ You’ll be prompted to enter the resource name (e.g., `Product`) and Deepline w
 In your migraion: /database/migrations/...users.js
 
 ```js
-import Migration from "deepline/migration";
+import Migration from "devlien/migration";
 
 export default class extends Migration {
     up(schema){
@@ -166,7 +166,7 @@ export default class extends Migration {
 In your routes/api.js:
 
 ```js
-import route from "deepline/route";
+import route from "devlien/route";
 import Auth from "../app/Http/Middleware/Auth.js";
 
 export default route.serve(route => {

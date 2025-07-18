@@ -1,4 +1,4 @@
-import Model from "deepline/model"
+import Model from "devlien/model"
 
 export default class User extends Model {
     

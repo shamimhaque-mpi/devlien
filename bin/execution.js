@@ -61,15 +61,15 @@ export default class Execution {
 
     async copyDemo(){
 
-        var cmd_core_files = `cp -R ${this.base_path}/node_modules/deepline/libraries/core/* ${path.join(this.base_path, '')}`;
-        var cmd_views_files = `cp -R ${path.join(this.base_path, '/node_modules/deepline/libraries/demo/*')} ${path.join(this.base_path, '')}`;
-        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/deepline/libraries/demo/.env')} ${this.base_path}`;
+        var cmd_core_files = `cp -R ${this.base_path}/node_modules/devlien/libraries/core/* ${path.join(this.base_path, '')}`;
+        var cmd_views_files = `cp -R ${path.join(this.base_path, '/node_modules/devlien/libraries/demo/*')} ${path.join(this.base_path, '')}`;
+        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/demo/.env')} ${this.base_path}`;
 
 
         if(this.os=='win32'){
-            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/core')}" "${path.join(this.base_path, '')}" /E /I /Y`;
-            cmd_views_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/demo')}" "${path.join(this.base_path, '')}" /E /I /Y`;
-            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/demo/.env')}" "${this.base_path}" /Y`;
+            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/core')}" "${path.join(this.base_path, '')}" /E /I /Y`;
+            cmd_views_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/demo')}" "${path.join(this.base_path, '')}" /E /I /Y`;
+            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/demo/.env')}" "${this.base_path}" /Y`;
         }
 
         try {
@@ -85,7 +85,7 @@ export default class Execution {
 
 
             console.log('System is preparing...');
-            await this.execPromise('npx deepline cache:clear');
+            await this.execPromise('npx devlien cache:clear');
             console.log('\x1b[32m%s\x1b[0m', 'System is ready to go.\n')
 
         } catch (error) {
@@ -98,16 +98,16 @@ export default class Execution {
 
     async copyNuxtDemo(){
 
-        var cmd_core_files = `cp -R ${this.base_path}/node_modules/deepline/libraries/core/* ${path.join(this.base_path, 'server/')}`;
-        var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/deepline/libraries/nuxt/*')} ${path.join(this.base_path, 'server/')}`;
-        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/deepline/libraries/nuxt/.env')} ${this.base_path}`;
+        var cmd_core_files = `cp -R ${this.base_path}/node_modules/devlien/libraries/core/* ${path.join(this.base_path, 'server/')}`;
+        var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/devlien/libraries/nuxt/*')} ${path.join(this.base_path, 'server/')}`;
+        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/nuxt/.env')} ${this.base_path}`;
         var cmd_env_remov  = `rm -rf ${path.join(this.base_path, 'server/.env')}`;
 
 
         if(this.os=='win32'){
-            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/core')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
-            cmd_nuxt_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/nuxt')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
-            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/nuxt/.env')}" "${this.base_path}" /Y`;
+            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/core')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
+            cmd_nuxt_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/nuxt')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
+            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/nuxt/.env')}" "${this.base_path}" /Y`;
             cmd_env_remov = `del /F /Q "${path.join(this.base_path, 'server/.env')}"`;
         }
 
@@ -136,7 +136,7 @@ export default class Execution {
             await this.delay(500);
 
             console.log('System is preparing...');
-            await this.execPromise('npx deepline cache:clear');
+            await this.execPromise('npx devlien cache:clear');
             console.log('\x1b[32m%s\x1b[0m', 'System is ready to go.\n')
 
         } catch (error) {
@@ -147,15 +147,15 @@ export default class Execution {
     async copyNextDemo(){
 
 
-        var cmd_core_files = `cp -R ${this.base_path}/node_modules/deepline/libraries/core/* ${path.join(this.base_path, 'server/')}`;
-        var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/deepline/libraries/next/*')} ${path.join(this.base_path, '/')}`;
-        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/deepline/libraries/next/.env')} ${this.base_path}`;
+        var cmd_core_files = `cp -R ${this.base_path}/node_modules/devlien/libraries/core/* ${path.join(this.base_path, 'server/')}`;
+        var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/devlien/libraries/next/*')} ${path.join(this.base_path, '/')}`;
+        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/next/.env')} ${this.base_path}`;
 
 
         if(this.os=='win32'){
-            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/core')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
-            cmd_nuxt_files = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/next')}" "${path.join(this.base_path, '/')}" /E /I /Y`;
-            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/deepline/libraries/next/.env')}" "${this.base_path}" /Y`;
+            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/core')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
+            cmd_nuxt_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/next')}" "${path.join(this.base_path, '/')}" /E /I /Y`;
+            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/next/.env')}" "${this.base_path}" /Y`;
         }
 
         try {
@@ -179,7 +179,7 @@ export default class Execution {
             await this.delay(500);
 
             console.log('System is preparing...');
-            await this.execPromise('npx deepline cache:clear');
+            await this.execPromise('npx devlien cache:clear');
             console.log('\x1b[32m%s\x1b[0m', 'System is ready to go.\n')
 
         } catch (error) {

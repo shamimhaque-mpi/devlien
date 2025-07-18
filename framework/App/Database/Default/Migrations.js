@@ -1,4 +1,4 @@
-import Migration from "deepline/migration";
+import Migration from "devlien/migration";
 
 export default class extends Migration {
     up(schema){
