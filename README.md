@@ -150,9 +150,10 @@ export default class extends Migration {
     up(schema){
         schema.create('users', (table)=>{
            table.increments('id');
+           table.string('username').unique();
            table.string('name');
            table.string('email').unique();
-           table.string('password');
+           table.string('password', 255);
            table.set('status', ['active', 'inactive']).default('active');
         });
     }
@@ -187,11 +188,38 @@ In your controller:
 
 ```js
 import User from "../Models/User.js";
+import UserResource from "../Resources/UserResource.js";
 
+async index(request) {
+    let users = await User.limit(10).get();
+    return new UserResource(users);
+}
+```
+
+
+In your controller: app/Http/Resources/UserResources.js
+
+```js
+import ResouceCollection from "devlien/resouceCollection";
+
+export default class UserResource extends ResouceCollection {
+    
+    async toJson(user){
+        return {
+            username:user.username,
+            name:user.name,
+            email:user.email
+        }
+    }
+}
+```
+
+
+
+
+```js
 // Fetch users
 let users = await User.get();
-
-
 // or
 let user = new User();
 let users = await user.get();
