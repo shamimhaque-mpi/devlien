@@ -1,7 +1,7 @@
 import Schema from "./Schema.js";
 
 export default class Migration {
-    getQuery(type='up'){
+    build(type='up'){
         let schema = new Schema();
         //
         if(type=='up')
@@ -9,6 +9,6 @@ export default class Migration {
         else 
             this.down(schema);
         //
-        return schema.query();
+        return schema;
     }
 }

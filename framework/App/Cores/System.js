@@ -23,9 +23,8 @@ export default class System {
 
 
     static vendorPath($string=""){
-        return path.join(process.cwd(), 'node_modules/devlien/framework', $string);
+        return path.join(process.cwd(), 'node_modules/devlien', $string);
     }
-
     static readDirAsync(dirPath) {
         return new Promise((resolve, reject) => {
             fs.readdir(dirPath, (err, files) => {

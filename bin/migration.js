@@ -39,23 +39,25 @@ export default class Migration {
 
 
         try{
-            const Dmigrations = await System.readDirAsync(System.vendorPath('App/Database/Default/'));
+            const Dmigrations = await System.readDirAsync(System.vendorPath('framework/App/Database/Default/'));
 
-            for(const index in Dmigrations)
-                {
-                let migration = new (await System.import(System.vendorPath('App/Database/Default/'+Dmigrations[index])));
-                await Mysql.instance().query(migration.getQuery().replaceAll('\n', ''));
+            for(const index in Dmigrations){
+                let migration = new (await System.import(System.vendorPath('framework/App/Database/Default/'+Dmigrations[index])));
+                await Mysql.query(migration.build().query().replaceAll('\n', ''));
             }
         }
         catch(e){}
 
+
+
+
+
         class Migrations extends Model { constructor(){super({table:'migrations'})}}
 
-        let migrated_list = await Migrations.instance().get();
+        let migrated_list = await Migrations.get();
             migrated_list = Object.values(migrated_list).map(row=>row.path)
         
-
-        let group_no = await Migrations.instance().last();
+        let group_no = await Migrations.last();
         group_no = group_no ? group_no.group + 1 : 1;
 
         for(const index in migrations){
@@ -77,10 +79,27 @@ export default class Migration {
 
 
     async runMigration(path){
-        let migration = new (await System.import(path));
-        //
+
         console.log(path+'  processing');
-        await Mysql.instance().query(migration.getQuery().replaceAll('\n', ''));
+
+        let migration = new (await System.import(path));
+        let init = migration.build();
+
+        let check_query = `
+            SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = '${baseEnv.DB_NAME}' AND TABLE_NAME = '${init._TABLE}';
+        `;
+
+        // 
+        var [data] = await Mysql.query(check_query);
+            data   = data.map(row=>row.COLUMN_NAME);
+
+
+        const queries = init.query(data.length ? data : false);
+
+        await Mysql.query(queries.replaceAll('\n', ''));
+
         console.log('\x1b[32m%s\x1b[0m', path+'  done');
     }
 
@@ -90,28 +109,27 @@ export default class Migration {
 
     static async rollback(param=null)
     {
-
-        const migrations = await System.readDirAsync(System.path('database/migrations/'));
         class Migrations extends Model { constructor(){super({table:'migrations'})}}
 
 
         if(param=='--all'){
-            var migrated_list = await Migrations.instance().get();
+            var migrated_list = await Migrations.orderBy('id', 'desc').get();
         }
         else {
-            let group_no      = (await Migrations.instance().last()).group;
-            var migrated_list = await Migrations.instance().where({group:group_no}).get();
+            let group_no      = (await Migrations.last()).group;
+            var migrated_list = await Migrations.where({group:group_no}).get();
         }
+
         migrated_list = Object.values(migrated_list).map(row=>row.path);
 
 
 
-        for(const index in migrated_list){
-            
+        for(const index in migrated_list)
+        {
             let migration = new (await System.import(System.path('database/migrations/'+migrated_list[index])));
             console.log(migrated_list[index]+'  processing');
-            await Mysql.instance().query(migration.getQuery('down').replaceAll('\n', ''));
-            await Migrations.instance().where({path:migrated_list[index]}).delete();
+            await Mysql.query(migration.build('down').query().replaceAll('\n', ''));
+            await Migrations.where({path:migrated_list[index]}).delete();
             console.log('\x1b[32m%s\x1b[0m', migrated_list[index]+'  done');
         }
         

@@ -26,6 +26,11 @@ Execution.start((system, param)=>{
     }
 
 
+    if(param.includes('make:seeder')){
+        system.createSeeder(param[1]);
+    }
+
+
     else if(param.includes('migrate')){
         system.runMigrate(param[1]);
     }
@@ -38,6 +43,11 @@ Execution.start((system, param)=>{
 
     else if(param.includes('cache:clear')){
         system.cacheClear(param[1]);
+    }
+
+
+    else if(param.includes('db:seed')){
+        system.DBSeed(param[1]);
     }
 
 

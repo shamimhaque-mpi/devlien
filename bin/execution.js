@@ -6,6 +6,7 @@ import Migration from './migration.js';
 import Model from './model.js';
 import Controller from './controller.js';
 import Resource from './resource.js';
+import Seeder from './seeder.js';
 import path from 'path';
 import Cache from './cache.js';
 import os from "os";
@@ -44,6 +45,16 @@ export default class Execution {
 
     async createResource(modelName){
         Resource.create(modelName);
+    }
+
+
+    async createSeeder(modelName){
+        Seeder.create(modelName);
+    }
+
+
+    async DBSeed(modelName=null){
+        Seeder.execute(modelName);
     }
 
 
