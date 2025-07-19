@@ -1,7 +1,7 @@
 {
   "name": "devlien",
-  "version": "1.0.0",
-  "description": "It is a NodeJs Framework",
+  "version": "1.0.1",
+  "description": "Devlien is a lightweight, zero-dependency Node.js framework with clean MVC structure, built-in ORM, and intuitive routing for rapid backend development.",
   "exports": {
     ".":"./index.js",
     "./run":"./framework/Run.js",
@@ -41,8 +41,24 @@
     
   },
   "keywords": [
+    "nodejs",
     "framework",
-    "nodejs-framework"
+    "mvc",
+    "devlien",
+    "backend",
+    "routing",
+    "orm",
+    "expressive",
+    "lightweight",
+    "no-dependencies",
+    "minimal",
+    "node-framework",
+    "controller",
+    "service",
+    "model",
+    "middleware",
+    "rest-api",
+    "pure-nodejs"
   ],
   "author": {
     "name": "Shamim Haque",
