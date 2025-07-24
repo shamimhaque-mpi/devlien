@@ -8,13 +8,13 @@ export default class Cache {
     constructor(){}
 
     static async clear(modelName){
-        let dir = path.join(process.cwd(), 'node_modules/devlien/framework/App/bootstrap');
+        let dir = path.join(baseEnv.BASE_PATH, 'bootstrap/cache');
         fs.writeFileSync(path.join(dir, 'config.js'), `export const configs = {}`);
 
         try{
             const files = await System.readDirAsync(path.join(baseEnv.BASE_PATH, 'config'));
 
-            var content   = `import System from "devlien/system";\n\n`;
+            var content   = ``;
             var fileNames = ``;
 
             Object.values(files).forEach((file)=>{

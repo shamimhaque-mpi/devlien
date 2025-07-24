@@ -1,9 +1,5 @@
 #!/usr/bin/env node
-import Cache from './cache.js';
 import Watcher from './server/watcher.js';
-
-
-Cache.clear();
 
 const { default: Execution } = await import('./execution.js');
 

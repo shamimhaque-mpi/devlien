@@ -18,7 +18,6 @@ export default class Execution {
     execPromise = promisify(exec);
 
     constructor(){
-        Cache.clear();
         this.base_path = process.cwd();
         this.os = os.platform();
         this.terminal = new Terminal;
@@ -76,22 +75,22 @@ export default class Execution {
 
     async copyDemo(){
 
-        var cmd_core_files = `cp -R ${this.base_path}/node_modules/devlien/libraries/core/* ${path.join(this.base_path, '')}`;
-        var cmd_views_files = `cp -R ${path.join(this.base_path, '/node_modules/devlien/libraries/demo/*')} ${path.join(this.base_path, '')}`;
-        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/demo/.env')} ${this.base_path}`;
+        var cmd_core_files = `cp -R ${this.base_path}/node_modules/devlien/libraries/core/* "${path.join(this.base_path, '')}\"`;
+        // var cmd_views_files = `cp -R ${path.join(this.base_path, '/node_modules/devlien/libraries/demo/*')} "${path.join(this.base_path, '')}\"`;
+        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/demo/.env')} "${this.base_path}\"`;
 
 
         if(this.os=='win32'){
-            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/core')}" "${path.join(this.base_path, '')}" /E /I /Y`;
-            cmd_views_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/demo')}" "${path.join(this.base_path, '')}" /E /I /Y`;
-            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/demo/.env')}" "${this.base_path}" /Y`;
+            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/core')}" "\"${path.join(this.base_path, '')}\"" /E /I /Y`;
+            // cmd_views_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/demo')}" "\"${path.join(this.base_path, '')}\"" /E /I /Y`;
+            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/demo/.env')}" "\"${this.base_path}\"" /Y`;
         }
 
         try {
             this.terminal.addLine('Core files are being generated @space processing');
             await this.execPromise(cmd_core_files);
-            await this.delay(500);
-            await this.execPromise(cmd_views_files);
+            // await this.delay(500);
+            // await this.execPromise(cmd_views_files);
             await this.delay(500);
             this.terminal.addLine('Core files have been generated @space done', 'success');
             
