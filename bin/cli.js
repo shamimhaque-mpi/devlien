@@ -61,18 +61,15 @@ Execution.start((system, param)=>{
         system.ask('Are you using Devlien with another framework ?', ['No', 'Yes'])
         .then(ans=>{
             if(ans.toLowerCase()=='no'){
-                system.updatePackageJson();
                 system.copyDemo();
             }
             else {
                 system.ask('Which framework are you using ?', ['NuxtJs', 'NextJs'])
                 .then(ans=>{
                     if(ans.toLowerCase()=='nuxtjs'){
-                        system.updatePackageJson();
                         system.copyNuxtDemo();
                     }
                     else if(ans.toLowerCase()=='nextjs'){
-                        system.updatePackageJson();
                         system.copyNextDemo();
                     }
                 })

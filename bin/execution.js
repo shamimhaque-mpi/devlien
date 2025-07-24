@@ -93,13 +93,30 @@ export default class Execution {
             await this.delay(500);
             await this.execPromise(cmd_views_files);
             await this.delay(500);
+            this.terminal.addLine('Core files have been generated @space done', 'success');
+            
+            this.terminal.addLine('Environment variables are being updated @space processing');
             await this.execPromise(cmd_env_clone);
             await this.delay(500);
-            this.terminal.addLine('Core files have been generated @space done', 'success');
+            this.terminal.addLine('Environment variables have been updated @space done', 'success');
+
+
+            this.terminal.addLine('package.json is updating @space processing');
+            await Package.add((json)=>{
+                delete json.scripts.dev;
+                json.type="module";
+                json.scripts = {...{dev:"devlien dev"}, ...json.scripts};
+            })
+            .save();
+            await this.delay(500);
+            this.terminal.addLine('package.json have been updated @space procesed', 'success');
+
 
             this.terminal.addLine('System is preparing @space processing');
             await this.execPromise('npx devlien cache:clear');
             this.terminal.addLine('System is ready to go @space done', 'success');
+
+
         } catch (error) {
             console.error("Error occurred:", error);
         }
@@ -145,10 +162,21 @@ export default class Execution {
             await this.delay(500);
             this.terminal.addLine('Environment variables have been updated @space done', 'success');
 
+
+            this.terminal.addLine('package.json is updating @space processing');
+            await Package.add((json)=>{
+                delete json.scripts.dev;
+                json.type="module";
+                json.scripts = {...{dev:"devlien dev nuxt"}, ...json.scripts};
+            })
+            .save();
+            await this.delay(500);
+            this.terminal.addLine('package.json have been updated @space procesed', 'success');
             
             this.terminal.addLine('System is preparing @space processing');
             await this.execPromise('npx devlien cache:clear');
             this.terminal.addLine('System is ready to go @space done', 'success');
+
 
         } catch (error) {
             console.error("Error occurred:", error);
@@ -185,6 +213,17 @@ export default class Execution {
             this.terminal.addLine('Environment variables have been updated @space done', 'success');
 
 
+            this.terminal.addLine('package.json is updating @space processing');
+            await Package.add((json)=>{
+                delete json.scripts.dev;
+                json.type="module";
+                json.scripts = {...{dev:"devlien dev next"}, ...json.scripts};
+            })
+            .save();
+            await this.delay(500);
+            this.terminal.addLine('package.json have been updated @space procesed', 'success');
+
+            
             this.terminal.addLine('System is preparing updated... @space processing');
             await this.execPromise('npx devlien cache:clear');
             this.terminal.addLine('System is ready to go @space done', 'success');
@@ -194,16 +233,6 @@ export default class Execution {
         }
         
     }
-
-
-    updatePackageJson(){
-        Package.add((json)=>{
-            json.type="module";
-            json.scripts = {...{dev:"nodemon ./server.js"}, ...json.scripts};
-        })
-        .save();
-    }
-
 
 
 

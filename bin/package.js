@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 
 /**
  * Package class for handling read-modify-write operations
@@ -6,7 +7,7 @@ import fs from "fs";
  */
 export default new class Package {
 
-    #_PATH = './package.json';
+    #_PATH = path.join(process.cwd(), 'package.json');
     _JSON;
 
     /**
@@ -31,7 +32,7 @@ export default new class Package {
     /**
      * Saves the modified JSON back to package.json with indentation.
      */
-    save(){
+    async save(){
         fs.writeFileSync(this.#_PATH, JSON.stringify(this._JSON, null, 2));
     }
 }

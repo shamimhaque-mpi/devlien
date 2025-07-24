@@ -63,7 +63,7 @@ export default class Watcher {
 
 		const ignored = ['node_modules', 'tmp', '.git', 'ignore.txt'];
 
-		fs.watch(this.isFrame ? baseEnv.BASE_PATH : process.cwd(), { recursive: true }, (eventType, filename) => {
+		fs.watch(this.isFrame ? baseEnv.BASE_PATH : '.', { recursive: true }, (eventType, filename) => {
 
 			const isIgnored = ignored.some(ignoredPath =>
 				filename.startsWith(ignoredPath)

@@ -2,7 +2,11 @@ import { pathToFileURL } from 'url';
 import path  from "path";
 import dotenv from "dotenv";
 
-const devlienConfig = (await import(pathToFileURL(path.join(process.cwd(), 'devlien.config.js')).href)).default;
+var devlienConfig = {};
+try{
+    devlienConfig = (await import(pathToFileURL(path.join(process.cwd(), 'devlien.config.js')).href)).default;
+}
+catch(e){}
 
 dotenv.config({ path: path.resolve()+'/.env' });
 

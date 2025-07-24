@@ -64,7 +64,6 @@ Edit the generated `.env` file and set your database configuration:
 
 ```env
 APP_NAME="DeepLine"
-SERVER_PATH="server"
 DB_HOST=localhost
 DB_PORT=3306
 DB_DATABASE=your_database_name

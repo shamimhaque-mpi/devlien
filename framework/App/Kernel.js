@@ -5,6 +5,7 @@ import System from "./Cores/System.js"
 import formidable from 'formidable';
 import Request from "./Http/Request.js";
 import config from "devlien/config";
+import colours from "../../utilities/colours.js";
 
 export default class Kernel 
 {
@@ -83,10 +84,11 @@ export default class Kernel
             return feedback;
         }
         catch(err){
-            console.log('\x1b[31m%s\x1b[0m', err);
+            
+            console.log(colours.text(JSON.stringify(err), 'warning'));
 
             if(response)
-                response.end(err.toString());
+                response.end(JSON.stringify(err));
             return err;
         }
     }
