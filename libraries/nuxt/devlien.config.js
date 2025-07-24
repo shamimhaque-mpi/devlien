@@ -1,4 +1,4 @@
 export default {
-    "framework" : "nuxtjs",
+    "framework" : "nextjs",
     "root" : "server/"
 }

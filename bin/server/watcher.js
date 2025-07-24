@@ -18,7 +18,7 @@ export default class Watcher {
 				spawn('npx', ['nuxt', 'dev'], {stdio:'inherit'});
 			}
 			else if(isFrame && isFrame=='next'){
-				spawn('npx', ['next', 'dev'], {stdio:'inherit'});
+				spawn('npx', ['next', 'dev', '--turbopack'], {stdio:'inherit'});
 			}
 
 			_this.isFrame = isFrame;
@@ -52,7 +52,9 @@ export default class Watcher {
 			});
 		}
 		else{
-			const configFile = 'nuxt.config.ts';
+			var configFile = 'nuxt.config.ts';
+			if(isFrame && isFrame=='next')
+				configFile = 'next.config.ts';
 			const now = new Date();
 			fs.utimes(path.join(process.cwd(), configFile), now, now, err => {});
 		}
