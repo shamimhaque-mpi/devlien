@@ -63,7 +63,7 @@ server
 Edit the generated `.env` file and set your database configuration:
 
 ```env
-APP_NAME="DeepLine"
+APP_NAME="DevLien"
 DB_HOST=localhost
 DB_PORT=3306
 DB_DATABASE=your_database_name
