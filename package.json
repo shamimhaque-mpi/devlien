@@ -5,7 +5,6 @@
   "exports": {
     ".":"./index.js",
     "./run":"./framework/Run.js",
-    "./server":"./framework/Server.js",
     "./route":"./framework/App/Routes/Route.js",
     "./model":"./framework/App/Eloquent/Model.js",
     "./database":"./framework/App/Database/Mysql.js",
@@ -34,8 +33,7 @@
   "dependencies": {
     "mysql2": "^3.14.0",
     "formidable": "^3.5.4",
-    "dotenv": "^16.5.0",
-    "nodemon": "^3.1.10"
+    "dotenv": "^16.5.0"
   },
   "peerDependencies": {
     

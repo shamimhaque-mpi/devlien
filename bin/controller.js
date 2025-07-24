@@ -13,10 +13,17 @@ export default class Controller {
         this.app_path = process.cwd();
     }
 
-    static async create(controllerName){
+    static async create(controllerName, terminal){
+
+        let file = `app/Http/Controllers/${controllerName}.js`
+
+        terminal.addLine(`${file} @space creating`);
+
         let mgn = new Controller;
         var content = fs.readFileSync(mgn.package_path+'/libraries/standard/controller.js', 'utf-8');
         content = content.replaceAll('@controller', controllerName)
-        fs.writeFileSync(path.join(baseEnv.BASE_PATH, `app/Http/Controllers/${controllerName}.js`)  , content);
+        fs.writeFileSync(path.join(baseEnv.BASE_PATH, file), content);
+
+        terminal.addLine(`${file} @space created`, 'success');
     }
 }

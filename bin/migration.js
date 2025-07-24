@@ -16,23 +16,27 @@ export default class Migration {
         this.app_path = process.cwd();
     }
 
-    static async create(name){
+    static async create(name, terminal){
 
         let mgn   = new Migration;
         let table = (new Migration).getTableName(name);
 
         const today = (new Date().toISOString().split('T')[0]).split('-').join('_');
         const unixSeconds = Math.floor(Date.now() / 1000);
+        const file = `database/migrations/${today+'_'+unixSeconds}_${name}.js`;
+
+        terminal.addLine(`${file} @space generating`);
 
         var content = fs.readFileSync(mgn.package_path+'/libraries/standard/migration.js', 'utf-8');
             content = content.replaceAll('@table', table)
+        fs.writeFileSync(path.join(baseEnv.BASE_PATH, file)  , content);
 
-        fs.writeFileSync(path.join(baseEnv.BASE_PATH, `database/migrations/${today+'_'+unixSeconds}_${name}.js`)  , content);
+        terminal.addLine(`${file} @space generated`, 'success');
     }
 
 
 
-    static async execute()
+    static async execute(terminal)
     {
         let migration = new Migration;
         const migrations = await System.readDirAsync(System.path('database/migrations/'));
@@ -40,16 +44,12 @@ export default class Migration {
 
         try{
             const Dmigrations = await System.readDirAsync(System.vendorPath('framework/App/Database/Default/'));
-
             for(const index in Dmigrations){
                 let migration = new (await System.import(System.vendorPath('framework/App/Database/Default/'+Dmigrations[index])));
                 await Mysql.query(migration.build().query().replaceAll('\n', ''));
             }
         }
         catch(e){}
-
-
-
 
 
         class Migrations extends Model { constructor(){super({table:'migrations'})}}
@@ -62,11 +62,14 @@ export default class Migration {
 
         for(const index in migrations){
             if(migrated_list.indexOf(migrations[index])<0){
-                await migration.runMigration(System.path('database/migrations/'+migrations[index])); 
+                const path = 'database/migrations/'+migrations[index];
+                terminal.addLine(`${path} @space migrating`);
+                await migration.runMigration(System.path(path)); 
                 await Migrations.instance().create({
                     path  : migrations[index],
                     group : group_no
                 });
+                terminal.addLine(`${path} @space migrated`, 'success');
             }
         }
         
@@ -75,12 +78,7 @@ export default class Migration {
 
 
 
-
-
-
     async runMigration(path){
-
-        console.log(path+'  processing');
 
         let migration = new (await System.import(path));
         let init = migration.build();
@@ -97,20 +95,16 @@ export default class Migration {
 
 
         const queries = init.query(data.length ? data : false);
-
         await Mysql.query(queries.replaceAll('\n', ''));
-
-        console.log('\x1b[32m%s\x1b[0m', path+'  done');
     }
 
 
 
 
 
-    static async rollback(param=null)
+    static async rollback(param=null, terminal)
     {
         class Migrations extends Model { constructor(){super({table:'migrations'})}}
-
 
         if(param=='--all'){
             var migrated_list = await Migrations.orderBy('id', 'desc').get();
@@ -123,17 +117,15 @@ export default class Migration {
         migrated_list = Object.values(migrated_list).map(row=>row.path);
 
 
-
         for(const index in migrated_list)
         {
+            terminal.addLine(`${migrated_list[index]} @space processing`);
             let migration = new (await System.import(System.path('database/migrations/'+migrated_list[index])));
-            console.log(migrated_list[index]+'  processing');
             await Mysql.query(migration.build('down').query().replaceAll('\n', ''));
             await Migrations.where({path:migrated_list[index]}).delete();
-            console.log('\x1b[32m%s\x1b[0m', migrated_list[index]+'  done');
+            terminal.addLine(`${migrated_list[index]} @space done`, 'success');
         }
         
-
         process.exit();
     }
 

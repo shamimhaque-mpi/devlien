@@ -59,7 +59,10 @@ export default class Kernel
                     return isReturn;
             }
 
-            if(!this.SERVICES.route.METHOD) throw {stack:"Page Not Found"};
+            if(!this.SERVICES.route.METHOD) throw {
+                status:"404",
+                message:"Not Found"
+            };
             /*
              * ***********************
              *
@@ -80,10 +83,11 @@ export default class Kernel
             return feedback;
         }
         catch(err){
-            console.log(err.stack, "sssss - stack");
+            console.log('\x1b[31m%s\x1b[0m', err);
+
             if(response)
-                response.end(err.stack.toString());
-            return err.stack;
+                response.end(err.toString());
+            return err;
         }
     }
 

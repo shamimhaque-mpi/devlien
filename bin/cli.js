@@ -1,32 +1,38 @@
 #!/usr/bin/env node
 import Cache from './cache.js';
+import Watcher from './server/watcher.js';
+
+
 Cache.clear();
 
 const { default: Execution } = await import('./execution.js');
 
 Execution.start((system, param)=>{
 
-    if(param.includes('make:migration')){
+    if(param.includes('dev')){
+        Watcher.start(param[1]);
+    }
+
+    else if(param.includes('make:migration')){
         system.createMigration(param[1]);
     }
 
-
-    if(param.includes('make:model')){
+    else if(param.includes('make:model')){
         system.createModel(param[1]);
     }
 
 
-    if(param.includes('make:controller')){
+    else if(param.includes('make:controller')){
         system.createController(param[1]);
     }
 
 
-    if(param.includes('make:resource')){
+    else if(param.includes('make:resource')){
         system.createResource(param[1]);
     }
 
 
-    if(param.includes('make:seeder')){
+    else if(param.includes('make:seeder')){
         system.createSeeder(param[1]);
     }
 

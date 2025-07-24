@@ -14,10 +14,17 @@ export default class Resource {
     }
 
 
-    static async create(resourceName){
+    static async create(resourceName, terminal){
+
+        const file = `app/Http/Resources/${resourceName}.js`;
+
+        terminal.addLine(`${file} @space generating`);
+
         let mgn = new Resource;
         var content = fs.readFileSync(mgn.package_path+'/libraries/standard/resource.js', 'utf-8');
         content = content.replaceAll('@resource', resourceName)
-        fs.writeFileSync(path.join(baseEnv.BASE_PATH, `app/Http/Resources/${resourceName}.js`)  , content);
+        fs.writeFileSync(path.join(baseEnv.BASE_PATH, file)  , content);
+
+        terminal.addLine(`${file} @space generated`, 'success');
     }
 }

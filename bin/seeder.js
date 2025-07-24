@@ -6,15 +6,15 @@ import { baseEnv } from "devlien/env";
 
 export default class Migration {
     
-    static async execute(file=null) {
+    static async execute(file=null, terminal) {
 
         try{
             if(!file) file='DatabaseSeeder.js';
 
+            terminal.addLine('database/seeders/'+file+' @space processing');
             let seeder = await System.import(path.join(baseEnv.BASE_PATH, 'database/seeders/', file));
             await seeder.run(new Database);
-
-            console.log('done');
+            terminal.addLine('database/seeders/'+file+' @space processed', 'success');
         }
         catch(e){
             console.log(e);
@@ -23,18 +23,22 @@ export default class Migration {
         process.exit();
     }
     
-    static async create(name){
+    static async create(name, terminal){
 
         try {
+
+            const file = `database/seeders/${name}.js`
+
+            terminal.addLine(`${file} @space generating`);
 
             let path = System.vendorPath('libraries/standard/seeder.js');
 
             var content = fs.readFileSync(path, 'utf-8');
                 content = content.replaceAll('@seeder', name)
 
-            fs.writeFileSync(System.path(`database/seeders/${name}.js`), content);
+            fs.writeFileSync(System.path(file), content);
 
-            console.log(`${name}.js`);
+            terminal.addLine(`${file} @space generated`, 'success');
         }
         catch(e){
             console.log(e);

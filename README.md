@@ -186,7 +186,7 @@ export default route.serve(route => {
 In your controller:
 
 ```js
-import User from "../Models/User.js";
+import User from "../../Models/User.js";
 
 // Fetch users
 let users = await User.get();

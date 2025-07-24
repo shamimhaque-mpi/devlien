@@ -11,6 +11,7 @@ import path from 'path';
 import Cache from './cache.js';
 import os from "os";
 import { promisify } from 'util';
+import Terminal from "./terminal.js";
 
 export default class Execution {
 
@@ -20,6 +21,7 @@ export default class Execution {
         Cache.clear();
         this.base_path = process.cwd();
         this.os = os.platform();
+        this.terminal = new Terminal;
     }
 
 
@@ -29,45 +31,47 @@ export default class Execution {
 
 
     async createMigration(name){
-        Migration.create(name);
-    }
-
-
-    async createModel(modelName){
-        Model.create(modelName);
-    }
-
-
-    async createController(modelName){
-        Controller.create(modelName);
-    }
-
-
-    async createResource(modelName){
-        Resource.create(modelName);
-    }
-
-
-    async createSeeder(modelName){
-        Seeder.create(modelName);
-    }
-
-
-    async DBSeed(modelName=null){
-        Seeder.execute(modelName);
+        Migration.create(name, this.terminal);
     }
 
 
     runMigrate(){
-        Migration.execute();
+        Migration.execute(this.terminal);
     }
 
     runMigrateRollback(param=null){
-        Migration.rollback(param);
+        Migration.rollback(param, this.terminal);
+    }
+
+
+    async createModel(modelName){
+        Model.create(modelName, this.terminal);
+    }
+
+
+    async createController(modelName){
+        Controller.create(modelName, this.terminal);
+    }
+
+
+    async createResource(modelName){
+        Resource.create(modelName, this.terminal);
+    }
+
+
+    async createSeeder(modelName){
+        Seeder.create(modelName, this.terminal);
+    }
+
+
+    async DBSeed(modelName=null){
+        Seeder.execute(modelName, this.terminal);
     }
 
     cacheClear(){
+        this.terminal.addLine('cache @space clearing')
         Cache.clear();
+        this.terminal.addLine('cache @space cleared', 'success')
     }
 
     async copyDemo(){
@@ -84,21 +88,18 @@ export default class Execution {
         }
 
         try {
-
-            console.log('Core files are being generated...');
+            this.terminal.addLine('Core files are being generated @space processing');
             await this.execPromise(cmd_core_files);
             await this.delay(500);
             await this.execPromise(cmd_views_files);
             await this.delay(500);
             await this.execPromise(cmd_env_clone);
             await this.delay(500);
-            console.log('\x1b[32m%s\x1b[0m', 'Core files have been generated.\n');
+            this.terminal.addLine('Core files have been generated @space done', 'success');
 
-
-            console.log('System is preparing...');
+            this.terminal.addLine('System is preparing @space processing');
             await this.execPromise('npx devlien cache:clear');
-            console.log('\x1b[32m%s\x1b[0m', 'System is ready to go.\n')
-
+            this.terminal.addLine('System is ready to go @space done', 'success');
         } catch (error) {
             console.error("Error occurred:", error);
         }
@@ -109,46 +110,45 @@ export default class Execution {
 
     async copyNuxtDemo(){
 
+
         var cmd_core_files = `cp -R ${this.base_path}/node_modules/devlien/libraries/core/* ${path.join(this.base_path, 'server/')}`;
-        var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/devlien/libraries/nuxt/*')} ${path.join(this.base_path, 'server/')}`;
-        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/nuxt/.env')} ${this.base_path}`;
+        var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/devlien/libraries/nuxt/*')} ${path.join(this.base_path, '/')}`;
+        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/nuxt/server/.env')} ${this.base_path}`;
         var cmd_env_remov  = `rm -rf ${path.join(this.base_path, 'server/.env')}`;
 
 
         if(this.os=='win32'){
             cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/core')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
-            cmd_nuxt_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/nuxt')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
-            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/nuxt/.env')}" "${this.base_path}" /Y`;
+            cmd_nuxt_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/nuxt')}" "${path.join(this.base_path, '')}" /E /I /Y`;
+            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/nuxt/server/.env')}" "${this.base_path}" /Y`;
             cmd_env_remov = `del /F /Q "${path.join(this.base_path, 'server/.env')}"`;
         }
 
         try {
-
-            console.log('Core files are being generated...');
-            await this.execPromise(cmd_core_files);
-            console.log('\x1b[32m%s\x1b[0m', 'Core files have been generated.\n');
-
-            await this.delay(500);
-
-            console.log('Nuxtjs config is being updated...');
+            
+            this.terminal.addLine('Nuxtjs config is being updated @space processing');
             await this.execPromise(cmd_nuxt_files);
-            console.log('\x1b[32m%s\x1b[0m', 'Nuxtjs config has been updated.\n');
-
             await this.delay(500);
+            this.terminal.addLine('Nuxtjs config has been updated @space done', 'success');
 
-            console.log('Environment variables are being updated...');
+
+            this.terminal.addLine('Core files are being generated @space processing');
+            await this.execPromise(cmd_core_files);
+            await this.delay(500);
+            this.terminal.addLine('Core files have been generated @space done', 'success');
+
+
+            this.terminal.addLine('Environment variables are being updated @space processing');
             await this.execPromise(cmd_env_clone);
-
             await this.delay(500);
-
             await this.execPromise(cmd_env_remov);
-            console.log('\x1b[32m%s\x1b[0m', 'Environment variables have been updated.\n');
-
             await this.delay(500);
+            this.terminal.addLine('Environment variables have been updated @space done', 'success');
 
-            console.log('System is preparing...');
+            
+            this.terminal.addLine('System is preparing @space processing');
             await this.execPromise('npx devlien cache:clear');
-            console.log('\x1b[32m%s\x1b[0m', 'System is ready to go.\n')
+            this.terminal.addLine('System is ready to go @space done', 'success');
 
         } catch (error) {
             console.error("Error occurred:", error);
@@ -171,27 +171,23 @@ export default class Execution {
 
         try {
 
-            console.log('Nuxtjs config is being updated...');
+            this.terminal.addLine('Core files are being generated @space processing');
             await this.execPromise(cmd_nuxt_files);
-            console.log('\x1b[32m%s\x1b[0m', 'Nuxtjs config has been updated.\n');
-
             await this.delay(500);
-
-            console.log('Core files are being generated...');
             await this.execPromise(cmd_core_files);
-            console.log('\x1b[32m%s\x1b[0m', 'Core files have been generated.\n');
-
             await this.delay(500);
+            this.terminal.addLine('Core files have been generated @space done', 'success');
 
-            console.log('Environment variables are being updated...');
+
+            this.terminal.addLine('Environment variables are being updated... @space processing');
             await this.execPromise(cmd_env_clone);
-            console.log('\x1b[32m%s\x1b[0m', 'Environment variables have been updated.\n');
-
             await this.delay(500);
+            this.terminal.addLine('Environment variables have been updated @space done', 'success');
 
-            console.log('System is preparing...');
+
+            this.terminal.addLine('System is preparing updated... @space processing');
             await this.execPromise('npx devlien cache:clear');
-            console.log('\x1b[32m%s\x1b[0m', 'System is ready to go.\n')
+            this.terminal.addLine('System is ready to go @space done', 'success');
 
         } catch (error) {
             console.error("Error occurred:", error);
