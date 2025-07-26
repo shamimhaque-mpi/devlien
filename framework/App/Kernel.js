@@ -5,8 +5,7 @@ import formidable from 'formidable';
 import Request from "./Http/Request.js";
 import config from "devlien/config";
 import colours from "../../utilities/colours.js";
-import path from "path";
-import url from "url";
+import PublicFile from "./Http/PublicFile.js";
 
 export default class Kernel 
 {
@@ -24,10 +23,10 @@ export default class Kernel
      * ************* */
     async executeController(request, response)
     {
-        const parsedUrl = url.parse(request.url);
-        const pathname = parsedUrl.pathname;
-        const extension = path.extname(pathname);
-        if(extension) return ;
+
+        if(PublicFile.hasExtension(request)){
+            return await PublicFile.provide(request, response);
+        }
 
         
         await this.initProvider(request, response);

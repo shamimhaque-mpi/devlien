@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import Watcher from './server/watcher.js';
+
+import Watcher from './server/Watcher.js';
 
 const { default: Execution } = await import('./execution.js');
 

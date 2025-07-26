@@ -1,9 +1,10 @@
 import RouteServiceProvider from "../app/Providers/RouteServiceProvider.js"
-
+import env from "devlien/env";
 
 export default {
 
-    name : '',
+    name : env('APP_NAME', 'devlien'),
+    port : env('PORT', 3000),
     version : '1.0.0',
     timezone : '',
     debug : false,
