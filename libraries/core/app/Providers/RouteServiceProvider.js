@@ -9,8 +9,13 @@ export default class RouteServiceProvider extends ServiceProvider {
         super();
     }
 
-
-    boot(){
+    /**
+     * Define your route bindings, pattern filters, and register routes.
+     *
+     * This method is called after all service providers have been registered,
+     * allowing you to define routes or bindings needed by your application.
+     */
+    async boot(){
         this.route(API)
     }
 }

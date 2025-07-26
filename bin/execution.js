@@ -13,6 +13,7 @@ import os from "os";
 import { promisify } from 'util';
 import Terminal from "./terminal.js";
 import DIR from '../framework/App/Core/Helpers/DIR.js';
+import color from '../utilities/colours.js';
 
 export default class Execution {
 
@@ -74,7 +75,7 @@ export default class Execution {
         this.terminal.addLine('cache @space cleared', 'success')
     }
 
-    async copyDemo(){
+    async copyDemo(param){
         try {
             this.terminal.addLine('Core files are being generated @space processing');
             await DIR.copy(`${this.base_path}/node_modules/devlien/libraries/core/`, `${path.join(this.base_path, '')}`);
@@ -97,6 +98,15 @@ export default class Execution {
             await this.execPromise('npx devlien cache:clear');
             this.terminal.addLine('System is ready to go @space done', 'success');
 
+            if(param.includes("--installer")){
+                console.log(color.info, "\n🎉 app has been created successfully!");
+                console.log(color.info, '👉 To get started: \n');
+                console.log(color.success, `   cd ${path.basename(process.cwd())}`);
+                console.log(color.success, '   npm run dev\n');
+                console.log(color.info, '   Happy coding! 🚀\n');
+            }
+
+
         } catch (error) {
             console.error("Error occurred:", error);
         }
@@ -106,7 +116,6 @@ export default class Execution {
 
 
     async copyNuxtDemo(){
-
         try {
             this.terminal.addLine('Nuxtjs config is being updated @space processing');
             await DIR.copy(`${path.join(this.base_path, '/node_modules/devlien/libraries/nuxt/')}`, `${this.base_path}`);

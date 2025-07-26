@@ -5,6 +5,8 @@ import formidable from 'formidable';
 import Request from "./Http/Request.js";
 import config from "devlien/config";
 import colours from "../../utilities/colours.js";
+import path from "path";
+import url from "url";
 
 export default class Kernel 
 {
@@ -22,6 +24,12 @@ export default class Kernel
      * ************* */
     async executeController(request, response)
     {
+        const parsedUrl = url.parse(request.url);
+        const pathname = parsedUrl.pathname;
+        const extension = path.extname(pathname);
+        if(extension) return ;
+
+        
         await this.initProvider(request, response);
         await this.initConfig(request, response);
 
@@ -80,7 +88,6 @@ export default class Kernel
                 response.end(Buffer.isBuffer(feedback) ? feedback : JSON.stringify(feedback))
             return feedback;
 
-
         }
         catch(err){
             console.log(colours.text(JSON.stringify(err), 'warning'));
@@ -95,13 +102,16 @@ export default class Kernel
 
     async initProvider(request, response){
         let providers = config('app.providers', null);
-        if(providers) providers.forEach(provider=>{
-            provider = new provider();
-            provider.boot();
-            if(provider.ROUTE_SERVICE){
-                this.ROUTES = [...this.ROUTES, ...provider.ROUTE_SERVICE];
+        if(providers) {
+            for(const index in providers){
+                var provider = providers[index];
+                provider = new provider();
+                await provider.boot();
+                if(provider.ROUTE_SERVICE){
+                    this.ROUTES = [...this.ROUTES, ...provider.ROUTE_SERVICE];
+                }
             }
-        });
+        }      
     }
 
     /*

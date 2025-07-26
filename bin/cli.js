@@ -56,7 +56,7 @@ Execution.start((system, param)=>{
     else if(param.includes('setup')){
 
         if(param.includes('--init')){
-            system.copyDemo();
+            system.copyDemo(param);
         }
         else{
             system.ask('Are you using Devlien with another framework ?', ['No', 'Yes'])
