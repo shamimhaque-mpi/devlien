@@ -54,22 +54,28 @@ Execution.start((system, param)=>{
 
 
     else if(param.includes('setup')){
-        system.ask('Are you using Devlien with another framework ?', ['No', 'Yes'])
-        .then(ans=>{
-            if(ans.toLowerCase()=='no'){
-                system.copyDemo();
-            }
-            else {
-                system.ask('Which framework are you using ?', ['NuxtJs', 'NextJs'])
-                .then(ans=>{
-                    if(ans.toLowerCase()=='nuxtjs'){
-                        system.copyNuxtDemo();
-                    }
-                    else if(ans.toLowerCase()=='nextjs'){
-                        system.copyNextDemo();
-                    }
-                })
-            }
-        });
+
+        if(param.includes('--init')){
+            system.copyDemo();
+        }
+        else{
+            system.ask('Are you using Devlien with another framework ?', ['No', 'Yes'])
+            .then(ans=>{
+                if(ans.toLowerCase()=='no'){
+                    system.copyDemo();
+                }
+                else {
+                    system.ask('Which framework are you using ?', ['NuxtJs', 'NextJs'])
+                    .then(ans=>{
+                        if(ans.toLowerCase()=='nuxtjs'){
+                            system.copyNuxtDemo();
+                        }
+                        else if(ans.toLowerCase()=='nextjs'){
+                            system.copyNextDemo();
+                        }
+                    })
+                }
+            });
+        }
     }
 });

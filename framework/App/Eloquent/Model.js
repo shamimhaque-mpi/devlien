@@ -1,5 +1,6 @@
 import Database from "../Database/Mysql.js";
 import Relation from "../Eloquent/Relation.js";
+import collect from "devlien/collect";
 
 export default class Model extends Relation {
 
@@ -12,12 +13,16 @@ export default class Model extends Relation {
     #_limit     = '';
     #_withSoftDete     = false;
     #successFn         = false;
+    #attributes = {};
+    #sudo_keys = ['fillable', 'hidden'];
 
 
     constructor(config={}){
         super();
             this.#table = config.table ? config.table : this.getTableName();
     }
+
+
 
     where(condition) {
 
@@ -40,42 +45,44 @@ export default class Model extends Relation {
 
         return this;
     }
-
-
     static where(condition){
         return (new this()).where(condition);
     }
+
+
 
 
     orderBy(entity, type){
         this.#_orderBy = `ORDER BY ${entity} ${type}`;
         return this;
     }
-
     static orderBy(entity, type){
         return (new this()).orderBy(entity, type);
     }
+
+
 
 
     skip(_num=null){
         this.#_skip = _num;
         return this;
     }
-
     static skip(_num=null){
         return (new this()).skip(_num);
     }
+
+
 
 
     limit(_num){
         this.#_limit = _num;
         return this;
     }
-
-
     static limit(_num){
         return (new this()).limit(_num);
     }
+
+
 
     //join('t1', 't2', 't1.id', 't2.id')
     join(...fields){
@@ -88,76 +95,75 @@ export default class Model extends Relation {
         }
         return this;
     }
-
-
     static join(...fields){
         return (new this()).join(fields);
     }
+
+
 
 
     select(columns) {
         this.#_columns = columns;
         return this;
     }
-
-
     static select(columns){
         return (new this()).select(columns);
     }
 
 
+
+
     async first() {
 
         try{
+            this.#_limit = 1;
             const [records] = await Database.instance().query(this.makeQuery('get'));
-            return records[0] ? this.makeResponse(records[0]) : false;
+            return collect(this.#geReformattedRecords(records)).first();
         }
         catch(e){
             throw new Error(e);
         }
     }
-
-
     static async first(){
         return await (new this()).first();
     }
 
 
+
+
     async last() {
         try{
             this.orderBy('id', 'DESC');
+            this.#_limit = 1;
             const [records] = await Database.instance().query(this.makeQuery('get'));
-            return records[0] ? this.makeResponse(records[0]) : false;
+            return collect(this.#geReformattedRecords(records)).last();
         }
         catch(e){
             throw new Error(e);
         }
     }
-
-
     static async last(){
         return await (new this()).last();
     }
 
 
+
+
     async get() {
         try{
             var [records] = await Database.instance().query(this.makeQuery('get'));
-            records = records.map((record)=>{
-                return this.makeResponse(record); ;
-            });
-            return records;
+            return collect(this.#geReformattedRecords(records));
         }
         catch(e){
             throw new Error(e);
         }
     }
-
-
     static async get(){
         return await (new this()).get();
     }
     
+
+
 
     async count(){
         try{
@@ -168,11 +174,13 @@ export default class Model extends Relation {
             throw new Error(e);
         }
     }
-
-
     static async count(){
         return await (new this()).count();
     }
+
+
+
+
 
 
     async create(data) {
@@ -370,15 +378,34 @@ export default class Model extends Relation {
     }
 
 
-    makeResponse(record){
+    getAttributes() {
+        return this.#attributes;
+    }
 
-        let model = this.constructor.name;
-        const d   = {[model]:class extends this.constructor { constructor(){super()}}}
+    #geReformattedRecords(records) {
+        return records.map((record) => {
+        this.#attributes = record;
+        return this.#getValidAttributes();
+        });
+    }
 
-        const _dClass = new d[model];
-        delete _dClass.softdelete;
+    #getValidAttributes() {
+        let formatted_data = {};
+        let rm = [...(this.hidden ? this.hidden : []), ...this.#sudo_keys];
 
-        return Object.assign(_dClass, record);
+        for (const key in this.#attributes) {
+        if (rm.indexOf(key) < 0) {
+            formatted_data[key] = this.#attributes[key];
+        }
+        }
+
+        let _this = new this.constructor();
+        _this.#attributes = formatted_data;
+
+        delete _this.fillable;
+        delete _this.hidden;
+
+        return Object.assign(_this, formatted_data);
     }
 
 }

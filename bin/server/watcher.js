@@ -37,6 +37,7 @@ export default class Watcher {
 
 
 	reloadServer(isFrame) {
+
 		if(!isFrame){
 			if (this.server) {
 				console.log(`\n${colours.text('⏳', 'info')} Server is reloading`);

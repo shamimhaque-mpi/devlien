@@ -1,7 +1,6 @@
 import Provider from "./Http/Controller/Provider.js"
-import RouteServe from "./Routes/RouteServe.js"
-import {methods} from "./Cores/Global.js"
-import System from "./Cores/System.js"
+import RouteServe from "./Route/RouteServe.js"
+import System from "./Core/System.js"
 import formidable from 'formidable';
 import Request from "./Http/Request.js";
 import config from "devlien/config";
@@ -17,14 +16,6 @@ export default class Kernel
     }
 
 
-
-    setGlobal(){
-        Object.keys(methods).forEach(method_name => {
-            global[method_name] = methods[method_name];
-        });
-    }
-
-
     /*
      * ****************
      *
@@ -35,6 +26,13 @@ export default class Kernel
         await this.initConfig(request, response);
 
         try {
+
+            if(!this.SERVICES.route.METHOD) throw {
+                status:"404",
+                message:"Not Found"
+            };
+
+
             /*
              * ***********************
              *
@@ -47,28 +45,23 @@ export default class Kernel
                     middleware = new middleware();
 
                     if(middleware){
-                        let isNuxt = await middleware.next(request, response);
-                        if(isNuxt!==true){
-                            isReturn = JSON.stringify(isNuxt);
+                        let isNext = await middleware.next(request, response);
+                        if(isNext!==true){
+                            isReturn = isNext;
                             break;
                         }
                     }
                 }
-                if(response & isReturn)
-                    response.end(Buffer.isBuffer(isReturn) ? isReturn : JSON.stringify(isReturn));
-                else if(isReturn)
-                    return isReturn;
+                if(isReturn) throw isReturn;
             }
 
-            if(!this.SERVICES.route.METHOD) throw {
-                status:"404",
-                message:"Not Found"
-            };
+
+
+
             /*
              * ***********************
              *
              * *******************/
-            
             const form = formidable({ multiples: true });
             var fields;
             var files;
@@ -79,14 +72,18 @@ export default class Kernel
                 files:files,
                 user:false
             }));
+
+
+
+
             if(response)
                 response.end(Buffer.isBuffer(feedback) ? feedback : JSON.stringify(feedback))
             return feedback;
+
+
         }
         catch(err){
-            
             console.log(colours.text(JSON.stringify(err), 'warning'));
-
             if(response)
                 response.end(JSON.stringify(err));
             return err;
@@ -113,13 +110,6 @@ export default class Kernel
      * ***************/
     async initConfig(request, response)
     {
-        /*
-         * ****************************
-         * SET ALL GLOBAL FUNCTIONS
-         * FROM LIBRARIES
-         * ******************* */
-        this.setGlobal();
-
         /*
          * ******************
          * SET ALL SERVICES

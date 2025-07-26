@@ -77,13 +77,13 @@ export default class Execution {
 
         var cmd_core_files = `cp -R ${this.base_path}/node_modules/devlien/libraries/core/* "${path.join(this.base_path, '')}\"`;
         // var cmd_views_files = `cp -R ${path.join(this.base_path, '/node_modules/devlien/libraries/demo/*')} "${path.join(this.base_path, '')}\"`;
-        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/demo/.env')} "${this.base_path}\"`;
+        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/standard/env.example')} "${this.base_path}/.env"`;
 
 
         if(this.os=='win32'){
             cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/core')}" "\"${path.join(this.base_path, '')}\"" /E /I /Y`;
             // cmd_views_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/demo')}" "\"${path.join(this.base_path, '')}\"" /E /I /Y`;
-            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/demo/.env')}" "\"${this.base_path}\"" /Y`;
+            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/standard/env.example')}" "\"${this.base_path}\".env" /Y`;
         }
 
         try {
@@ -129,14 +129,14 @@ export default class Execution {
 
         var cmd_core_files = `cp -R ${this.base_path}/node_modules/devlien/libraries/core/* ${path.join(this.base_path, 'server/')}`;
         var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/devlien/libraries/nuxt/*')} ${path.join(this.base_path, '/')}`;
-        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/nuxt/server/.env')} ${this.base_path}`;
+        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/standard/env.example')} ${this.base_path}/.env`;
         var cmd_env_remov  = `rm -rf ${path.join(this.base_path, 'server/.env')}`;
 
 
         if(this.os=='win32'){
             cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/core')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
             cmd_nuxt_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/nuxt')}" "${path.join(this.base_path, '')}" /E /I /Y`;
-            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/nuxt/server/.env')}" "${this.base_path}" /Y`;
+            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/standard/env.example')}" "${this.base_path}/.env" /Y`;
             cmd_env_remov = `del /F /Q "${path.join(this.base_path, 'server/.env')}"`;
         }
 
@@ -187,13 +187,13 @@ export default class Execution {
 
         var cmd_core_files = `cp -R ${this.base_path}/node_modules/devlien/libraries/core/* ${path.join(this.base_path, 'server/')}`;
         var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/devlien/libraries/next/*')} ${path.join(this.base_path, '/')}`;
-        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/next/.env')} ${this.base_path}`;
+        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/standard/env.example')} ${this.base_path}/.env`;
 
 
         if(this.os=='win32'){
             cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/core')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
             cmd_nuxt_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/next')}" "${path.join(this.base_path, '/')}" /E /I /Y`;
-            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/next/.env')}" "${this.base_path}" /Y`;
+            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/standard/env.example')}" "${this.base_path}/.env" /Y`;
         }
 
         try {

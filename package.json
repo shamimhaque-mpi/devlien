@@ -5,7 +5,7 @@
   "exports": {
     ".":"./index.js",
     "./run":"./framework/Run.js",
-    "./route":"./framework/App/Routes/Route.js",
+    "./route":"./framework/App/Route/Route.js",
     "./model":"./framework/App/Eloquent/Model.js",
     "./database":"./framework/App/Database/Mysql.js",
     "./db":"./framework/App/Database/DB.js",
@@ -15,8 +15,10 @@
     "./serviceProvider": "./framework/App/Http/Provider/ServiceProvider.js",
     "./file": "./framework/App/File/FileHandler.js",
     "./env": "./framework/Env.js",
-    "./config": "./framework/App/Cores/Config.js",
-    "./system": "./framework/App/Cores/System.js"
+    "./collect": "./framework/App/Core/Helpers/Collect.js",
+    "./config": "./framework/App/Core/Config.js",
+    "./system": "./framework/App/Core/System.js",
+    "./middleware/auth": "./framework/App/Core/Middleware/Auth.js"
   },
   "main": "index.js",
   "type": "module",
@@ -54,7 +56,7 @@
     "controller",
     "service",
     "model",
-    "middleware",
+    "/auth",
     "rest-api",
     "pure-nodejs"
   ],
