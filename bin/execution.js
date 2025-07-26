@@ -12,6 +12,7 @@ import Cache from './cache.js';
 import os from "os";
 import { promisify } from 'util';
 import Terminal from "./terminal.js";
+import DIR from '../framework/App/Core/Helpers/DIR.js';
 
 export default class Execution {
 
@@ -74,31 +75,12 @@ export default class Execution {
     }
 
     async copyDemo(){
-
-        var cmd_core_files = `cp -R ${this.base_path}/node_modules/devlien/libraries/core/* "${path.join(this.base_path, '')}\"`;
-        // var cmd_views_files = `cp -R ${path.join(this.base_path, '/node_modules/devlien/libraries/demo/*')} "${path.join(this.base_path, '')}\"`;
-        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/standard/env.example')} "${this.base_path}/.env"`;
-
-
-        if(this.os=='win32'){
-            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/core')}" "\"${path.join(this.base_path, '')}\"" /E /I /Y`;
-            // cmd_views_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/demo')}" "\"${path.join(this.base_path, '')}\"" /E /I /Y`;
-            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/standard/env.example')}" "\"${this.base_path}\".env" /Y`;
-        }
-
         try {
             this.terminal.addLine('Core files are being generated @space processing');
-            await this.execPromise(cmd_core_files);
-            // await this.delay(500);
-            // await this.execPromise(cmd_views_files);
-            await this.delay(500);
+            await DIR.copy(`${this.base_path}/node_modules/devlien/libraries/core/`, `${path.join(this.base_path, '')}`);
             this.terminal.addLine('Core files have been generated @space done', 'success');
             
-            this.terminal.addLine('Environment variables are being updated @space processing');
-            await this.execPromise(cmd_env_clone);
-            await this.delay(500);
-            this.terminal.addLine('Environment variables have been updated @space done', 'success');
-
+            await this.createEnv();
 
             this.terminal.addLine('package.json is updating @space processing');
             await Package.add((json)=>{
@@ -115,7 +97,6 @@ export default class Execution {
             await this.execPromise('npx devlien cache:clear');
             this.terminal.addLine('System is ready to go @space done', 'success');
 
-
         } catch (error) {
             console.error("Error occurred:", error);
         }
@@ -126,40 +107,18 @@ export default class Execution {
 
     async copyNuxtDemo(){
 
-
-        var cmd_core_files = `cp -R ${this.base_path}/node_modules/devlien/libraries/core/* ${path.join(this.base_path, 'server/')}`;
-        var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/devlien/libraries/nuxt/*')} ${path.join(this.base_path, '/')}`;
-        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/standard/env.example')} ${this.base_path}/.env`;
-        var cmd_env_remov  = `rm -rf ${path.join(this.base_path, 'server/.env')}`;
-
-
-        if(this.os=='win32'){
-            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/core')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
-            cmd_nuxt_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/nuxt')}" "${path.join(this.base_path, '')}" /E /I /Y`;
-            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/standard/env.example')}" "${this.base_path}/.env" /Y`;
-            cmd_env_remov = `del /F /Q "${path.join(this.base_path, 'server/.env')}"`;
-        }
-
         try {
-            
             this.terminal.addLine('Nuxtjs config is being updated @space processing');
-            await this.execPromise(cmd_nuxt_files);
-            await this.delay(500);
+            await DIR.copy(`${path.join(this.base_path, '/node_modules/devlien/libraries/nuxt/')}`, `${this.base_path}`);
             this.terminal.addLine('Nuxtjs config has been updated @space done', 'success');
 
 
             this.terminal.addLine('Core files are being generated @space processing');
-            await this.execPromise(cmd_core_files);
-            await this.delay(500);
+            await DIR.copy(`${this.base_path}/node_modules/devlien/libraries/core/`, `${path.join(this.base_path, '/server')}`);
             this.terminal.addLine('Core files have been generated @space done', 'success');
 
 
-            this.terminal.addLine('Environment variables are being updated @space processing');
-            await this.execPromise(cmd_env_clone);
-            await this.delay(500);
-            await this.execPromise(cmd_env_remov);
-            await this.delay(500);
-            this.terminal.addLine('Environment variables have been updated @space done', 'success');
+            await this.createEnv();
 
 
             this.terminal.addLine('package.json is updating @space processing');
@@ -177,40 +136,26 @@ export default class Execution {
             this.terminal.addLine('System is ready to go @space done', 'success');
 
 
-        } catch (error) {
+        } 
+        catch (error) {
             console.error("Error occurred:", error);
         }
     }
 
     async copyNextDemo(){
 
-
-        var cmd_core_files = `cp -R ${this.base_path}/node_modules/devlien/libraries/core/* ${path.join(this.base_path, 'server/')}`;
-        var cmd_nuxt_files = `cp -R ${path.join(this.base_path, '/node_modules/devlien/libraries/next/*')} ${path.join(this.base_path, '/')}`;
-        var cmd_env_clone  = `cp ${path.join(this.base_path, '/node_modules/devlien/libraries/standard/env.example')} ${this.base_path}/.env`;
-
-
-        if(this.os=='win32'){
-            cmd_core_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/core')}" "${path.join(this.base_path, 'server')}" /E /I /Y`;
-            cmd_nuxt_files = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/next')}" "${path.join(this.base_path, '/')}" /E /I /Y`;
-            cmd_env_clone  = `xcopy "${path.join(this.base_path, 'node_modules/devlien/libraries/standard/env.example')}" "${this.base_path}/.env" /Y`;
-        }
-
         try {
 
+            this.terminal.addLine('Nextjs config is being updated @space processing');
+            await DIR.copy(`${path.join(this.base_path, '/node_modules/devlien/libraries/next/')}`, `${this.base_path}`);
+            this.terminal.addLine('Nextjs config has been updated @space done', 'success');
+
+
             this.terminal.addLine('Core files are being generated @space processing');
-            await this.execPromise(cmd_nuxt_files);
-            await this.delay(500);
-            await this.execPromise(cmd_core_files);
-            await this.delay(500);
+            await DIR.copy(`${this.base_path}/node_modules/devlien/libraries/core/`, `${path.join(this.base_path, '/server')}`);
             this.terminal.addLine('Core files have been generated @space done', 'success');
 
-
-            this.terminal.addLine('Environment variables are being updated... @space processing');
-            await this.execPromise(cmd_env_clone);
-            await this.delay(500);
-            this.terminal.addLine('Environment variables have been updated @space done', 'success');
-
+            await this.createEnv();
 
             this.terminal.addLine('package.json is updating @space processing');
             await Package.add((json)=>{
@@ -233,6 +178,12 @@ export default class Execution {
         
     }
 
+
+    async createEnv(){
+        this.terminal.addLine('Environment variables are being updated @space processing');
+        await DIR.copy(`${path.join(this.base_path, '/node_modules/devlien/libraries/standard/env.example')}`, `${this.base_path}/.env`);
+        this.terminal.addLine('Environment variables have been updated @space done', 'success');
+    }
 
 
     ask(question, choices) {
