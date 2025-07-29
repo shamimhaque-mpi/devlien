@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
 import Watcher from './server/Watcher.js';
+import Execution from './execution.js';
 
-const { default: Execution } = await import('./execution.js');
-
-Execution.start((system, param)=>{
+new Execution().start(async (system, param, terminal)=>{
 
     if(param.includes('dev')){
         Watcher.start(param[1]);
@@ -60,14 +59,19 @@ Execution.start((system, param)=>{
             system.copyDemo(param);
         }
         else{
-            system.ask('Are you using Devlien with another framework ?', ['No', 'Yes'])
-            .then(ans=>{
+            let questionOne = 'Are you using Devlien with another framework ?';
+            terminal.ask(questionOne, ['No', 'Yes']).then(ans=>{
+
+                terminal.addLine(questionOne + '\nAnswer : '+terminal.COLORS.success.replace('%s', ans));
+
                 if(ans.toLowerCase()=='no'){
                     system.copyDemo();
                 }
                 else {
-                    system.ask('Which framework are you using ?', ['NuxtJs', 'NextJs'])
+                    let questionTwo = 'Which framework are you using ?';
+                    terminal.ask(questionTwo, ['NuxtJs', 'NextJs'])
                     .then(ans=>{
+                        terminal.addLine(questionTwo + '\nAnswer : '+terminal.COLORS.success.replace('%s', ans));
                         if(ans.toLowerCase()=='nuxtjs'){
                             system.copyNuxtDemo();
                         }

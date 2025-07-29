@@ -13,6 +13,7 @@ export default class Controller {
         this.app_path = process.cwd();
     }
 
+    
     static async create(controllerName, terminal){
 
         let file = `app/Http/Controllers/${controllerName}.js`

@@ -1,3 +1,4 @@
+import readline from 'readline';
 import color from "../utilities/colours.js";
 
 export default class Terminal 
@@ -7,7 +8,8 @@ export default class Terminal
 
 	COLORS = { 
 		processing: color.info, 
-		success: color.success 
+		success: color.success,
+		default: '%s' 
 	};
 
 
@@ -61,5 +63,68 @@ export default class Terminal
 		const terminalWidth = process.stdout.columns || 80;
 		const middleSpace = terminalWidth - (str.length + 2);
 		return middleSpace > 0 ? ' ' + '-'.repeat(middleSpace) + ' ' : ' ';
+	}
+
+	ask(question, options) {
+		this.reload();
+		//
+		const _this = this;
+		var message_id = null;
+
+		return new Promise((resolve) => {
+
+			const rl = readline.createInterface({
+				input: process.stdin,
+				output: process.stdout,
+			});
+
+			let currentIndex = 0;
+
+			function render() {
+				let outputs = question + '\n';
+				options.forEach((choice, i) => {
+					const selected = i === currentIndex ? '◉' : '◯';
+					if (i === currentIndex) {
+
+						outputs += _this.COLORS['success'].replace('%s',` ${selected} ${choice} \n`);
+					} 
+					else outputs += ` ${selected} ${choice} \n`;
+				});
+
+				outputs += '\nUse arrow keys (↑ ↓) and press Enter';
+
+				if (!message_id) message_id = _this.addLine(outputs, 'default');
+				else _this.updateLine(outputs, 'default', message_id);
+			}
+
+			render();
+
+
+			readline.emitKeypressEvents(process.stdin);
+			process.stdin.setRawMode(true);
+			process.stdin.removeAllListeners('keypress');
+
+			process.stdin.on('keypress', (_, key) => {
+				if (key.name === 'up') {
+					currentIndex = (currentIndex - 1 + options.length) % options.length;
+					render();
+				} 
+				else if (key.name === 'down') {
+					currentIndex = (currentIndex + 1) % options.length;
+					render();
+				} 
+				else if (key.name === 'return') {
+					rl.close();
+					process.stdin.setRawMode(false);
+					delete this.#STORAGE[message_id];
+					this.reload();
+					resolve(options[currentIndex]);
+				} 
+				else if (key.ctrl && key.name === 'c') {
+					rl.close();
+					process.exit();
+				}
+			});
+		});
 	}
 }

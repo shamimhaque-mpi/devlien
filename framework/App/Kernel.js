@@ -1,11 +1,10 @@
 import Provider from "./Http/Controller/Provider.js"
 import RouteServe from "./Route/RouteServe.js"
 import System from "./Core/System.js"
-import formidable from 'formidable';
-import Request from "./Http/Request.js";
 import config from "devlien/config";
 import colours from "../../utilities/colours.js";
 import PublicFile from "./Http/PublicFile.js";
+import HTTPHandler from "./Http/Request/HTTPHandler.js";
 
 export default class Kernel 
 {
@@ -69,6 +68,7 @@ export default class Kernel
              * ***********************
              *
              * *******************/
+            /*
             const form = formidable({ multiples: true });
             var fields;
             var files;
@@ -79,19 +79,19 @@ export default class Kernel
                 files:files,
                 user:false
             }));
+            */
 
-
-
-
-            if(response)
-                response.end(Buffer.isBuffer(feedback) ? feedback : JSON.stringify(feedback))
+            const feedback = await (new Provider(this.SERVICES)).getResponse(new HTTPHandler(request));
+            //
+            if(response) response.end(Buffer.isBuffer(feedback) ? feedback : JSON.stringify(feedback))
             return feedback;
 
         }
         catch(err){
             console.log(colours.text(JSON.stringify(err), 'warning'));
-            if(response)
-                response.end(JSON.stringify(err));
+            if(response){
+                return response.end(JSON.stringify(err));
+            }
             return err;
         }
     }

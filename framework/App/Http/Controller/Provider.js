@@ -10,8 +10,6 @@ export default class Provider
     }
 
 
-
-
     /*
      * *********
      *
@@ -19,15 +17,12 @@ export default class Provider
     async getResponse($request)
     {
         try {
-            let {route, system} = this.services;
+            let { route } = this.services;
 
             if(route['CONTROLLER'] && route['METHOD']){
-                
                 const cltr_path = path.join(baseEnv.BASE_PATH, "app/Http/Controllers/"+route['CONTROLLER']+'.js');
                 const base = new (await System.import(cltr_path))($request);
-                const resp = await base[route['METHOD']]($request, route.PARAMS);
-
-                return resp;
+                return await base[route['METHOD']]($request, route.PARAMS);
             }
             return false;
         }

@@ -18,24 +18,24 @@ export default class Validator {
                 }
             }
 
-            if(errors.length) throw createError({
+            if(errors.length) throw createError(JSON.stringify({
                 message:'Some Fields Are Missing.',
                 statusCode:422, 
                 data: errors
-            }, );
+            }));
         }
     }
 
-    async validate(fields){
-        await this.checkValidation(fields);
+    async validate(roles){
+        await this.checkValidation(roles);
     }
 
 
     async checkValidation(roles) 
     {
-        const data  = this.all();
-
+        const data = await this.all();
         let errors = {};
+
         for(const key in roles)
         {
             const role = roles[key].split('|');

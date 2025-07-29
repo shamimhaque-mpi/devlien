@@ -36,17 +36,19 @@ export default class RouteServe {
 
     async getOrigin(){
 
+        const url = (this._REQUEST.url).split('?')[0];
+
         for (const pattern in this._ROUTES){
-            const match_route = this.matchRoute(pattern, this._REQUEST.url);
+            const match_route = this.matchRoute(pattern, url);
             
             if(match_route) {
-                this._ROUTES[this._REQUEST.url] = this._ROUTES[pattern];
-                this._ROUTES[this._REQUEST.url].PARAMS = match_route;
+                this._ROUTES[url] = this._ROUTES[pattern];
+                this._ROUTES[url].PARAMS = match_route;
                 break;
             }
         }
 
-        let _TARGET_PATH =  this._ROUTES[this._REQUEST.url];
+        let _TARGET_PATH =  this._ROUTES[url];
         let _IS_ACCEPT   = _TARGET_PATH && (_TARGET_PATH.REQUEST_METHOD.includes(this._REQUEST.method.toLocaleUpperCase()) || _TARGET_PATH.REQUEST_METHOD.includes('ANY'))
 
         if(_IS_ACCEPT){
