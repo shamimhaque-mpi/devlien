@@ -6,8 +6,8 @@ export default async function view ($path='', dataset={}){
 	$path = ($path).split('.').join('/');
 	let $base = path.join(process.cwd(), '/resources/views/');
 
-	let template = new Template($base, true);
-	let component = await template.build($path+'.dl');
+	let template = new Template($base, '.dl');
+	let component = await template.build($path+'.dl', true);
 
 	if(typeof component != 'object')
 		return component;
