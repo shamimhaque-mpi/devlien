@@ -1,6 +1,6 @@
 {
   "name": "devlien",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Devlien is a lightweight, zero-dependency Node.js framework with clean MVC structure, built-in ORM, and intuitive routing for rapid backend development.",
   "exports": {
     ".":"./index.js",

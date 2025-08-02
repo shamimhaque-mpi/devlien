@@ -4,38 +4,183 @@
 		<head>
 			<meta charset="UTF-8" />
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<title>Welcome to Devlien</title>
-			<link rel="stylesheet" href="/css/devlien.css">
+			<title>{{ title }}</title>
+			<script src="https://cdn.tailwindcss.com"></script>
 		</head>
 		<body>
-			<div class="main-wrapper">
-				<header>
-					<h1>Welcome to Devlien</h1>
-					<p>A lightweight Node.js templating and component framework</p>
-					<nav>
-					<a href="/tutorial">NPM</a>
-					<a href="/docs">GIT</a>
-					<a href="https://www.youtube.com/@devlien-framework">YOUTUBE</a>
-					</nav>
-				</header>
-				<main>
-					<h2>Getting Started</h2>
-					<p>
-						Devlien helps you build simple and powerful web apps using familiar templating
-						syntax, reusable components, and clean logic—without external dependencies.
-					</p>
-					<p>
-						Explore the tutorial to build your first app, or dive into the documentation for a deeper understanding.
-					</p>
-				</main>
+			<div class="bg-gray-50 text-gray-800 min-h-[calc(100vh-180px)] flex items-center">
+
+				<div class="w-full pt-5">
+					<div class="flex flex-col md:flex-row items-center justify-center space-y-10 md:space-y-0 md:space-x-3">
+						<!-- Left: Image -->
+						<div class="w-20 h-20 md:w-20 md:h-20">
+							<img src="/devlien.webp" alt="Devlien Logo" class="w-full h-full object-contain">
+						</div>
+
+						<!-- Right: Devlien Text -->
+						<div class="text-center md:text-left">
+							<h1 class="text-4xl font-bold text-gray-900">Devlien</h1>
+							<p class="mt-2 text-gray-600 text-lg">The modern backend framework for full-stack developers.</p>
+						</div>
+					</div>
+
+
+					<div class="max-w-7xl mx-auto px-4 py-10 space-y-10">
+
+						<!-- First Row -->
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+							<!-- Column 1: Logo + Tutorial -->
+							<a href="https://www.youtube.com/@devlien-framework" class="bg-white p-6 rounded-xl shadow border">
+								<div class="flex items-center space-x-4">
+								<!-- Logo Icon -->
+								<div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">
+									<!-- Code Icon -->
+									<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+									<path d="M16 18l6-6-6-6M8 6l-6 6 6 6" />
+									</svg>
+								</div>
+								<div>
+									<h2 class="text-xl font-semibold">Tutorial</h2>
+									<p class="text-sm text-gray-500">Get started with Devlien step-by-step.</p>
+								</div>
+								</div>
+							</a>
+
+							<!-- Column 2: Documentation -->
+							<a href="https://github.com/shamimhaque-mpi/devlien/blob/main/README.md" class="bg-white p-6 rounded-xl shadow border">
+								<div class="flex items-start space-x-4">
+								<!-- Book Icon -->
+								<div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">
+									<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+									<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 4.5A2.5 2.5 0 0 1 6.5 7H20v13" />
+									</svg>
+								</div>
+								<div>
+									<h2 class="text-xl font-semibold">Documentation</h2>
+									<p class="text-sm text-gray-600">
+									Templating, API and configuration guide for Devlien.
+									</p>
+								</div>
+								</div>
+							</a>
+						</div>
+
+						<!-- Second Row -->
+						<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+							<!-- Column 1: Examples -->
+							<a href="#" class="bg-white p-6 rounded-xl shadow border">
+								<div class="flex items-start space-x-4">
+									<!-- Layout Icon -->
+									<div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">
+										<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+										<rect x="3" y="3" width="7" height="7" />
+										<rect x="14" y="3" width="7" height="7" />
+										<rect x="14" y="14" width="7" height="7" />
+										<rect x="3" y="14" width="7" height="7" />
+										</svg>
+									</div>
+									<div>
+										<h3 class="text-lg font-semibold mb-1">Examples</h3>
+										<p class="text-sm text-gray-600">Devlien projects and boilerplates.</p>
+									</div>
+								</div>
+							</a>
+
+							<!-- Column 2: Deploy -->
+							<a href="#" class="bg-white p-6 rounded-xl shadow border">
+								<div class="flex items-start space-x-4">
+									<!-- Cloud Upload Icon -->
+									<div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">
+										<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+										<path d="M16 16l-4-4-4 4M12 12v9M20 16.58A5 5 0 0 0 18 7a5.8 5.8 0 0 0-1.42.18A6 6 0 0 0 6 9.5a4 4 0 0 0 1 7.88" />
+										</svg>
+									</div>
+									<div>
+										<h3 class="text-lg font-semibold mb-1">Deploy</h3>
+										<p class="text-sm text-gray-600">Deploy your Devlien app easily.</p>
+									</div>
+								</div>
+							</a>
+
+							<!-- Column 3: With Other Frameworks -->
+							<a href="#" class="bg-white p-6 rounded-xl shadow border">
+								<div class="flex items-start space-x-4">
+									<!-- Layers Icon -->
+									<div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">
+										<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+										<polygon points="12 2 2 7 12 12 22 7 12 2" />
+										<polyline points="2 17 12 22 22 17" />
+										<polyline points="2 12 12 17 22 12" />
+										</svg>
+									</div>
+									<div>
+										<h3 class="text-lg font-semibold mb-1">With Other Frameworks</h3>
+										<p class="text-sm text-gray-600">Integrate Devlien with Nuxt, Next, and more.</p>
+									</div>
+								</div>
+							</a>
+						</div>
+
+					</div>
+
+
+					<div class="mx-auto">
+						<ul class="flex space-x-3 justify-center">
+							<li>
+								<a href="https://github.com/shamimhaque-mpi/devlien" target="_blank" class="dark:hover:text-white dark:text-gray-400 focus-visible:ring-2 hover:text-[#020420] text-gray-500">
+									<span class="sr-only">Devlien GitHub Repository</span> 
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+										<path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+									</svg>
+								</a>
+							</li>
+							<li>
+								<a href="#" target="_blank" class="dark:hover:text-white dark:text-gray-400 focus-visible:ring-2 hover:text-[#020420] text-gray-500">
+									<span class="sr-only">Devlien Discord Server</span> 
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+										<path fill="currentColor" d="M20.317 4.37a19.8 19.8 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.3 18.3 0 0 0-5.487 0 13 13 0 0 0-.617-1.25.08.08 0 0 0-.079-.037A19.7 19.7 0 0 0 3.677 4.37a.1.1 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.08.08 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.08.08 0 0 0 .084-.028 14 14 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13 13 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10 10 0 0 0 .372-.292.07.07 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.07.07 0 0 1 .078.01q.181.149.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.08.08 0 0 0 .084.028 19.8 19.8 0 0 0 6.002-3.03.08.08 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 0 0-.031-.03M8.02 15.33c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418m7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418"></path>
+									</svg>
+								</a>
+							</li>
+							<li>
+								<a href="https://www.linkedin.com/in/shamimhaque" target="_blank" class="dark:hover:text-white dark:text-gray-400 focus-visible:ring-2 hover:text-[#020420] text-gray-500">
+									<span class="sr-only">Linkedin</span> 
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+										<path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.06 2.06 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065m1.782 13.019H3.555V9h3.564zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"></path>
+									</svg>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
-			<footer>
-				&copy; 2025 Devlien Framework. All rights reserved.
+			<footer class="bg-gray-900 text-white py-8">
+				<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+					<div class="flex flex-col md:flex-row justify-between items-center">
+					<!-- Left section -->
+					<div class="mb-4 md:mb-0">
+						<h2 class="text-xl font-bold">Devlien</h2>
+						<p class="text-sm text-gray-400">A powerful backend framework for modern web apps.</p>
+					</div>
+
+					<!-- Center section -->
+					<div class="flex space-x-6">
+						<a href="#" class="text-gray-400 hover:text-white text-sm">Home</a>
+						<a href="#" class="text-gray-400 hover:text-white text-sm">Docs</a>
+						<a href="#" class="text-gray-400 hover:text-white text-sm">GitHub</a>
+						<a href="#" class="text-gray-400 hover:text-white text-sm">Contact</a>
+					</div>
+					</div>
+
+					<div class="mt-8 border-t border-gray-700 pt-4 text-center text-sm text-gray-500">
+					© 2025 Devlien. All rights reserved.
+					</div>
+				</div>
 			</footer>
 		</body>
 	</html>
 </template>
 
 @script
-    const message = "Hellow World";
+    const title = "Welcome to Devlien";
 @endscript

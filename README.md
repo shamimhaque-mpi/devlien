@@ -11,15 +11,21 @@ It gives you a Laravel-like development experience while staying simple and unop
 
 ---
 
-## 🚀 Quick Start with Nuxt.js
+## 🚀 Quick Start (Standalone Server)
+```bash
+npm create devlien@latest devlienApp
+```
+
+
+## 🚀 Quick Start with Nuxt.js or Nextjs
 
 This guide will walk you through installing and using Devlien in a **Nuxt.js**, **Nextjs** project.
 
 ---
 
-### 1️⃣ Install the Framework
+### 1️⃣ Install the Framework (If you install Devlien into any other framework)
 
-In your Nuxt project root, install Devlien:
+In your Nuxtjs or Nextjs project root, install Devlien:
 
 ```bash
 npm install devlien
@@ -27,7 +33,7 @@ npm install devlien
 
 ---
 
-### 2️⃣ Run the Setup Command
+### 2️⃣ Run the Setup Command (If you install Devlien into any other framework)
 
 Initialize the server environment using:
 
