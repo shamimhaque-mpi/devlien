@@ -2,7 +2,7 @@ import path from "path";
 import Template from "./Template.js";
 import Compiler from "./Compiler.js";
 
-export default async function view ($path=''){
+export default async function view ($path='', dataset={}){
 	$path = ($path).split('.').join('/');
 	let $base = path.join(process.cwd(), '/resources/views/');
 
@@ -14,7 +14,7 @@ export default async function view ($path=''){
 
 	let view = {
 		viewEngine:true,
-		html : await Compiler.execute(component),
+		html : await Compiler.execute(component, dataset),
 	}
 
 	return view;
