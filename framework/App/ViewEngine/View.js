@@ -9,6 +9,9 @@ export default async function view ($path=''){
 	let template = new Template($base, true);
 	let component = await template.build($path+'.dl');
 
+	if(typeof component != 'object')
+		return component;
+
 	let view = {
 		viewEngine:true,
 		html : await Compiler.execute(component),
