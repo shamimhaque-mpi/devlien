@@ -61,29 +61,21 @@ export default class Kernel
                 if(isReturn) throw isReturn;
             }
 
-
-
-
-            /*
-             * ***********************
-             *
-             * *******************/
-            /*
-            const form = formidable({ multiples: true });
-            var fields;
-            var files;
-            [fields, files] = await form.parse(request);
-
-            const feedback = await (new Provider(this.SERVICES)).getResponse(Request.instance({
-                fields:fields,
-                files:files,
-                user:false
-            }));
-            */
-
             const feedback = await (new Provider(this.SERVICES)).getResponse(new HTTPHandler(request));
             //
-            if(response) response.end(Buffer.isBuffer(feedback) ? feedback : JSON.stringify(feedback))
+            if(response){
+                let resonseData = "";
+                if(Buffer.isBuffer(feedback)){
+                    resonseData = feedback;
+                }
+                else if(feedback.viewEngine){
+                    resonseData = feedback.html;
+                }
+                else {
+                    resonseData = JSON.stringify(feedback);
+                }
+                return response.end(resonseData);
+            }
             return feedback;
 
         }

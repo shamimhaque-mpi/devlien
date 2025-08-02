@@ -1,5 +1,6 @@
 import ServiceProvider from "devlien/serviceProvider";
 import API from "../../routes/api.js";
+import WEB from "../../routes/web.js";
 
 
 
@@ -16,6 +17,7 @@ export default class RouteServiceProvider extends ServiceProvider {
      * allowing you to define routes or bindings needed by your application.
      */
     async boot(){
-        this.route(API)
+        this.route(API);
+        this.route(WEB);
     }
 }

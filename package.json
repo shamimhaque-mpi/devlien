@@ -19,7 +19,8 @@
     "./collect": "./framework/App/Core/Helpers/Collect.js",
     "./config": "./framework/App/Core/Config.js",
     "./system": "./framework/App/Core/System.js",
-    "./middleware/auth": "./framework/App/Core/Middleware/Auth.js"
+    "./middleware/auth": "./framework/App/Core/Middleware/Auth.js",
+    "./view": "./framework/App/ViewEngine/View.js"
   },
   "main": "index.js",
   "type": "module",

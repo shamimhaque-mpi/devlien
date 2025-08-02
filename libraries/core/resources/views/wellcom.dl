@@ -1,0 +1,41 @@
+<template>
+    <!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8" />
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Welcome to Devlien</title>
+			<link rel="stylesheet" href="/css/devlien.css">
+		</head>
+		<body>
+			<div class="main-wrapper">
+				<header>
+					<h1>Welcome to Devlien</h1>
+					<p>A lightweight Node.js templating and component framework</p>
+					<nav>
+					<a href="/tutorial">NPM</a>
+					<a href="/docs">GIT</a>
+					<a href="https://www.youtube.com/@devlien-framework">YOUTUBE</a>
+					</nav>
+				</header>
+				<main>
+					<h2>Getting Started</h2>
+					<p>
+						Devlien helps you build simple and powerful web apps using familiar templating
+						syntax, reusable components, and clean logic—without external dependencies.
+					</p>
+					<p>
+						Explore the tutorial to build your first app, or dive into the documentation for a deeper understanding.
+					</p>
+				</main>
+			</div>
+			<footer>
+				&copy; 2025 Devlien Framework. All rights reserved.
+			</footer>
+		</body>
+	</html>
+</template>
+
+@script
+    const message = "Hellow World";
+@endscript

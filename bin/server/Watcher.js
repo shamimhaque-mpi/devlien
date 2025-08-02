@@ -75,7 +75,7 @@ export default class Watcher {
 			if(!isIgnored){
 				if (this.watcher) clearTimeout(this.watcher);
 				this.watcher = setTimeout(() => {
-					if (filename && filename.endsWith('.js') && fn) {
+					if (filename && (filename.endsWith('.js') || filename.endsWith('.dl')) && fn) {
 						fn(eventType, filename);
 					}
 				}, 300);
