@@ -11,7 +11,7 @@ It gives you a Laravel-like development experience while staying simple and unop
 
 ---
 
-## 🚀 Quick Start (Standalone Server)
+## ⚡ Quick Start (Standalone Server)
 ```bash
 npm create devlien@latest devlienApp
 ```
@@ -59,6 +59,10 @@ server
 │   ├── migrations
 │   └── seeds
 ├── routes
+│   ├── web
+│   └── api
+├── resources
+│   └── views
 ├── .env
 ```
 
@@ -72,7 +76,7 @@ Edit the generated `.env` file and set your database configuration:
 APP_NAME="DevLien"
 DB_HOST=localhost
 DB_PORT=3306
-DB_DATABASE=your_database_name
+DB_DATABASE=database_name
 DB_USERNAME=root
 DB_PASSWORD=secret
 ```
@@ -182,6 +186,34 @@ export default route.serve(route => {
         route.put('update/:id', 'UserController@update');
     })
 });
+```
+
+## 📄 Template Usage Example
+In you controller
+```js
+import view from "devlien/view";
+
+export default class DevlienController extends Controller {
+    constructor() {
+        super();
+        // Any setup or initialization can go here.
+    }
+    async wellcome(request) {
+        return await view('wellcome', {title:'Wellcome to Devlien'});
+    }
+}
+
+```
+In you template (root/resources/views/wellcome.dl)
+```js
+<template>
+    <h1>{{ title }}</h1>
+    <p>{{ version }}</p>
+</template>
+
+@script
+    const version = "1.0.3";
+@endscript
 ```
 
 
