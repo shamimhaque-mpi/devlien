@@ -11,8 +11,7 @@ export default class Relation {
     }
 
 
-
-
+    
     async manyToMany(model){
 
         let parent_table = this.getTableName();
@@ -30,26 +29,35 @@ export default class Relation {
             )
         `);
 
+        let className = new model().constructor.name;
+        let modelPath = path.join(baseEnv.BASE_PATH, model.namespace, className+'.js');
+
+        let modelT = new Function(`
+            return async ()=>{
+
+                let model = (await import('${modelPath}')).default;
+                let Database = (await import('devlien/database')).default;
+
+                class relationable extends model {};
+
+                return class ${className} extends relationable {
+                    async sync(ids){
+                        let data = [];
+                        let _pid = ${this['id']};
+
+                        for(const i in ids){
+                            data.push('('+_pid+' ,'+ids[i]+')');
+                        }
+
+                        await Database.query('DELETE FROM ${pivot_table} WHERE ${pp_id_name} = '+_pid);
+                        await Database.query('INSERT INTO ${pivot_table} (${pp_id_name}, ${pc_id_name}) VALUES '+(data.join(',')));
+                    } 
+                };
+            }
+        `)();
         
-        let pid = this['id'];
 
-        class _model {
-            async sync(ids=[]){
-
-                let data = [];
-                let _pid = pid;
-
-                for(const i in ids){
-                    data.push(`(${_pid},${ids[i]})`);
-                }
-
-                await Database.instance().query(`DELETE FROM ${pivot_table} WHERE ${pp_id_name} = ${_pid}`);
-
-                await Database.instance().query(`INSERT INTO ${pivot_table} (${pp_id_name}, ${pc_id_name}) VALUES ${data.join(',')};`);
-            }    
-        }
-
-        return Object.assign((new _model()), {...data});
+        return Object.assign((new (await modelT())), {...data});
     }
     
 

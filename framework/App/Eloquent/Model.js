@@ -182,17 +182,27 @@ export default class Model extends Relation {
 
 
 
-
+    /**
+     * Insert multiple records one by one using the create() method.
+     * 
+     * This method loops through an array of records and inserts each record
+     * sequentially by calling the `create()` method for every item.
+     * 
+     * @param {Array<Object>} records - An array of record objects to insert.
+     * @returns {Promise<void>}
+     */
     async create(data) {
         try{
             const columns = Object.keys(data);
             const values  = Object.values(data);
-            const [record] = await Database.instance().query(this.makeQuery('insert', columns), values);
+            const _this = new this.constructor;
 
-            let _data = this.where({'id':record.insertId}).first();
+            const [record] = await Database.query(_this.makeQuery('insert', columns), values);
 
-            if(this.#successFn)
-                this.#successFn(this.where({'id':record.insertId}), _data);
+            let _data = _this.where({'id':record.insertId}).first();
+
+            if(_this.#successFn)
+                _this.#successFn(_this.where({'id':record.insertId}), _data);
 
             return _data;
         }
@@ -200,10 +210,18 @@ export default class Model extends Relation {
             throw new Error(e);
         }
     }
-
-
     static async create(data){
         return await (new this()).create(data);
+    }
+
+
+    async insert(records){
+        for(const record of records){
+            await this.create(record);
+        }
+    }
+    static async insert(records){
+        return await (new this()).insert(records);
     }
 
 

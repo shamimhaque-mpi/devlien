@@ -15,7 +15,7 @@ export default class @controller extends Controller {
      * @param {object} request - The HTTP request object containing query, headers, body, etc.
      * @return {string} A simple response string to confirm the controller is working.
      */
-    index(request) {
+    async index(request) {
         return "I'm ready...";
-    }   
+    }  
 }

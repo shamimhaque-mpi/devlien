@@ -27,7 +27,7 @@ export default class Validator {
     }
 
     async validate(roles){
-        await this.checkValidation(roles);
+        return await this.checkValidation(roles);
     }
 
 
@@ -72,6 +72,8 @@ export default class Validator {
             statusCode:422, 
             data: errors
         }));
+        
+        else return true;
     }
 
 
