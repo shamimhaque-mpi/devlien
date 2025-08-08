@@ -239,10 +239,17 @@ export default class Model extends Relation {
             throw new Error(e);
         }
     }
-
-
     static async update(data={}){
         return await (new this()).update(data);
+    }
+
+
+
+    static async updateOrCreate(where, record){
+        let _this = new this();
+        const exist = _this.where(where).first();
+        if(exist) return _this.where(where).update(record);
+        else return_this.create(record);
     }
 
 

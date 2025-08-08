@@ -4,6 +4,7 @@ import Package from './package.js';
 import Migration from './migration.js';
 import Model from './model.js';
 import Controller from './controller.js';
+import Request from './request.js';
 import Resource from './resource.js';
 import Seeder from './seeder.js';
 import path from 'path';
@@ -56,6 +57,11 @@ export default class Execution {
 
     async createResource(modelName){
         Resource.create(modelName, this.terminal);
+    }
+
+
+    async createRequest(requestName){
+        Request.create(requestName, this.terminal);
     }
 
 

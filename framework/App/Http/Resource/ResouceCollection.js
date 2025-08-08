@@ -6,6 +6,10 @@ export default class ResouceCollection {
 
 
     async getRecords($model){
+
+        if(!this.constructor.collection) 
+            return await this.toJson($model);
+
         let records = [];
         for(const key in $model){
             let data = await this.toJson($model[key]);

@@ -1,4 +1,6 @@
 import Database from "../Database/Mysql.js";
+import { baseEnv } from "devlien/env";
+import path from "path";
 
 export default class Relation {
 

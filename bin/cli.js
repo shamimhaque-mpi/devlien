@@ -28,6 +28,11 @@ new Execution().start(async (system, param, terminal)=>{
     }
 
 
+    else if(param.includes('make:request')){
+        system.createRequest(param[1]);
+    }
+
+
     else if(param.includes('make:seeder')){
         system.createSeeder(param[1]);
     }

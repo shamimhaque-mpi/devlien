@@ -25,13 +25,13 @@ export default class Migration {
         const unixSeconds = Math.floor(Date.now() / 1000);
         const file = `database/migrations/${today+'_'+unixSeconds}_${name}.js`;
 
-        terminal.addLine(`${file} @space generating`);
+        terminal.addLine(`${file} @space GENERATING`);
 
         var content = fs.readFileSync(mgn.package_path+'/libraries/standard/migration.js', 'utf-8');
             content = content.replaceAll('@table', table)
         fs.writeFileSync(path.join(baseEnv.BASE_PATH, file)  , content);
 
-        terminal.addLine(`${file} @space generated`, 'success');
+        terminal.addLine(`${file} @space GENERATED`, 'success');
     }
 
 
