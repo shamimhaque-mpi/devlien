@@ -73,12 +73,14 @@ server
 Edit the generated `.env` file and set your database configuration:
 
 ```env
-APP_NAME="DevLien"
-DB_HOST=localhost
-DB_PORT=3306
-DB_DATABASE=database_name
+APP_NAME="Devlien"
+
+DB_CONNECTION="mysql"
+DB_HOST="localhost"
+DB_PORT="3306"
 DB_USERNAME=root
 DB_PASSWORD=secret
+DB_NAME=devlien
 ```
 
 > ✅ You must have a running MySQL/MariaDB database before proceeding.
