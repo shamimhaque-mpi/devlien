@@ -18,11 +18,11 @@ export default class Validator {
                 }
             }
 
-            if(errors.length) throw createError(JSON.stringify({
+            if(errors.length) throw {
                 message:'Some Fields Are Missing.',
-                statusCode:422, 
+                status:422, 
                 data: errors
-            }));
+            };
         }
     }
 
@@ -67,11 +67,11 @@ export default class Validator {
             }
         }
 
-        if(Object.values(errors).length) throw new Error(JSON.stringify({
+        if(Object.values(errors).length) throw {
             message:'Validation fails',
-            statusCode:422, 
+            status:422, 
             data: errors
-        }));
+        };
         
         else return true;
     }

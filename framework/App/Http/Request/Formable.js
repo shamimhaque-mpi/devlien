@@ -38,9 +38,18 @@ export default class Formable extends Validator {
 
                     this.node.on('end', () => {
 
-                        if(isJsonResonse) return resolve({ fields:Object.assign(fields, JSON.parse(body)), files });
-                        if(isURLencodedResonse) return resolve({ fields:Object.assign(fields, this.parseUrlEncoded(body)), files });
-
+                        try{
+                            if(isJsonResonse) return resolve({ fields:Object.assign(fields, JSON.parse(body)), files });
+                            if(isURLencodedResonse) return resolve({ fields:Object.assign(fields, this.parseUrlEncoded(body)), files });
+                        }
+                        catch(err){
+                            reject({
+                                status:'400',
+                                message:'Bad Request',
+                                error:err
+                            });
+                        }
+                        
                         const boundary = this.node.headers['content-type']?.split('boundary=')[1];
                         const parts = body.split(`--${boundary}`);
 

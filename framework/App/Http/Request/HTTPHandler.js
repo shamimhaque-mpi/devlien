@@ -6,10 +6,12 @@ export default class HTTPHandler extends Formable {
 	node;
 	#fields;
 	#files;
+	#response
 
-	constructor(request) {
+	constructor(request, response=null) {
 		super();
 		this.node = request;
+		this.#response = response;
 		this.#init();
 	}
 
@@ -22,9 +24,14 @@ export default class HTTPHandler extends Formable {
 	async all() {
 		if(this.#fields) return this.#fields;
 		else {
-			const { fields } = await this.form();
-			this.#fields = fields;
-			return this.#fields;
+			try {
+				const { fields } = await this.form();
+				this.#fields = fields;
+				return this.#fields;
+			}
+			catch(err){
+				return this.#makeError(err);
+			}
 		}
 	}
 
@@ -36,31 +43,55 @@ export default class HTTPHandler extends Formable {
 	async files() {
 		if(this.#files) return this.#files;
 		else {
-			const { files } = await this.form();
-			this.#files = files;
-			return this.#files;
+			try {
+				const { files } = await this.form();
+				this.#files = files;
+				return this.#files;
+			}
+			catch(err){
+				return this.#makeError(err);
+			}
 		}
 	}
 
 
 	async except(keys = []) {
-		const filtered = {};
-		let body = await this.all();
-		for (const key in body) {
-			if (!keys.includes(key)) {
-				filtered[key] = body[key];
+		try {
+			const filtered = {};
+			let body = await this.all();
+			for (const key in body) {
+				if (!keys.includes(key)) {
+					filtered[key] = body[key];
+				}
 			}
+			return filtered;
 		}
-		return filtered;
+		catch(err){
+			return this.#makeError(err);
+		}
 	}
 
 	async #init(){
-		let data = await this.all();
-		for(const key in data){
-			this[key] = data[key];
+		try {
+			let data = await this.all();
+			for(const key in data){
+				this[key] = data[key];
+			}
+		}
+		catch(err){
+			return this.#makeError(err);
 		}
 	}
 
+	#makeError(error){
+		console.log(error);
+		if(this.#response){
+			this.#response.statusCode = error.status||500;
+			this.#response.setHeader('Content-Type', 'application/json');
+			this.#response.end(JSON.stringify(error));
+		}
+		else return error;
+	}
 
 	ip(){
 		return this.node.socket.remoteAddress;

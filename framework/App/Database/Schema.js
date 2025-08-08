@@ -22,13 +22,13 @@ export default class Schema {
         return this._PROCESS[column];
     }
     
-    bigInt(column) {
+    bigInteger(column) {
         this._PROCESS[column] = new Schema();
         this._PROCESS[column]._type = "BIGINT";
         return this._PROCESS[column];
     }
 
-    unsignedBigInt(column) {
+    unsignedBigInteger(column) {
         this._PROCESS[column] = new Schema();
         this._PROCESS[column]._type = "BIGINT UNSIGNED";
         return this._PROCESS[column];

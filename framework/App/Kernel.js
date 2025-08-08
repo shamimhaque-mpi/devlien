@@ -22,6 +22,7 @@ export default class Kernel
      * ************* */
     async executeController(request, response)
     {
+        console.log('url : '+request.url);
 
         if(PublicFile.hasExtension(request)){
             return await PublicFile.provide(request, response);
@@ -61,17 +62,24 @@ export default class Kernel
                 if(isReturn) throw isReturn;
             }
 
-            const feedback = await (new Provider(this.SERVICES)).getResponse(new HTTPHandler(request));
+            const feedback = await (new Provider(this.SERVICES)).getResponse(new HTTPHandler(request, response));
+            
+
+
             //
             if(response){
                 let resonseData = "";
-                if(Buffer.isBuffer(feedback)){
+                if(feedback.error){
+                    throw feedback;
+                }
+                else if(Buffer.isBuffer(feedback)){
                     resonseData = feedback;
                 }
                 else if(feedback.viewEngine){
                     resonseData = feedback.html;
                 }
                 else {
+                    response.setHeader('Content-Type', 'application/json');
                     resonseData = JSON.stringify(feedback);
                 }
                 return response.end(resonseData);
@@ -80,8 +88,11 @@ export default class Kernel
 
         }
         catch(err){
+            console.log(request.url);
             console.log(colours.text(JSON.stringify(err), 'warning'));
             if(response){
+                response.statusCode = err.status||500;
+                response.setHeader('Content-Type', 'application/json');
                 return response.end(JSON.stringify(err));
             }
             return err;

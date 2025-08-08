@@ -247,9 +247,13 @@ export default class Model extends Relation {
 
     static async updateOrCreate(where, record){
         let _this = new this();
-        const exist = _this.where(where).first();
-        if(exist) return _this.where(where).update(record);
-        else return_this.create(record);
+        const exist = await _this.where(where).first();
+        if(exist) {
+            return _this.where(where).update(record);
+        }
+        else {
+            return _this.create(record);
+        };
     }
 
 
