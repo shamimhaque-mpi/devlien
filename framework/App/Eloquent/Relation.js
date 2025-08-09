@@ -1,4 +1,4 @@
-import Facade from "./facade.js";
+import Facade from "./Facade.js";
 import Database from "../Database/Mysql.js";
 import { baseEnv } from "devlien/env";
 import path from "path";

@@ -5,7 +5,7 @@ export default class extends Migration {
         schema.create('migrations', (table)=>{
            table.increments('id');
            table.string('path');
-           table.bigInt('group').default(1);
+           table.bigInteger('group').default(1);
         });
     }
     down(schema){

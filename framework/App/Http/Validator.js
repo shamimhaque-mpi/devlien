@@ -50,8 +50,7 @@ export default class Validator {
             }
 
             let [status] = role.filter((field)=>(field.indexOf('in')>-1)).map((role)=>role.split(':').join(',').split(','));
-            
-            if(status && status.length && data[key]){
+            if(status && status.includes('in') && data[key]){
                 delete status[0]
                 
                 if(!status.includes(data[key])) 
