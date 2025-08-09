@@ -2,13 +2,18 @@ import fs from "fs";
 import path from "path";
 import { baseEnv } from "devlien/env";
 import System from "devlien/system";
+import DIR from "../framework/App/Core/Helpers/DIR.js";
 
 export default class Cache {
 
     constructor(){}
 
-    static async clear(modelName){
+    static async clear(modelName)
+    {
         let dir = path.join(baseEnv.BASE_PATH, 'bootstrap/cache');
+
+        await DIR.path(path.join(dir, 'config.js')).make();
+
         fs.writeFileSync(path.join(dir, 'config.js'), `export const configs = {}`);
 
         try{
@@ -29,7 +34,7 @@ export default class Cache {
             fs.writeFileSync(path.join(dir, 'config.js'), content);
         }
         catch(e){
-            // console.log(e);
+            console.log(e);
         }
     }
 }

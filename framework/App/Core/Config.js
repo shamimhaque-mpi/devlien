@@ -6,8 +6,11 @@ import path from "path";
 var configs = {};
 let isSetuping = process.argv.length > 2 && process.argv[2]=='setup';
 
-if(!isSetuping)
-    var {configs} = (await import(System.toFilePath(path.join(baseEnv.BASE_PATH, 'bootstrap/cache/config.js'))));
+try{
+    if(!isSetuping)
+        var {configs} = (await import(System.toFilePath(path.join(baseEnv.BASE_PATH, 'bootstrap/cache/config.js'))));
+}
+catch(e){}
 //
 export default function(segments='', _default=null) {
     
