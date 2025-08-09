@@ -18,13 +18,13 @@ export default class Controller {
 
         let file = `app/Http/Controllers/${controllerName}.js`
 
-        terminal.addLine(`${file} @space creating`);
+        terminal.addLine(`${file} @space GENERATING`);
 
         let mgn = new Controller;
         var content = fs.readFileSync(mgn.package_path+'/libraries/standard/controller.js', 'utf-8');
         content = content.replaceAll('@controller', controllerName)
         fs.writeFileSync(path.join(baseEnv.BASE_PATH, file), content);
 
-        terminal.addLine(`${file} @space created`, 'success');
+        terminal.addLine(`${file} @space GENERATED`, 'success');
     }
 }

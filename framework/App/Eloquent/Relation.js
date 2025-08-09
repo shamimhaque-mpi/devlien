@@ -1,8 +1,9 @@
+import Facade from "./facade.js";
 import Database from "../Database/Mysql.js";
 import { baseEnv } from "devlien/env";
 import path from "path";
 
-export default class Relation {
+export default class Relation extends Facade {
 
     async hasMany(model, forein_key, local_key){
         return await model.instance().where(forein_key, this[local_key]).get();
@@ -34,7 +35,7 @@ export default class Relation {
         let className = new model().constructor.name;
         let modelPath = path.join(baseEnv.BASE_PATH, model.namespace, className+'.js');
 
-        let modelT = new Function(`
+        let newModel = new Function(`
             return async ()=>{
 
                 let model = (await import('${modelPath}')).default;
@@ -57,48 +58,8 @@ export default class Relation {
                 };
             }
         `)();
-        
 
-        return Object.assign((new (await modelT())), {...data});
-    }
-    
-
-
-    pluralize(word) {
-        if (word.endsWith('y') && !/[aeiou]y$/.test(word)) {
-            return word.slice(0, -1) + 'ies';
-        }
-        if (word.endsWith('s') || word.endsWith('x') || word.endsWith('z') || word.endsWith('ch') || word.endsWith('sh')) {
-            return word + 'es';
-        }
-        return word + 's';
-    }
-
-
-
-
-    toSnakeCase(str) {
-        return str
-          .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
-          .toLowerCase()
-    }
-
-
-
-    
-    toSingularize(word) {
-        return word
-            .split('_')
-            .map(part => {
-                if (part.endsWith('ies')) {
-                    return part.slice(0, -3) + 'y';
-                } else if (part.endsWith('es') && !/(ses|xes|zes|ches|shes)$/.test(part)) {
-                    return part.slice(0, -1); 
-                } else if (part.endsWith('s')) {
-                    return part.slice(0, -1);
-                }
-                return part;
-            })
-            .join('_');
-    }
+        newModel = (await newModel());
+        return this.toFormat(data, newModel, new newModel, model.hidden);
+    }    
 }

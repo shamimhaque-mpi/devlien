@@ -63,13 +63,13 @@ export default class Migration {
         for(const index in migrations){
             if(migrated_list.indexOf(migrations[index])<0){
                 const path = 'database/migrations/'+migrations[index];
-                terminal.addLine(`${path} @space migrating`);
+                terminal.addLine(`${path} @space MIGRATING`);
                 await migration.runMigration(System.path(path)); 
                 await Migrations.instance().create({
                     path  : migrations[index],
                     group : group_no
                 });
-                terminal.addLine(`${path} @space migrated`, 'success');
+                terminal.addLine(`${path} @space MIGRATED`, 'success');
             }
         }
         
@@ -119,11 +119,11 @@ export default class Migration {
 
         for(const index in migrated_list)
         {
-            terminal.addLine(`${migrated_list[index]} @space processing`);
+            terminal.addLine(`${migrated_list[index]} @space PROCESSING`);
             let migration = new (await System.import(System.path('database/migrations/'+migrated_list[index])));
             await Mysql.query(migration.build('down').query().replaceAll('\n', ''));
             await Migrations.where({path:migrated_list[index]}).delete();
-            terminal.addLine(`${migrated_list[index]} @space done`, 'success');
+            terminal.addLine(`${migrated_list[index]} @space PROCESSED`, 'success');
         }
         
         process.exit();

@@ -1,4 +1,9 @@
 export default class Schema {
+
+    #defaultKeys = [
+        'CURRENT_TIMESTAMP',
+        'NULL',
+    ];
     
     create(table, fn){
         this._PROCESS  = {};
@@ -52,6 +57,29 @@ export default class Schema {
         return this._PROCESS[column];
     }
     
+    
+    timestamp(column) {
+        this._PROCESS[column] = new Schema();
+        this._PROCESS[column]._type = 'DATETIME';
+        return this._PROCESS[column];
+    }
+    
+    timestamps() {
+        this._PROCESS['created_at'] = new Schema();
+        this._PROCESS['created_at']._type = 'DATETIME';
+        this._PROCESS['created_at'].nullable().default('CURRENT_TIMESTAMP');
+
+        this._PROCESS['updated_at'] = new Schema();
+        this._PROCESS['updated_at']._type = 'DATETIME';
+        this._PROCESS['updated_at'].nullable().default(`CURRENT_TIMESTAMP`).onUpdate(`CURRENT_TIMESTAMP`);
+    }
+    
+    softDeletes() {
+        this._PROCESS['deleted_at'] = new Schema();
+        this._PROCESS['deleted_at']._type = 'DATETIME';
+        this._PROCESS['deleted_at'].nullable().default('NULL');
+    }
+
     foreign(column){
         let coln = column;
         column += '_foreign_devlien';
@@ -106,6 +134,14 @@ export default class Schema {
         this._after = column;
         return this;
     }
+
+    onUpdate(value){
+        if(this.#defaultKeys.includes(value) || Number.isInteger(value))
+            this._on_update = value;
+        else
+            this._on_update = `'${value}'`;
+        return this;
+    }
     
     nullable(column){
         this._nullable = true;
@@ -118,7 +154,10 @@ export default class Schema {
     }
     
     default(value){
-        this._default = Number.isInteger(value) ? value :`'${value}'`;
+        if(this.#defaultKeys.includes(value) || Number.isInteger(value))
+            this._default = value;
+        else
+            this._default = `'${value}'`;
         return this;
     }
     
@@ -128,11 +167,6 @@ export default class Schema {
         if(fields) this._OPERATION = 'update';
 
         if(!this._PROCESS) return this._query;
-
-
-
-
-
         
         let query    = "";
         let entities = [];
@@ -143,8 +177,6 @@ export default class Schema {
             
             entity = this._PROCESS[key];
             key = key.replace('_foreign_devlien', '');
-
-
 
 
             if(fields && fields.indexOf(key)<0){
@@ -159,7 +191,6 @@ export default class Schema {
                 mod_type  = '';
                 attribute = (!entity._foreign_key ? `\`${key}\`` : '');
             };
-
 
             
 
@@ -176,6 +207,7 @@ export default class Schema {
                 column += `${entity._before ? ' BEFORE '+entity._before : ''}`;
                 column += `${entity._drop ? ' DROP COLUMN '+entity._drop : ''}`;
                 column += `${entity._foreign_key ? ` REFERENCES ${entity._foreign_table}(${entity._ref_id}) ON DELETE ${entity._dlt_method} ` : ``}`;
+                column += `${entity._on_update ? ` ON UPDATE ${entity._on_update}` : ``}`;
             }
             else column = "DROP COLUMN "+entity._drop;
             //

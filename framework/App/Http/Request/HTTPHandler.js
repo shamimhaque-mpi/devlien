@@ -4,14 +4,16 @@ import Formable from './Formable.js';
 export default class HTTPHandler extends Formable {
 	//
 	node;
-	#fields;
-	#files;
+	#fields = {};
+	#files = {};
+	#isReady = false;
 	#response
 
 	constructor(request, response=null) {
 		super();
 		this.node = request;
 		this.#response = response;
+		this.#fields = {};
 		this.#init();
 	}
 
@@ -22,11 +24,12 @@ export default class HTTPHandler extends Formable {
 	* WITHOUT FILES
 	* ================= */
 	async all() {
-		if(this.#fields) return this.#fields;
+		if(this.#isReady) return this.#fields;
 		else {
 			try {
 				const { fields } = await this.form();
-				this.#fields = fields;
+				this.#fields = Object.assign(this.#fields, fields);
+				this.#isReady = true;
 				return this.#fields;
 			}
 			catch(err){
@@ -54,6 +57,10 @@ export default class HTTPHandler extends Formable {
 		}
 	}
 
+	add(key={}){
+		this.#fields = Object.assign(this.#fields, key);
+	}
+
 
 	async except(keys = []) {
 		try {
@@ -65,6 +72,21 @@ export default class HTTPHandler extends Formable {
 				}
 			}
 			return filtered;
+		}
+		catch(err){
+			return this.#makeError(err);
+		}
+	}
+
+	async only(...keys){
+		try {
+			let body = await this.all();
+			return keys.reduce((acc, key) => {
+				if (body.hasOwnProperty(key)) {
+					acc[key] = body[key];
+				}
+				return acc;
+			}, {});
 		}
 		catch(err){
 			return this.#makeError(err);

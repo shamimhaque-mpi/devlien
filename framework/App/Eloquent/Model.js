@@ -12,9 +12,6 @@ export default class Model extends Relation {
     #_skip      = '';
     #_limit     = '';
     #_withSoftDete     = false;
-    #successFn         = false;
-    #attributes = {};
-    #sudo_keys = ['fillable', 'hidden'];
 
 
     constructor(config={}){
@@ -84,22 +81,6 @@ export default class Model extends Relation {
 
 
 
-    //join('t1', 't2', 't1.id', 't2.id')
-    join(...fields){
-
-        if(fields.length==3){
-            this.#_join += ` ${this.#_join? 'JOIN' : ''} ${fields[0]} ON ${fields[0]}.${fields[1]} = ${this.#table}.${fields[1]}`;
-        }
-        else {
-            this.#_join += ` ${this.#_join? 'JOIN' : ''} ${fields[0]} ON ${fields[0]}.${fields[2]} = ${fields[1]}.${fields[3]}`;
-        }
-        return this;
-    }
-    static join(...fields){
-        return (new this()).join(fields);
-    }
-
-
 
 
     select(columns) {
@@ -114,11 +95,10 @@ export default class Model extends Relation {
 
 
     async first() {
-
         try{
             this.#_limit = 1;
-            const [records] = await Database.instance().query(this.makeQuery('get'));
-            return collect(this.#geReformattedRecords(records)).first();
+            const [records] = await Database.query(this.makeQuery('get'));
+            return collect(this.toFormat(records, this.constructor)).first();
         }
         catch(e){
             throw new Error(e);
@@ -136,7 +116,7 @@ export default class Model extends Relation {
             this.orderBy('id', 'DESC');
             this.#_limit = 1;
             const [records] = await Database.instance().query(this.makeQuery('get'));
-            return collect(this.#geReformattedRecords(records)).last();
+            return collect(this.toFormat(records, this.constructor)).last();
         }
         catch(e){
             throw new Error(e);
@@ -151,8 +131,8 @@ export default class Model extends Relation {
 
     async get() {
         try{
-            var [records] = await Database.instance().query(this.makeQuery('get'));
-            return collect(this.#geReformattedRecords(records));
+            var [records] = await Database.query(this.makeQuery('get'));
+            return collect(this.toFormat(records, this.constructor));
         }
         catch(e){
             throw new Error(e);
@@ -189,7 +169,7 @@ export default class Model extends Relation {
      * sequentially by calling the `create()` method for every item.
      * 
      * @param {Array<Object>} records - An array of record objects to insert.
-     * @returns {Promise<void>}
+     * @returns {Promise<Object>}
      */
     async create(data) {
         try{
@@ -200,9 +180,6 @@ export default class Model extends Relation {
             const [record] = await Database.query(_this.makeQuery('insert', columns), values);
 
             let _data = _this.where({'id':record.insertId}).first();
-
-            if(_this.#successFn)
-                _this.#successFn(_this.where({'id':record.insertId}), _data);
 
             return _data;
         }
@@ -228,12 +205,7 @@ export default class Model extends Relation {
     async update(data={}){
         try{
             await Database.instance().query(this.makeQuery('update', data));
-            let _data = this.first()
-
-            if(this.#successFn)
-                this.#successFn(this, _data);
-            
-            return _data;
+            return await this.first()
         }
         catch(e){
             throw new Error(e);
@@ -386,11 +358,6 @@ export default class Model extends Relation {
     }
 
 
-    onSuccess(Fn=null) {
-        this.#successFn = Fn;
-        return this;
-    }
-
     toObject(){
         return Object.assign({}, this);
     }
@@ -406,35 +373,19 @@ export default class Model extends Relation {
         return new this();
     }
 
+    //join('t1', 't2', 't1.id', 't2.id')
+    join(...fields){
 
-    getAttributes() {
-        return this.#attributes;
-    }
-
-    #geReformattedRecords(records) {
-        return records.map((record) => {
-        this.#attributes = record;
-        return this.#getValidAttributes();
-        });
-    }
-
-    #getValidAttributes() {
-        let formatted_data = {};
-        let rm = [...(this.hidden ? this.hidden : []), ...this.#sudo_keys];
-
-        for (const key in this.#attributes) {
-        if (rm.indexOf(key) < 0) {
-            formatted_data[key] = this.#attributes[key];
+        if(fields.length==3){
+            this.#_join += ` ${this.#_join? 'JOIN' : ''} ${fields[0]} ON ${fields[0]}.${fields[1]} = ${this.#table}.${fields[1]}`;
         }
+        else {
+            this.#_join += ` ${this.#_join? 'JOIN' : ''} ${fields[0]} ON ${fields[0]}.${fields[2]} = ${fields[1]}.${fields[3]}`;
         }
-
-        let _this = new this.constructor();
-        _this.#attributes = formatted_data;
-
-        delete _this.fillable;
-        delete _this.hidden;
-
-        return Object.assign(_this, formatted_data);
+        return this;
+    }
+    static join(...fields){
+        return (new this()).join(fields);
     }
 
 }

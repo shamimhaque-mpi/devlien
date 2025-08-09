@@ -49,9 +49,17 @@ export default class Validator {
                 if(!regex.test(data[key])) errors[key] = `The email is not valid`;
             }
 
+            let [status] = role.filter((field)=>(field.indexOf('in')>-1)).map((role)=>role.split(':').join(',').split(','));
+            
+            if(status && status.length && data[key]){
+                delete status[0]
+                
+                if(!status.includes(data[key])) 
+                    errors[key] = `The ${key} is invalid`;
+            }
+
 
             // CONVERT 
-
             let [same_ck_params] = role.filter((field)=>(field.indexOf('same')>-1)).map((role)=>role.split(':'));
             if(same_ck_params && (data[same_ck_params[1]]!=data[key])) {
                 errors[key] = `The ${key} must be the same as the ${same_ck_params[1]}`;
@@ -64,6 +72,14 @@ export default class Validator {
             let [uqu_params] = role.filter((field)=>(field.indexOf('unique')>-1)).map((role)=>role.split(':').join(',').split(','));
             if(data[key] && uqu_params && !(await this.uniqueCheck(uqu_params, data[key]))){
                 errors[key] = `The ${key} must be unique`;
+            }
+
+
+
+            // CONVERT ['exists:table,id,1'] TO ['exists', 'table', 'id', 1] 
+            let [exists_checkable] = role.filter((field)=>(field.indexOf('exists')>-1)).map((role)=>role.split(':').join(',').split(','));
+            if(data[key] && exists_checkable && !(await this.existsCheck(exists_checkable, data[key]))){
+                errors[key] = `The record does not exist`;
             }
         }
 
@@ -85,5 +101,28 @@ export default class Validator {
         const [data] = await Mysql.instance().query(query);
         //
         return data[0]?false:true;
+    }
+
+
+    /**
+     * Checks if a given value is exists in a specific table column.
+     *
+     * @param {Array} params - An array containing:
+     *   [0] - (Unused) Could be the rule name or placeholder.
+     *   [1] - Table name to search in.
+     *   [2] - Column name to check.
+     *   [3] - Value to match against the column.
+     * @param {*} value - (Unused here) The value being validated (can be used for future improvements).
+     * @returns {boolean} - Returns `true` if the value does NOT exist (exists),
+     *                               otherwise `false` if the value already exists.
+     *
+     * Example:
+     *   await existsCheck(['exists', 'users', 'email', 'test@example.com'], null);
+     *   // true if email is exists.
+     */
+    async existsCheck(params, value){
+        const query = `SELECT * FROM ${params[1]} WHERE \`${params[2]}\` = '${params[3] ? params[3] : value}' limit 1`;
+        const [data] = await Mysql.instance().query(query);
+        return data[0]?true:false;
     }
 }

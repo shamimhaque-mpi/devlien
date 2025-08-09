@@ -26,7 +26,12 @@ export default class Provider
                 const base = new (controller)($request);
 
                 if(controller.requestBind && controller.requestBind[route['METHOD']]){
-                    await this.validation(controller.requestBind[route['METHOD']], $request);
+                    await this.validation(controller.requestBind[route['METHOD']], $request, route.PARAMS);
+                }
+                
+                if(!base[route['METHOD']]) throw {
+                    message:`${route['METHOD']} function is not found`,
+                    data:{controller:"app/Http/Controllers/"+route['CONTROLLER']+'.js'}
                 }
 
                 return await base[route['METHOD']]($request, route.PARAMS);
@@ -43,8 +48,8 @@ export default class Provider
         }
     }
 
-    async validation(ruleResource, request){
-        let rd = await request.validate(new ruleResource().rules(request));
-        console.log(rd, 444);
+    async validation(ruleResource, request, PARAMS){
+        let rules = await new ruleResource().rules(request, PARAMS);
+        let rd = await request.validate(rules);
     }
 }

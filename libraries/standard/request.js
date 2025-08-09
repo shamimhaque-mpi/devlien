@@ -6,7 +6,7 @@ export default class @request {
      *
      * @return Object<string, string>
      */
-    rules(request)
+    async rules(request)
     {
         return {};
     }
@@ -16,7 +16,7 @@ export default class @request {
      *
      * @return Object<string, string>
      */
-    messages()
+    async messages()
     {
         return {};
     }

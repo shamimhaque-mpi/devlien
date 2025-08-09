@@ -1,22 +1,36 @@
 class collections {
-  #records;
-  constructor(records) {
-    this.#records = records;
-  }
+	#records;
+	constructor(records) {
+		if(Array.isArray(records))
+			this.#records = records;
+		else 
+			this.#records = Object.assign({}, records);
+	}
 
-  first() {
-    return this.#records.length ? this.#records[0] : false;
-  }
+	first() {
+		return this.#records.length ? this.#records[0] : false;
+	}
 
-  last() {
-    return this.#records.length
-      ? this.#records[this.#records.length - 1]
-      : false;
-  }
+	last() {
+		return this.#records.length
+		? this.#records[this.#records.length - 1]
+		: false;
+	}
 
-  toArray() {
-    return Object.values(this.#records);
-  }
+
+	only(...keys){
+		return keys.reduce((acc, key) => {
+			if (this.#records.hasOwnProperty(key)) {
+				acc[key] = this.#records[key];
+			}
+			return acc;
+		}, {});
+	}
+
+	
+	toArray() {
+		return Object.values(this.#records);
+	}
 }
 
 export default function collect(records) {

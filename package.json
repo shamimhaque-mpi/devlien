@@ -17,6 +17,7 @@
     "./file": "./framework/App/File/FileHandler.js",
     "./env": "./framework/Env.js",
     "./collect": "./framework/App/Core/Helpers/Collect.js",
+    "./string": "./framework/App/Core/Helpers/String.js",
     "./config": "./framework/App/Core/Config.js",
     "./system": "./framework/App/Core/System.js",
     "./middleware/auth": "./framework/App/Core/Middleware/Auth.js",

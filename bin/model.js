@@ -26,7 +26,7 @@ export default class Migration {
         }
 
         await dir.make();
-        terminal.addLine(`${file} @space generating`);
+        terminal.addLine(`${file} @space GENERATING`);
 
 
         let mgn = new Migration;
@@ -37,6 +37,6 @@ export default class Migration {
 
         fs.writeFileSync(path.join(baseEnv.BASE_PATH, file), content);
 
-        terminal.addLine(`${file} @space generated`, 'success');
+        terminal.addLine(`${file} @space GENERATED`, 'success');
     }
 }

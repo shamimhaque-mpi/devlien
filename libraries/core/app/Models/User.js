@@ -6,5 +6,5 @@ export default class User extends Model {
     * The attributes that should be 
     * hidden for arrays and JSON output
     */
-    hidden = ['password'];
+    static hidden = ['password'];
 }

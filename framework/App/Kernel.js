@@ -64,8 +64,6 @@ export default class Kernel
 
             const feedback = await (new Provider(this.SERVICES)).getResponse(new HTTPHandler(request, response));
             
-
-
             //
             if(response){
                 let resonseData = "";
