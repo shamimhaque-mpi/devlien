@@ -1,12 +1,14 @@
 import process from 'process';
 import { exec } from 'child_process';
 import Package from './package.js';
+
 import Migration from './migration.js';
+import Seeder from './seeder.js';
+
 import Model from './model.js';
 import Controller from './controller.js';
 import Request from './request.js';
 import Resource from './resource.js';
-import Seeder from './seeder.js';
 import path from 'path';
 import Cache from './cache.js';
 import os from "os";

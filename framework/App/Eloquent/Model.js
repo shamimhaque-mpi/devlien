@@ -388,4 +388,10 @@ export default class Model extends Relation {
         return (new this()).join(fields);
     }
 
+
+
+    static class (){
+        return this.namespace + '/' + this.name;
+    }
+
 }

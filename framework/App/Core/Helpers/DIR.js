@@ -32,6 +32,18 @@ export default class DIR
         const basename = path.basename(basPath);
         return await mkdir(basPath.replace(basename ? basename : '', ''), { recursive: true });
     }
+
+
+    async makeFile(filename=null, content=''){
+
+        filename = filename ? filename : this.filename();
+        await this.make();
+
+        let filePath = this.#dir.replace(this.filename(), '');
+        filePath = path.join(filePath, filename);
+        
+        fs.writeFileSync(filePath, content);
+    }
         
 
     filename(isExtension=true){

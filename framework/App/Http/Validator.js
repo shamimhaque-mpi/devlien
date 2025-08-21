@@ -44,42 +44,62 @@ export default class Validator {
                 errors[key] = `The ${key} field is required`;
             }
 
+
             if(role.includes('email') && data[key]){
                 const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if(!regex.test(data[key])) errors[key] = `The email is not valid`;
             }
 
-            let [status] = role.filter((field)=>(field.indexOf('in')>-1)).map((role)=>role.split(':').join(',').split(','));
-            if(status && status.includes('in') && data[key]){
-                delete status[0]
+
+
+            const signedRoles = role.filter(x=>x.indexOf(':')>-1);
+            for(const rule of signedRoles)
+            {
+                const segments = rule.split(':');
                 
-                if(!status.includes(data[key])) 
-                    errors[key] = `The ${key} is invalid`;
+                if(segments.includes('min') && !(segments[1] <= data[key])) 
+                    errors[key] = `The ${key} must be at least ${segments[1]}`;
+                
+                if(segments.includes('len') && !(segments[1] <= data[key].length)) 
+                    errors[key] = `The ${key} must be at least length ${segments[1]}`;
+
+                if(segments.includes('in')){
+                    let [status] = role.filter((field)=>(field.indexOf('in')>-1)).map((role)=>role.split(':').join(',').split(','));
+                    if(status && status.includes('in') && data[key]){
+                        delete status[0]
+                        
+                        if(!status.includes(data[key])) 
+                            errors[key] = `The ${key} is invalid`;
+                    }
+                }
+
+                if(segments.includes('same')){
+                    // CONVERT 
+                    let [same_ck_params] = role.filter((field)=>(field.indexOf('same')>-1)).map((role)=>role.split(':'));
+                    if(same_ck_params && (data[same_ck_params[1]]!=data[key])) {
+                        errors[key] = `The ${key} must be the same as the ${same_ck_params[1]}`;
+                    }
+                }
+                
+
+                if(segments.includes('unique')){
+                    // CONVERT ['unique:table,entity,id,3'] TO ['unique', 'table', 'entity'] 
+                    let [uqu_params] = role.filter((field)=>(field.indexOf('unique')>-1)).map((role)=>role.split(':').join(',').split(','));
+                    if(data[key] && uqu_params && !(await this.uniqueCheck(uqu_params, data[key]))){
+                        errors[key] = `The ${key} must be unique`;
+                    }
+                }
+
+
+                if(segments.includes('exists')){
+                    // CONVERT ['exists:table,id,1'] TO ['exists', 'table', 'id', 1] 
+                    let [exists_checkable] = role.filter((field)=>(field.indexOf('exists')>-1)).map((role)=>role.split(':').join(',').split(','));
+                    if(data[key] && exists_checkable && !(await this.existsCheck(exists_checkable, data[key]))){
+                        errors[key] = `The record does not exist`;
+                    }
+                }
             }
 
-
-            // CONVERT 
-            let [same_ck_params] = role.filter((field)=>(field.indexOf('same')>-1)).map((role)=>role.split(':'));
-            if(same_ck_params && (data[same_ck_params[1]]!=data[key])) {
-                errors[key] = `The ${key} must be the same as the ${same_ck_params[1]}`;
-            }
-
-
-
-
-            // CONVERT ['unique:table,entity,id,3'] TO ['unique', 'table', 'entity'] 
-            let [uqu_params] = role.filter((field)=>(field.indexOf('unique')>-1)).map((role)=>role.split(':').join(',').split(','));
-            if(data[key] && uqu_params && !(await this.uniqueCheck(uqu_params, data[key]))){
-                errors[key] = `The ${key} must be unique`;
-            }
-
-
-
-            // CONVERT ['exists:table,id,1'] TO ['exists', 'table', 'id', 1] 
-            let [exists_checkable] = role.filter((field)=>(field.indexOf('exists')>-1)).map((role)=>role.split(':').join(',').split(','));
-            if(data[key] && exists_checkable && !(await this.existsCheck(exists_checkable, data[key]))){
-                errors[key] = `The record does not exist`;
-            }
         }
 
         if(Object.values(errors).length) throw {

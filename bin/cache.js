@@ -1,23 +1,38 @@
 import fs from "fs";
 import path from "path";
-import { baseEnv } from "devlien/env";
-import System from "devlien/system";
 import DIR from "../framework/App/Core/Helpers/DIR.js";
+import System from "devlien/system";
 
 export default class Cache {
 
-    constructor(){}
+    loaderPath = path.join(process.cwd(), 'node_modules/devlien/utilities/loader.js')
 
     static async clear(modelName)
     {
-        let dir = path.join(baseEnv.BASE_PATH, 'bootstrap/cache');
+        let _this = new this(); 
+        //
+        await _this.resetLoader();
+        await _this.makeConfigCache();
+        await _this.updateLoader();
+        return 1;
+    }
 
-        await DIR.path(path.join(dir, 'config.js')).make();
 
-        fs.writeFileSync(path.join(dir, 'config.js'), `export const configs = {}`);
 
+    async makeConfigCache(){
         try{
-            const files = await System.readDirAsync(path.join(baseEnv.BASE_PATH, 'config'));
+
+            let devlienConfig = (await import(path.resolve('devlien.config.js'))).default;
+            let baseDir = path.join(process.cwd(), devlienConfig.root);
+
+            let dir = path.join(baseDir, 'bootstrap/cache');
+
+            const config = DIR.path(path.join(dir, 'config.js'));
+            await config.make();
+            fs.writeFileSync(path.join(dir, 'config.js'), `export const configs = {}`);
+
+
+            const files = await System.readDirAsync(path.join(baseDir, 'config'));
 
             var content   = ``;
             var fileNames = ``;
@@ -27,11 +42,52 @@ export default class Cache {
                 let fileName  = file.replace('.js', '');
                     fileNames += `  ${file.replace('.js', '')} : ${fileName},\n`;
                 //
-                content += `const ${fileName} = (await import('${System.toFilePath(path.join(baseEnv.BASE_PATH, 'config/'+file))}')).default;\n`;
+                content += `import ${fileName} from '${System.toFilePath(path.join(baseDir, 'config/'+file))}';\n`;
             });
 
-            content += `\n\nexport const configs = {\n${fileNames}}`;
+            content += `\n\nexport default {\n${fileNames}}`;
             fs.writeFileSync(path.join(dir, 'config.js'), content);
+        }
+        catch(e){
+            console.log(e);
+        }
+    }
+
+
+
+    async resetLoader(){
+        const loader = DIR.path(this.loaderPath);
+        if(!loader.isExist())
+            loader.make();
+        
+        await loader.makeFile(null, `export default {}`);
+    }
+
+
+
+    async updateLoader(){
+        try {
+
+            let devlienConfig = (await import(path.resolve('devlien.config.js'))).default;
+            let baseDir = path.join(process.cwd(), devlienConfig.root);
+
+
+            const files = await System.readDirAsync(path.join(baseDir, 'bootstrap/cache/'));
+
+            var content   = ``;
+            var fileNames = ``;
+
+            Object.values(files).forEach((file)=>{
+
+                let fileName  = file.replace('.js', '');
+                    fileNames += `  ${file.replace('.js', '')} : ${fileName},\n`;
+                //
+                content += `import ${fileName} from '${System.toFilePath(path.join(baseDir, 'bootstrap/cache/'+file))}';\n`;
+            });
+
+            content += `\n\nexport default {\n${fileNames}}`;
+
+            fs.writeFileSync(this.loaderPath, content);
         }
         catch(e){
             console.log(e);

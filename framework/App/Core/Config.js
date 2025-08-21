@@ -1,25 +1,19 @@
-import { baseEnv } from "devlien/env";
-import System from "devlien/system";
-import path from "path";
+import loader from "../../../utilities/loader.js";
 
 
-var configs = {};
+
+var configs = loader.config;
 let isSetuping = process.argv.length > 2 && process.argv[2]=='setup';
 
-try{
-    if(!isSetuping)
-        var {configs} = (await import(System.toFilePath(path.join(baseEnv.BASE_PATH, 'bootstrap/cache/config.js'))));
-}
-catch(e){}
+
 //
 export default function(segments='', _default=null) {
-    
+
     if(!isSetuping && segments) {
         
         const file = segments.split('.')[0];
-        
         var result = configs[file];
-
+        
         segments.split('.').forEach((key, index)=>{
             if(index!=0){
                 result = result[key];

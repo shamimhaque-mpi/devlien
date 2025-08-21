@@ -1,6 +1,7 @@
 export default class Facade 
 {
     #attributes = {};
+    #hidden_attributes = {};
 
 
     toFormat(records, _this=null, wrapper=null, hiddens=false) {
@@ -17,6 +18,8 @@ export default class Facade
     getValidAttributes(model=null, _hiddens=null) {
 
         let formatted_data = {};
+        let hidden_attributes = {};
+
         let hidden = _hiddens ? _hiddens : this.constructor.hidden;
 
         if(hidden)
@@ -24,6 +27,7 @@ export default class Facade
                 if (hidden.indexOf(key) < 0) {
                     formatted_data[key] = this.#attributes[key];
                 }
+                else hidden_attributes[key] = this.#attributes[key];
             }
         else
             formatted_data = this.#attributes;
@@ -34,8 +38,8 @@ export default class Facade
             _this = new this.constructor();
         else
             _this = new model;
-
             _this.#attributes = formatted_data;
+            _this.#hidden_attributes = hidden_attributes;
 
         return Object.assign(_this, formatted_data);
     }
@@ -43,6 +47,11 @@ export default class Facade
 
     getAttributes() {
         return this.#attributes;
+    }
+
+
+    getHiddenAttributes() {
+        return this.#hidden_attributes;
     }
 
 
@@ -62,6 +71,7 @@ export default class Facade
     toSnakeCase(str) {
         return str
           .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+          .replace(/[\s-]+/g, "_") 
           .toLowerCase()
     }
 
@@ -82,5 +92,15 @@ export default class Facade
                 return part;
             })
             .join('_');
+    }
+
+
+
+    makeMorphFields(name) {
+        const snake = this.toSnakeCase(name);
+        return {
+            type: snake + "able_type",
+            id: snake + "able_id"
+        };
     }
 }

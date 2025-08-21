@@ -8,6 +8,7 @@
     "./listener":"./bin/server/Listener.js",
     "./route":"./framework/App/Route/Route.js",
     "./model":"./framework/App/Eloquent/Model.js",
+    "./model/authenticatable": "./framework/App/Eloquent/Authenticatable.js",
     "./database":"./framework/App/Database/Mysql.js",
     "./db":"./framework/App/Database/DB.js",
     "./migration":"./framework/App/Database/Migration.js",
@@ -20,8 +21,11 @@
     "./string": "./framework/App/Core/Helpers/String.js",
     "./config": "./framework/App/Core/Config.js",
     "./system": "./framework/App/Core/System.js",
-    "./middleware/auth": "./framework/App/Core/Middleware/Auth.js",
-    "./view": "./framework/App/ViewEngine/View.js"
+    "./middleware/auth": "./utilities/middlewares/Auth.js",
+    "./view": "./framework/App/ViewEngine/View.js",
+    "./accessToken": "./framework/App/Authentication/AccessToken.js",
+    "./hash": "./framework/App/Authentication/Hash.js",
+    "./dateTime": "./utilities/helpers/DateTime.js"
   },
   "main": "index.js",
   "type": "module",
@@ -37,7 +41,9 @@
   },
   "dependencies": {
     "mysql2": "^3.14.0",
-    "dotenv": "^16.5.0"
+    "bcrypt": "^6.0.0",
+    "dotenv": "^16.5.0",
+    "jsonwebtoken": "^9.0.2"
   },
   "peerDependencies": {
     

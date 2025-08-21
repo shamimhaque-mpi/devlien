@@ -87,10 +87,13 @@ export default class Kernel
         }
         catch(err){
             console.log(request.url);
-            console.log(colours.text(JSON.stringify(err), 'warning'));
+            console.error(err);
             if(response){
                 response.statusCode = err.status||500;
                 response.setHeader('Content-Type', 'application/json');
+                if(err.stack) 
+                    return response.end(JSON.stringify(err.stack))
+
                 return response.end(JSON.stringify(err));
             }
             return err;

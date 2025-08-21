@@ -42,14 +42,14 @@ export default class Migration {
         const migrations = await System.readDirAsync(System.path('database/migrations/'));
 
 
-        try{
-            const Dmigrations = await System.readDirAsync(System.vendorPath('framework/App/Database/Default/'));
-            for(const index in Dmigrations){
-                let migration = new (await System.import(System.vendorPath('framework/App/Database/Default/'+Dmigrations[index])));
+        const Dmigrations = await System.readDirAsync(System.vendorPath('utilities/migrations/'));
+        for(const index in Dmigrations){
+            try{
+                let migration = new (await System.import(System.vendorPath('utilities/migrations/'+Dmigrations[index])));
                 await Mysql.query(migration.build().query().replaceAll('\n', ''));
             }
+            catch(e){}
         }
-        catch(e){}
 
 
         class Migrations extends Model { constructor(){super({table:'migrations'})}}

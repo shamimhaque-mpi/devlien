@@ -2,7 +2,7 @@
 
 export default class ServiceProvider {
     ROUTE_SERVICE = [];
-    route(route){
+    async route(route){
         this.ROUTE_SERVICE.push(route);
     }
 }

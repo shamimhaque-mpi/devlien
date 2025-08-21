@@ -61,5 +61,36 @@ export default class Relation extends Facade {
 
         newModel = (await newModel());
         return this.toFormat(data, newModel, new newModel, model.hidden);
-    }    
+    }
+
+
+
+    async morphTo(_type=null, _id=null, _entity=null){
+        try{
+
+            var {type, id} = this.makeMorphFields(this.constructor.name);
+
+            if(_type) type = _type;
+            if(_id) id = _id;
+
+            const model = (await import(path.resolve(this[type]+'.js'))).default;
+            return await model.where({[_entity?_entity:'id']:this[id]}).first();
+        }
+        catch(e){
+            console.log(e);
+            throw e;
+        }
+    }
+
+
+    async morphMany(_class, _type){
+        try{
+            const model = (await import(path.resolve(_class+'.js'))).default;
+            return await model.where({[_type+'_type']:this.constructor.class()}).where({[_type+'_id']:this.id}).get();
+        }
+        catch(e){
+            console.log(e);
+            throw e;
+        }
+    }
 }
