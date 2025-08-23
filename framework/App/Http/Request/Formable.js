@@ -1,6 +1,6 @@
 import url from 'url';
 import file from './File.js';
-import Validator from "../Validator.js";
+import Validator from "./Validator.js";
 
 export default class Formable extends Validator {
     /*

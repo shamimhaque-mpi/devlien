@@ -6,7 +6,7 @@ export default class PersonalAccessToken extends model {
 
 
     //
-    model(){
+    tokenable(){
         return this.morphTo('tokenable_type', 'tokenable_id');
     }
 }

@@ -9,6 +9,7 @@
     "./route":"./framework/App/Route/Route.js",
     "./model":"./framework/App/Eloquent/Model.js",
     "./model/authenticatable": "./framework/App/Eloquent/Authenticatable.js",
+    "./model/personalAccessToken":  "./utilities/models/PersonalAccessToken.js",
     "./database":"./framework/App/Database/Mysql.js",
     "./db":"./framework/App/Database/DB.js",
     "./migration":"./framework/App/Database/Migration.js",

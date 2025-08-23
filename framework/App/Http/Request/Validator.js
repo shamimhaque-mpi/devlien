@@ -1,4 +1,4 @@
-import Mysql from "../Database/Mysql.js";
+import Mysql from "../../Database/Mysql.js";
 
 export default class Validator {
 
@@ -26,12 +26,12 @@ export default class Validator {
         }
     }
 
-    async validate(roles){
-        return await this.checkValidation(roles);
+    async validate(roles, messages={}){
+        return await this.checkValidation(roles, messages);
     }
 
 
-    async checkValidation(roles) 
+    async checkValidation(roles, messages={}) 
     {
         const data = await this.all();
         let errors = {};
@@ -41,13 +41,13 @@ export default class Validator {
             const role = roles[key].split('|');
 
             if(role.includes('required') && !data[key]){
-                errors[key] = `The ${key} field is required`;
+                errors[key] = messages[`${key+''}.required`] ? messages[`${key}.required`] : `The ${key} field is required`;
             }
 
 
             if(role.includes('email') && data[key]){
                 const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if(!regex.test(data[key])) errors[key] = `The email is not valid`;
+                if(!regex.test(data[key])) errors[key] = messages[`${key+''}.email`] ? messages[`${key}.email`] : `The email is not valid`;
             }
 
 
@@ -58,10 +58,10 @@ export default class Validator {
                 const segments = rule.split(':');
                 
                 if(segments.includes('min') && !(segments[1] <= data[key])) 
-                    errors[key] = `The ${key} must be at least ${segments[1]}`;
+                    errors[key] = messages[`${key+''}.min`] ? messages[`${key}.min`] : `The ${key} must be at least ${segments[1]}`;
                 
                 if(segments.includes('len') && !(segments[1] <= data[key].length)) 
-                    errors[key] = `The ${key} must be at least length ${segments[1]}`;
+                    errors[key] = messages[`${key+''}.len`] ? messages[`${key}.len`] : `The ${key} must be at least length ${segments[1]}`;
 
                 if(segments.includes('in')){
                     let [status] = role.filter((field)=>(field.indexOf('in')>-1)).map((role)=>role.split(':').join(',').split(','));
@@ -69,7 +69,7 @@ export default class Validator {
                         delete status[0]
                         
                         if(!status.includes(data[key])) 
-                            errors[key] = `The ${key} is invalid`;
+                            errors[key] = messages[`${key+''}.in`] ? messages[`${key}.in`] : `The ${key} is invalid`;
                     }
                 }
 
@@ -77,7 +77,7 @@ export default class Validator {
                     // CONVERT 
                     let [same_ck_params] = role.filter((field)=>(field.indexOf('same')>-1)).map((role)=>role.split(':'));
                     if(same_ck_params && (data[same_ck_params[1]]!=data[key])) {
-                        errors[key] = `The ${key} must be the same as the ${same_ck_params[1]}`;
+                        errors[key] = messages[`${key+''}.same`] ? messages[`${key}.same`] : `The ${key} must be the same as the ${same_ck_params[1]}`;
                     }
                 }
                 
@@ -86,7 +86,7 @@ export default class Validator {
                     // CONVERT ['unique:table,entity,id,3'] TO ['unique', 'table', 'entity'] 
                     let [uqu_params] = role.filter((field)=>(field.indexOf('unique')>-1)).map((role)=>role.split(':').join(',').split(','));
                     if(data[key] && uqu_params && !(await this.uniqueCheck(uqu_params, data[key]))){
-                        errors[key] = `The ${key} must be unique`;
+                        errors[key] = messages[`${key+''}.unique`] ? messages[`${key}.unique`] : `The ${key} must be unique`;
                     }
                 }
 
@@ -95,7 +95,7 @@ export default class Validator {
                     // CONVERT ['exists:table,id,1'] TO ['exists', 'table', 'id', 1] 
                     let [exists_checkable] = role.filter((field)=>(field.indexOf('exists')>-1)).map((role)=>role.split(':').join(',').split(','));
                     if(data[key] && exists_checkable && !(await this.existsCheck(exists_checkable, data[key]))){
-                        errors[key] = `The record does not exist`;
+                        errors[key] = messages[`${key+''}.exists`] ? messages[`${key}.exists`] : `The record does not exist`;
                     }
                 }
             }

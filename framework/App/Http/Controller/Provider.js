@@ -40,7 +40,7 @@ export default class Provider
         }
         catch(error){
             console.log(error);
-            return {
+            throw {
                 status: error.status || 500,
                 message: error.message || 'SERVER ERROR',
                 errors: error.data || {}
@@ -49,7 +49,7 @@ export default class Provider
     }
 
     async validation(ruleResource, request, PARAMS){
-        let rules = await new ruleResource().rules(request, PARAMS);
-        let rd = await request.validate(rules);
+        let resources = new ruleResource();
+        await request.validate(await resources.rules(request, PARAMS), resources.messages());
     }
 }
