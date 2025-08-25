@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { baseEnv } from "devlien/env";
-import DIR from "../framework/App/Core/Helpers/DIR.js";
+import DIR from "../framework/App/Helpers/DIR.js";
 
 export default class Migration {
 

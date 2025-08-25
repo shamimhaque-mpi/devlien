@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import DIR from "../framework/App/Core/Helpers/DIR.js";
+import DIR from "../framework/App/Helpers/DIR.js";
 import System from "devlien/system";
 
 export default class Cache {

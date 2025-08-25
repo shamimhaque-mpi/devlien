@@ -1,6 +1,6 @@
 import Database from "../Database/Mysql.js";
 import Relation from "../Eloquent/Relation.js";
-import collect from "devlien/collect";
+import collect from "../Helpers/Collect.js";
 
 export default class Model extends Relation {
 

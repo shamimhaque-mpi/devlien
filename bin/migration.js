@@ -1,15 +1,12 @@
 import fs from "fs";
 import path from "path";
-import Mysql from "../framework/App/Database/Mysql.js";
-import { baseEnv } from "devlien/env";
-import System from "devlien/system";
-import Model from "devlien/model";
+
+import DIR from "devlien/dir";
 
 export default class Migration {
 
     package_path = '';
-    app_path = '';
-
+    app_path     = '';
 
     constructor(){
         this.package_path = path.join(process.cwd(), 'node_modules/devlien');
@@ -17,6 +14,8 @@ export default class Migration {
     }
 
     static async create(name, terminal){
+
+        const baseEnv = (await import("devlien/env")).baseEnv;
 
         let mgn   = new Migration;
         let table = (new Migration).getTableName(name);
@@ -38,52 +37,76 @@ export default class Migration {
 
     static async execute(terminal)
     {
-        let migration = new Migration;
-        const migrations = await System.readDirAsync(System.path('database/migrations/'));
+        try{
+            const Mysql = (await import("devlien/database")).default;
+            const Model = (await import("devlien/model")).default;
+            const migration = new Migration;
+
+            const migrations = DIR.scan('database/migrations');
+            const default_migrations = DIR.utilities('migrations').scan();
 
 
-        const Dmigrations = await System.readDirAsync(System.vendorPath('utilities/migrations/'));
-        for(const index in Dmigrations){
-            try{
-                let migration = new (await System.import(System.vendorPath('utilities/migrations/'+Dmigrations[index])));
-                await Mysql.query(migration.build().query().replaceAll('\n', ''));
+            for(const index in default_migrations){
+                try{
+                    var singleMigraion = await import(DIR.utilities('migrations/'+default_migrations[index]).path);
+                        singleMigraion = new singleMigraion.default;
+
+                    await Mysql.query(singleMigraion.build().query().replaceAll('\n', ''));
+                }
+                catch(error){}
             }
-            catch(e){}
-        }
+
+            class Migrations extends Model { constructor(){super({table:'migrations'})}}
 
 
-        class Migrations extends Model { constructor(){super({table:'migrations'})}}
+            let migrated_list = await Migrations.get();
+                migrated_list = Object.values(migrated_list).map(row=>row.path)
+            
+            let group_no = await Migrations.last();
+            group_no = group_no ? group_no.group + 1 : 1;
 
-        let migrated_list = await Migrations.get();
-            migrated_list = Object.values(migrated_list).map(row=>row.path)
-        
-        let group_no = await Migrations.last();
-        group_no = group_no ? group_no.group + 1 : 1;
+            for(const index in migrations)
+            {
+                if(migrated_list.indexOf(migrations[index])<0)
+                {
+                    const path = DIR.file('database/migrations/'+migrations[index]).path;
 
-        for(const index in migrations){
-            if(migrated_list.indexOf(migrations[index])<0){
-                const path = 'database/migrations/'+migrations[index];
-                terminal.addLine(`${path} @space MIGRATING`);
-                await migration.runMigration(System.path(path)); 
-                await Migrations.instance().create({
-                    path  : migrations[index],
-                    group : group_no
-                });
-                terminal.addLine(`${path} @space MIGRATED`, 'success');
+                    terminal.addLine(`${path} @space MIGRATING`);
+                    await migration.runMigration(path); 
+
+                    await Migrations.create({
+                        path  : migrations[index],
+                        group : group_no
+                    });
+                    terminal.addLine(`${path} @space MIGRATED`, 'success');
+                }
             }
         }
-        
+        catch(e){
+            console.log(e);
+        }
         process.exit();
     }
 
 
+    /**
+     * Run a migration file and apply schema changes to the database.
+     *
+     * This method dynamically imports a migration class, initializes
+     * its schema definition, checks the existing columns in the
+     * database table, and executes the migration queries.
+     *
+     * @param  {string} path  The absolute path of the migration file.
+     * @return {Promise<void>}
+     */
+    async runMigration(path)
+    {
+        const migration = new (await DIR.import(path)).default;
+        const init      = migration.build();
+        const Mysql     = (await import("devlien/database")).default;
+        const baseEnv   = (await import('devlien/env')).baseEnv;
 
-    async runMigration(path){
-
-        let migration = new (await System.import(path));
-        let init = migration.build();
-
-        let check_query = `
+        const check_query = `
             SELECT COLUMN_NAME
             FROM INFORMATION_SCHEMA.COLUMNS
             WHERE TABLE_SCHEMA = '${baseEnv.DB_NAME}' AND TABLE_NAME = '${init._TABLE}';
@@ -92,7 +115,6 @@ export default class Migration {
         // 
         var [data] = await Mysql.query(check_query);
             data   = data.map(row=>row.COLUMN_NAME);
-
 
         const queries = init.query(data.length ? data : false);
         await Mysql.query(queries.replaceAll('\n', ''));
@@ -104,6 +126,8 @@ export default class Migration {
 
     static async rollback(param=null, terminal)
     {
+        const Mysql = (await import("../framework/App/Database/Mysql.js")).default;
+        const Model = (await import("../framework/App/Eloquent/Model.js")).default;
         class Migrations extends Model { constructor(){super({table:'migrations'})}}
 
         if(param=='--all'){
@@ -120,9 +144,14 @@ export default class Migration {
         for(const index in migrated_list)
         {
             terminal.addLine(`${migrated_list[index]} @space PROCESSING`);
-            let migration = new (await System.import(System.path('database/migrations/'+migrated_list[index])));
+
+            let path = DIR.file('database/migrations/'+migrated_list[index]).path;
+            let migration = new (await import(path)).default;
+            
+            
             await Mysql.query(migration.build('down').query().replaceAll('\n', ''));
             await Migrations.where({path:migrated_list[index]}).delete();
+            
             terminal.addLine(`${migrated_list[index]} @space PROCESSED`, 'success');
         }
         
