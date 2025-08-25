@@ -10,11 +10,12 @@ import Cache from './cache.js';
 import os from "os";
 import { promisify } from 'util';
 import Terminal from "./terminal.js";
-import DIR from '../framework/App/Helpers/DIR.js';
 import color from '../utilities/colours.js';
 
 import Migration from './migration.js';
 import Seeder from './seeder.js';
+
+var DIR = (await import('devlien/dir')).default;
 
 export default class Execution {
 
@@ -219,14 +220,13 @@ export default class Execution {
 
 
     async defaultAssets(){
-
         const config = (await import(path.resolve('devlien.config.js'))).default;
         const basePath = path.join(process.cwd(), config.root);
 
         const userMigrationName = (new Date().toISOString().split('T')[0]).split('-').join('_')+"_"+Math.floor(Date.now() / 1000)+'_users.js';
         const defaultMigration = path.join(basePath, 'database/migrations/0000_00_00_0000_users.js');
-
-        const migrations = DIR.scan(path.join(basePath, 'database/migrations'));
+        
+        const migrations = DIR.scan('database/migrations', config.root);
 
         if((migrations.join('-').replace('0000_00_00_0000_users.js', '').indexOf('_users.js')>-1)){
             DIR.remove(defaultMigration);

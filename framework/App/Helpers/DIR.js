@@ -2,15 +2,29 @@ import fs from "fs";
 import { pathToFileURL } from 'url';
 import path, { join } from "path";
 import { mkdir } from "fs/promises";
-import config from "../../../../../devlien.config.js";
+
+var config;
+
+try{
+    config = await import("../../../../../devlien.config.js");
+    config = config.default;
+}
+catch(error){
+    config = {};
+}
+
 
 export default class DIR 
 {
-    #dir;
     path;
 
     constructor(dir=''){
-        this.#dir = dir;
+        this.path = dir;
+    }
+
+
+    static path(path){
+        return new this(path);
     }
 
 
@@ -40,8 +54,8 @@ export default class DIR
 
 
 
-    static scan(_path){
-        return fs.readdirSync(path.join(process.cwd(), config.root, _path))
+    static scan(_path, prefix=''){
+        return fs.readdirSync(path.join(process.cwd(), config.root?config.root:prefix, _path))
     }
     scan(_path=''){
         return fs.readdirSync(path.join(this.path, _path))
@@ -71,7 +85,7 @@ export default class DIR
     }
 
     async make(dirPath=null){
-        const basPath  = dirPath ? dirPath : this.#dir;
+        const basPath  = dirPath ? dirPath : this.path;
         const basename = path.basename(basPath);
         return await mkdir(basPath.replace(basename ? basename : '', ''), { recursive: true });
     }
@@ -82,7 +96,7 @@ export default class DIR
         filename = filename ? filename : this.filename();
         await this.make();
 
-        let filePath = this.#dir.replace(this.filename(), '');
+        let filePath = this.path.replace(this.filename(), '');
         filePath = path.join(filePath, filename);
         
         fs.writeFileSync(filePath, content);
@@ -91,22 +105,18 @@ export default class DIR
 
     filename(isExtension=true){
         if(isExtension)
-            return path.basename(this.#dir);
+            return path.basename(this.path);
         else {
-            return path.basename(this.#dir, path.extname(this.#dir));
+            return path.basename(this.path, path.extname(this.path));
         }
     }
 
     isExist() {
-        return fs.existsSync(this.#dir)
+        return fs.existsSync(this.path)
     }
 
     extension(){
-        return path.extname(this.#dir);
-    }
-
-    static path(path){
-        return new this(path);
+        return path.extname(this.path);
     }
 
     static async remove(dirPath){
