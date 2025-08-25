@@ -220,7 +220,7 @@ export default class Execution {
 
 
     async defaultAssets(){
-        const config = (await import(path.resolve('devlien.config.js'))).default;
+        const config = (await DIR.import(path.resolve('devlien.config.js'))).default;
         const basePath = path.join(process.cwd(), config.root);
 
         const userMigrationName = (new Date().toISOString().split('T')[0]).split('-').join('_')+"_"+Math.floor(Date.now() / 1000)+'_users.js';

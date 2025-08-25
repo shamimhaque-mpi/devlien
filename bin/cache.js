@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import DIR from "../framework/App/Helpers/DIR.js";
+import DIR from "devlien/dir";
 import System from "devlien/system";
 
 export default class Cache {
@@ -22,7 +22,7 @@ export default class Cache {
     async makeConfigCache(){
         try{
 
-            let devlienConfig = (await import(path.resolve('devlien.config.js'))).default;
+            let devlienConfig = (await DIR.import(path.resolve('devlien.config.js'))).default;
             let baseDir = path.join(process.cwd(), devlienConfig.root);
 
             let dir = path.join(baseDir, 'bootstrap/cache');
@@ -68,7 +68,7 @@ export default class Cache {
     async updateLoader(){
         try {
 
-            let devlienConfig = (await import(path.resolve('devlien.config.js'))).default;
+            let devlienConfig = (await DIR.import(path.resolve('devlien.config.js'))).default;
             let baseDir = path.join(process.cwd(), devlienConfig.root);
 
 
@@ -90,7 +90,7 @@ export default class Cache {
             fs.writeFileSync(this.loaderPath, content);
         }
         catch(e){
-            console.log(e);
+            console.log(e, 44444);
         }
     }
 }

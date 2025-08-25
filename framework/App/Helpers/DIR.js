@@ -18,10 +18,13 @@ export default class DIR
 {
     path;
 
-    constructor(dir=''){
-        this.path = dir;
+    constructor(_path=''){
+        this.path = (_path);
     }
 
+    static getFileUrl(_path){
+        return pathToFileURL(_path).href;
+    }
 
     static path(path){
         return new this(path);
@@ -87,7 +90,8 @@ export default class DIR
     async make(dirPath=null){
         const basPath  = dirPath ? dirPath : this.path;
         const basename = path.basename(basPath);
-        return await mkdir(basPath.replace(basename ? basename : '', ''), { recursive: true });
+        const mainPath = basPath.replace(basename ? basename : '', '');
+        return await mkdir(mainPath, { recursive: true });
     }
 
 
@@ -97,8 +101,8 @@ export default class DIR
         await this.make();
 
         let filePath = this.path.replace(this.filename(), '');
-        filePath = path.join(filePath, filename);
-        
+
+        filePath = (path.join(filePath, filename));
         fs.writeFileSync(filePath, content);
     }
         
@@ -128,8 +132,6 @@ export default class DIR
             console.error("Error removing directory:", err);
         }
     }
-
-
 
 
 
