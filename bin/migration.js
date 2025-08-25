@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-
 import DIR from "devlien/dir";
 
 export default class Migration {
@@ -48,7 +47,7 @@ export default class Migration {
 
             for(const index in default_migrations){
                 try{
-                    var singleMigraion = await import(DIR.utilities('migrations/'+default_migrations[index]).path);
+                    var singleMigraion = await DIR.import(DIR.utilities('migrations/'+default_migrations[index]).path);
                         singleMigraion = new singleMigraion.default;
 
                     await Mysql.query(singleMigraion.build().query().replaceAll('\n', ''));
@@ -57,7 +56,6 @@ export default class Migration {
             }
 
             class Migrations extends Model { constructor(){super({table:'migrations'})}}
-
 
             let migrated_list = await Migrations.get();
                 migrated_list = Object.values(migrated_list).map(row=>row.path)
