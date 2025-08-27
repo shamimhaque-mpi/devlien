@@ -210,11 +210,12 @@ export default class Execution {
 
     async configAPIServer(type='next'){
         
-        const config = (await import(path.resolve('devlien.config.js'))).default;
+        const config = (await DIR.import(path.resolve('devlien.config.js'))).default;
         const basePath = path.join(process.cwd(), config.root);
 
         await DIR.remove(path.join(basePath, 'resources'));
         await DIR.remove(path.join(basePath, 'routes/web.js'));
+        await DIR.remove(path.join(basePath, 'devlien.config.js'));
         await DIR.copy(path.join(process.cwd(), 'node_modules/devlien/libraries/single/RouteServiceProvider.js'), path.join(basePath, 'app/Providers/RouteServiceProvider.js')); 
     }
 

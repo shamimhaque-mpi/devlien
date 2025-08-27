@@ -15,10 +15,10 @@ export default class Watcher {
 
 		try{
 			if(isFrame && isFrame=='nuxt'){
-				spawn('npx', ['nuxt', 'dev'], {stdio:'inherit'});
+				spawn('npx', ['nuxt', 'dev'], {stdio:'inherit', shell:true});
 			}
 			else if(isFrame && isFrame=='next'){
-				spawn('npx', ['next', 'dev', '--turbopack'], {stdio:'inherit'});
+				spawn('npx', ['next', 'dev', '--turbopack'], {stdio:'inherit', shell:true});
 			}
 
 			_this.isFrame = isFrame;
