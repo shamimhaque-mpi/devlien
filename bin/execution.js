@@ -217,6 +217,7 @@ export default class Execution {
         await DIR.remove(path.join(basePath, 'routes/web.js'));
         await DIR.remove(path.join(basePath, 'devlien.config.js'));
         await DIR.copy(path.join(process.cwd(), 'node_modules/devlien/libraries/single/RouteServiceProvider.js'), path.join(basePath, 'app/Providers/RouteServiceProvider.js')); 
+        await DIR.copy(path.join(process.cwd(), 'node_modules/devlien/libraries/single/DevlienController.js'), path.join(basePath, 'app/Http/Controllers/DevlienController.js')); 
     }
 
 
