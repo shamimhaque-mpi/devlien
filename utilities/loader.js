@@ -1,8 +1,6 @@
-import config from 'file:///Users/shamimhaque/Desktop/nuxtjs/NuxtApp/server/bootstrap/cache/config.js';
-import route from 'file:///Users/shamimhaque/Desktop/nuxtjs/NuxtApp/server/bootstrap/cache/route.js';
+import config from 'file:///Users/shamimhaque/Desktop/tech_sync/bootstrap/cache/config.js';
 
 
 export default {
   config : config,
-  route : route,
 }

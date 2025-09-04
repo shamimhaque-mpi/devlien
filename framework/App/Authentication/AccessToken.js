@@ -25,7 +25,7 @@ export default class AccessToken {
                 const currentTimestamp = DateTime.current().timestamp();
 
                 if(tokenSet && (tokenTimestamp > currentTimestamp)){
-                    return await tokenSet.model()
+                    return await tokenSet.tokenable()
                 }
                 else return false;
             }

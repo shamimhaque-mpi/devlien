@@ -57,10 +57,10 @@ export default class Validator {
             {
                 const segments = rule.split(':');
                 
-                if(segments.includes('min') && !(segments[1] <= data[key])) 
+                if(segments.includes('min') && !(+segments[1] <= +data[key])) 
                     errors[key] = messages[`${key+''}.min`] ? messages[`${key}.min`] : `The ${key} must be at least ${segments[1]}`;
                 
-                if(segments.includes('len') && !(segments[1] <= data[key].length)) 
+                if(segments.includes('len') && !(+segments[1] <= +data[key].length)) 
                     errors[key] = messages[`${key+''}.len`] ? messages[`${key}.len`] : `The ${key} must be at least length ${segments[1]}`;
 
                 if(segments.includes('in')){
