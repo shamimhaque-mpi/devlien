@@ -20,6 +20,10 @@ export default class DateTime
         return this.date.getTime();
     }
 
+    static timestamp(){
+        return (new this).date.getTime();
+    }
+
     // add time (like "1h", "2day", "30m")
     add(str) {
         const parts = str.split('/');

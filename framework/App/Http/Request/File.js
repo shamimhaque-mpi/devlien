@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import DIR from "devlien/dir";
 
 export default class File {
     #file;
@@ -17,6 +18,9 @@ export default class File {
     }
 
     upload(location, name = null) {
+
+		name = name ? JSON.stringify(name) : null;
+
 		return new Promise((resolve, reject) => {
 			const hasPathExtension = path.extname(location);
 			const hasNameExtension = path.extname(name ? name : '');
@@ -32,10 +36,11 @@ export default class File {
 				filePath = path.join(location, this.name());
 
 
-
-			fs.writeFile(filePath, Buffer.from(this.#file.content, 'binary'), (error) => {
-				if (error) reject(error);
-				else resolve(filePath);
+			DIR.path(filePath).make().then(_=>{
+				fs.writeFile(filePath, Buffer.from(this.#file.content, 'binary'), (error) => {
+					if (error) reject(error);
+					else resolve(filePath);
+				});
 			});
 		});
     }

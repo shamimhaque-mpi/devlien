@@ -49,8 +49,7 @@ export default class Validator {
                 const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if(!regex.test(data[key])) errors[key] = messages[`${key+''}.email`] ? messages[`${key}.email`] : `The email is not valid`;
             }
-
-
+            
 
             const signedRoles = role.filter(x=>x.indexOf(':')>-1);
             for(const rule of signedRoles)

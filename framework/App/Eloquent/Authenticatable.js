@@ -1,7 +1,7 @@
 import Model from "devlien/model"
 import DateTime from "devlien/dateTime"
 import AccessToken from "devlien/accessToken";
-import PersonalAccessToken from "../../../utilities/models/PersonalAccesstoken.js";
+import PersonalAccessToken from "../../../utilities/models/PersonalAccessToken.js";
 import config from "devlien/config";
 
 export default class Authenticatable extends Model {

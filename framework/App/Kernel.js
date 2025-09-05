@@ -1,8 +1,7 @@
-import Provider from "./Http/Controller/Provider.js"
+import ControllerExecuter from "./Http/Controller/ControllerExecuter.js"
 import RouteServe from "./Route/RouteServe.js"
 import System from "./Helpers/System.js"
 import config from "devlien/config";
-import colours from "../../utilities/colours.js";
 import PublicFile from "./Http/PublicFile.js";
 import HTTPHandler from "./Http/Request/HTTPHandler.js";
 
@@ -39,6 +38,7 @@ export default class Kernel
                 message:"Not Found"
             };
 
+            const appRequest = new HTTPHandler(request, response);
 
             /*
              * ***********************
@@ -52,7 +52,7 @@ export default class Kernel
                     middleware = new middleware();
 
                     if(middleware){
-                        let isNext = await middleware.next(request, response);
+                        let isNext = await middleware.next(appRequest, response);
                         if(isNext!==true){
                             isReturn = isNext;
                             break;
@@ -62,7 +62,7 @@ export default class Kernel
                 if(isReturn) throw isReturn;
             }
 
-            const feedback = await (new Provider(this.SERVICES)).getResponse(new HTTPHandler(request, response));
+            const feedback = await (new ControllerExecuter(this.SERVICES)).getResponse(appRequest);
             
             //
             if(response){

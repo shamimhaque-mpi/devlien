@@ -5,6 +5,7 @@ export default {
 
     name : env('APP_NAME', 'devlien'),
     port : env('PORT', 3000),
+    url  : env('APP_URL'),
     version : '1.0.0',
     timezone : '',
     debug : false,

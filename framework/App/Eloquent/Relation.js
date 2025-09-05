@@ -88,9 +88,9 @@ export default class Relation extends Facade {
             const model = (await import(path.resolve(_class+'.js'))).default;
             return await model.where({[_type+'_type']:this.constructor.class()}).where({[_type+'_id']:this.id}).get();
         }
-        catch(e){
-            console.log(e);
-            throw e;
+        catch(error){
+            console.log(error);
+            throw error;
         }
     }
 }

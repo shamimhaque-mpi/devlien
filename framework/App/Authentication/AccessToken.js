@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import DateTime from "../../../utilities/helpers/DateTime.js";
 import config from 'devlien/config';
-import PersonalAccessToken from "../../../utilities/models/PersonalAccesstoken.js";
+import PersonalAccessToken from "../../../utilities/models/PersonalAccessToken.js";
 
 export default class AccessToken {
 

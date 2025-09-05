@@ -5,7 +5,7 @@ export default class HTTPHandler extends Formable {
 	//
 	node;
 	#fields = {};
-	#files = {};
+	#files  = {};
 	#isReady = false;
 	#response
 
@@ -27,8 +27,9 @@ export default class HTTPHandler extends Formable {
 		if(this.#isReady) return this.#fields;
 		else {
 			try {
-				const { fields } = await this.form();
+				const { fields, files } = await this.form();
 				this.#fields = Object.assign(this.#fields, fields);
+				this.#files = files;
 				this.#isReady = true;
 				return this.#fields;
 			}
@@ -44,11 +45,13 @@ export default class HTTPHandler extends Formable {
 	* WITHOUT FORM DATA
 	* ================= */
 	async files() {
-		if(this.#files) return this.#files;
+		if(this.#isReady) return this.#files;
 		else {
 			try {
-				const { files } = await this.form();
+				const { files, fields } = await this.form();
+				this.#fields = Object.assign(this.#fields, fields);
 				this.#files = files;
+				this.#isReady = true;
 				return this.#files;
 			}
 			catch(err){
