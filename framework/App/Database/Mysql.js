@@ -12,12 +12,13 @@ export default class Mysql {
     
     #config = {};
 
-    constructor(){
-
+    constructor()
+    {
         let database = config('database');
 
-        if(database.default && database.connections)
-            this.#config = database.connections[database.default]
+        if(database.default && database.connections){
+            this.#config = database.connections[database.default];
+        }
     }
 
     static instance (){
@@ -26,6 +27,7 @@ export default class Mysql {
 
     async query(query, values=[]){
         try{
+            console.log(query);
             return await this.connect().query(query, values);
         }
         catch(e){
@@ -38,12 +40,14 @@ export default class Mysql {
     }
 
     connect(database=this.#config.database){
-        return createPool({
-            host: this.#config.host,
-            user: this.#config.username,
-            password: this.#config.password,
-            database: database,
-            connectTimeout: 3000
-        })
+        if(!process.mysql_conn)
+            process.mysql_conn = createPool({
+                host: this.#config.host,
+                user: this.#config.username,
+                password: this.#config.password,
+                database: database,
+                connectTimeout: 3000
+            });
+        return process.mysql_conn;
     }
 }
